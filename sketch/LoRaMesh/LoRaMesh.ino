@@ -64,7 +64,7 @@ void setup() {
 		0x78,
 		0xc4,
 		0x08
-	} // Low data-rate, Slow-long modem
+	}; // Low data-rate, Slow-long modem
 	rf95w.setModemRegisters(&modemConfig);
 	if (!rf95w.setModemConfig(RH_RF95::Bw125Cr48Sf4096)) { // Recheck modem config
 		Serial.println(F("!! Modem config failed !!"));
@@ -105,7 +105,7 @@ void updateRoutingTable() {
 	// Update routing data toward all other nodes
 	for (uint8_t dest = 1; dest <= NODES; dest++) {
 		RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-		if (dest == destId) { // if destination is self
+		if (dest == nodeId) { // if destination is self
 			routes[dest - 1] = 255; // mark itself
 		} else {
 			routes[dest - 1] = route->next_hop; // update route
@@ -121,14 +121,14 @@ void updateRoutingTable() {
 void getRouteInfoString(char *p, size_t len) {
 	p[0] = '\0';
 	strcat(p, "[");
-	for(uint8_t node = 1 ; node <= NODES; n++) {
+	for(uint8_t node = 1 ; node <= NODES; node++) {
 		strcat(p, "{\"n\":");
 		sprintf(p + strlen(p), "%d", routes[node - 1]);
 		strcat(p, ",");
 		strcat(p, "\"r\":");
 		sprintf(p + strlen(p), "%d", rssi[node - 1]);
 		strcat(p, "}");
-		if (nide < NODES) {
+		if (node < NODES) {
 			strcat(p, ",");
 		}
 	}
@@ -150,14 +150,14 @@ void printNodeInfo(uint8_t node, char *s) {
 void loop() {
 	// Send the route info of current node to all other nodes
 	for (uint8_t dest = 1; dest <= NODES; dest++) {
-		if (dest == destId) continue; // self skip
+		if (dest == nodeId) continue; // self skip
 
 
 		updateRoutingTable();
 		getRouteInfoString(buf, RH_MESH_MAX_MESSAGE_LEN);
 
 		// Print transmit info
-		Serial print(F("->"));
+		Serial.print(F("->"));
 		Serial.print(dest);
 		Serial.print(F(" :"));
 		Serial.print(buf);
@@ -172,9 +172,9 @@ void loop() {
 		} else {
 			Serial.println(F(" OK")); // if transmit is successful
 			
-			// if there is intermediate node in route to destination node
+			// if there is intermediate node in route destination node
 			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-			if (route->next_hope != 0) {
+			if (route->next_hop != 0) {
 				// Update rssi data by previous transmit info
 				rssi[route->next_hop - 1] = rf95w.lastRssi();
 			}
@@ -209,5 +209,6 @@ void loop() {
 					rssi[route->next_hop - 1] = rf95w.lastRssi();
 				}
 			}
+		}
 	}
 }
