@@ -136,6 +136,8 @@ void getRouteInfoString(char *p, size_t len) {
 }
 
 // Print node info with buffer by char pointer on serial
+// !! You must not change any string in this function !!
+// !! Mesh visualize featues will be broken !!
 void printNodeInfo(uint8_t node, char *s) {
   Serial.print(F("node: "));
   Serial.print(F("{"));
