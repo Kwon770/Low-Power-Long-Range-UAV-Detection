@@ -1,7 +1,6 @@
 #include <WiFi.h>
-#include <WiFiUdp.h>
 #include <WiFiClient.h>
-#include <WiFiServer.h>
+#include <WiFiInfo.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <PubSubClient.h>
@@ -9,9 +8,6 @@
 // Default ESP buad rate
 #define BUAD_RATE 115200
 
-// WiFi AP info
-const char* SSID = "SSID";
-const char* PASSWORD = "your-wifi-";
 // MQTT info
 const char* MQTT_SERVER = "lopode-mqtt-server";
 int mqtt_port = 8883;
@@ -50,10 +46,10 @@ void setup()   {
 	while (!Serial); // Wait till serial is ready
 
 	Serial.print("Connecting to AP - ");
-	Serial.print(SSID);
+	Serial.print(WIFI_SSID);
 
 	// Initialize WiFi connection
-	WiFi.begin(SSID, PASSWORD);
+	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 	// If connection isn't done yet, wait for 250ms till done
 	while (WiFi.status() != WL_CONNECTED) {
 		delay(250);
