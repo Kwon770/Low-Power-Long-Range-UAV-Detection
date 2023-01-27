@@ -33,7 +33,7 @@ let options = {
   host: 'broker.hivemq.com',
   port: 1883,
   username: mqttInfo.username,
-  password: mqttInfo.password'
+  password: mqttInfo.password
 }
 
 let mqttClient  = mqtt.connect(options)

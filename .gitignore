@@ -2,5 +2,8 @@ libraries/WiFiInfo/**
 libraries/WiFiInfo
 libraries/MQTTInfo/**
 libraries/MQTTInfo
+
 visual_server/secret/**
 visual_server/secret
+visual_server/node_modules
+visual_server/build
