@@ -18,15 +18,6 @@ RHMesh *manager;
 char buf[RH_MESH_MAX_MESSAGE_LEN];
 
 
-
-// Return free memeory by caculation
-int freeMem() {
-//	extern int __heap_start, *__brkval; // Arduino core memeory variables
-//	int v;
-//	return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
-	return ESP.getFreeHeap();
-}
-
 void setup() {
 	randomSeed(analogRead(0));
 	Serial.begin(BUAD_RATE);
@@ -81,8 +72,8 @@ void setup() {
 	}
 
 	// Print free memory
-	Serial.print(F("Memory = "));
-	Serial.println(freeMem());
+	Serial.print(F("RAM = "));
+	Serial.println(ESP.getFreeHeap());
 	Serial.print("SRAM = ");
 	Serial.println(ESP.getPsramSize());
 }
