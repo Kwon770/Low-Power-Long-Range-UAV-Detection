@@ -1,15 +1,12 @@
-#include <EEPROM.h>
 #include <RHRouter.h>
 #include <RHMesh.h>
 #include <RH_RF95.h>
 
-#define LED 9 // LED Pin number
-#define NODES 2 // Nodes count
 #define BUAD_RATE 115200 // Default ESP32 baud rate
+#define NODES 2 // Nodes count
+#define NODE_ID 1 // This node id
 
 
-// Node Data
-uint8_t nodeId;
 uint8_t routes[NODES]; // full routing table for mesh
 int16_t rssi[NODES]; // signal strength of nodes
 
@@ -24,25 +21,27 @@ char buf[RH_MESH_MAX_MESSAGE_LEN];
 
 // Return free memeory by caculation
 int freeMem() {
-	extern int __heap_start, *__brkval; // Arduino core memeory variables
-	int v;
-	return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+//	extern int __heap_start, *__brkval; // Arduino core memeory variables
+//	int v;
+//	return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+	return ESP.getFreeHeap();
 }
 
 void setup() {
 	randomSeed(analogRead(0));
-	pinMode(LED, OUTPUT);
 	Serial.begin(BUAD_RATE);
 	while (!Serial); // Wait for serial port to be available
 
 
-	// Read nodeId from the address 0 of EEPROM
-	nodeId = EEPROM.read(0);
+	Serial.print(F("[NODE "));
+	Serial.print(NODE_ID);
+	Serial.println(F("]"));
+
 	// Use flash memory for string instead of RAM
 	Serial.print(F("initializing node : "));
 
 	// Initalize driver
-	manager = new RHMesh(rf95w, nodeId);
+	manager = new RHMesh(rf95w, NODE_ID);
 	if (!manager->init()) {
 		Serial.println(F("!! init failed !!"));
 	} else {
@@ -76,10 +75,16 @@ void setup() {
 		routes[node] = 0;
 		rssi[node] = 0;
 	}
+	manager->clearRoutingTable();
+	for(uint8_t node = 1; node <= NODES; node++) {
+		manager->addRouteTo(node, 0);
+	}
 
 	// Print free memory
 	Serial.print(F("Memory = "));
 	Serial.println(freeMem());
+	Serial.print("SRAM = ");
+	Serial.println(ESP.getPsramSize());
 }
 
 
@@ -104,10 +109,14 @@ const __FlashStringHelper* getErrorString(uint8_t error) {
 void updateRoutingTable() {
 	// Update routing data toward all other nodes
 	for (uint8_t dest = 1; dest <= NODES; dest++) {
-		RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-		if (dest == nodeId) { // if destination is self
+		Serial.print(NODE_ID);
+		Serial.print(" -> ");
+		Serial.println(dest);
+
+		if (dest == NODE_ID) { // if destination is self
 			routes[dest - 1] = 255; // mark itself
 		} else {
+			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
 			routes[dest - 1] = route->next_hop; // update route
 
 			if (routes[dest - 1] == 0) { // if there is no route
@@ -139,20 +148,20 @@ void getRouteInfoString(char *p, size_t len) {
 // !! You must not change any string in this function !!
 // !! Mesh visualize featues will be broken !!
 void printNodeInfo(uint8_t node, char *s) {
-  Serial.print(F("node: "));
-  Serial.print(F("{"));
-  Serial.print(F("\""));
-  Serial.print(node);
-  Serial.print(F("\""));
-  Serial.print(F(": "));
-  Serial.print(s);
-  Serial.println(F("}"));
+	Serial.print(F("node: "));
+	Serial.print(F("{"));
+	Serial.print(F("\""));
+	Serial.print(node);
+	Serial.print(F("\""));
+	Serial.print(F(": "));
+	Serial.print(s);
+	Serial.println(F("}"));
 }
 
 void loop() {
 	// Send the route info of current node to all other nodes
 	for (uint8_t dest = 1; dest <= NODES; dest++) {
-		if (dest == nodeId) continue; // self skip
+		if (dest == NODE_ID) continue; // self skip
 
 
 		updateRoutingTable();
@@ -167,13 +176,13 @@ void loop() {
 		// Send route info 
 		uint8_t error = manager->sendtoWait((uint8_t *)buf, strlen(buf), dest);
 		if (error != RH_ROUTER_ERROR_NONE) { // if transmit error is occured
-			// Print detail error
+						     // Print detail error
 			Serial.println();
 			Serial.println(F(" !! "));
 			Serial.println(getErrorString(error));
 		} else {
 			Serial.println(F(" OK")); // if transmit is successful
-			
+
 			// if there is intermediate node in route destination node
 			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
 			if (route->next_hop != 0) {
@@ -182,7 +191,7 @@ void loop() {
 			}
 		}
 
-		if (nodeId == 1) printNodeInfo(nodeId, buf);  // debugging from Ground node
+		if (NODE_ID == 1) printNodeInfo(NODE_ID, buf);  // debugging from Ground node
 
 		// Listen incoming messages
 		// Wait for a random length of time before next transmit during listening
@@ -202,7 +211,7 @@ void loop() {
 				Serial.print(F("-> :"));
 				Serial.println(buf);
 
-				if (nodeId == 1) printNodeInfo(src, buf); // debugging from Ground node
+				if (NODE_ID == 1) printNodeInfo(src, buf); // debugging from Ground node
 
 				// if received trasnmit come from intermediate node
 				RHRouter::RoutingTableEntry *route = manager->getRouteTo(src);
