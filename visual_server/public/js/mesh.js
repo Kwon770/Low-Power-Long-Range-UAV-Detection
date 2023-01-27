@@ -1,14 +1,14 @@
 // Keep track of our socket connection
-var socket;
+let socket;
 
-var VerletPhysics2D = toxi.physics2d.VerletPhysics2D,
+let VerletPhysics2D = toxi.physics2d.VerletPhysics2D,
     VerletParticle2D = toxi.physics2d.VerletParticle2D,
     VerletSpring2D = toxi.physics2d.VerletSpring2D,
     VerletMinDistanceSpring2D = toxi.physics2d.VerletMinDistanceSpring2D,
     Vec2D = toxi.geom.Vec2D,
     Rect = toxi.geom.Rect;
 
-var options = {
+let options = {
     nodeRadius: 40,
     ageThreshold: 30000,
     springStrength: 0.001,
@@ -16,22 +16,22 @@ var options = {
     strengthScale: 5.0
 };
 
-var mesh,
+let mesh,
     nodes,
     physics,
     nodeColors;
 
-var dataCounter = 0;
-var bottomPadding = 50;
-var selectedNode;
-var showIndirectRoutes = true;
+let dataCounter = 0;
+let bottomPadding = 50;
+let selectedNode;
+let showIndirectRoutes = true;
 
 // utility to provide an iterator function with everly element
 // and every element after that element
 function forEachNested(arr, fn){
-    for(var i=0; i<arr.length; i++){
-        for(var j=i+1; j<arr.length; j++){
-            var result = fn(arr[i], arr[j], i, j, arr);
+    for(let i=0; i<arr.length; i++){
+        for(let j=i+1; j<arr.length; j++){
+            let result = fn(arr[i], arr[j], i, j, arr);
             if(result === false){
                 return;
             }
@@ -57,10 +57,10 @@ function setup() {
   socket.on('mesh-data',
     // When we receive data
     function(data) {
-      var nodeInfo = JSON.parse(data);
-      var nodeKey = Object.keys(nodeInfo)[0];
-      var nodeNumber = parseInt(nodeKey); // assume one property which is the node name
-      var routes = nodeInfo[nodeKey];
+      let nodeInfo = JSON.parse(data);
+      let nodeKey = Object.keys(nodeInfo)[0];
+      let nodeNumber = parseInt(nodeKey); // assume one property which is the node name
+      let routes = nodeInfo[nodeKey];
       console.log("updating node " + nodeNumber + " with routes " + JSON.stringify(routes));
       mesh.updateNode(nodeNumber, routes);
     }
@@ -69,8 +69,8 @@ function setup() {
 
 function mousePressed() {
   Object.values(mesh.nodes).forEach(function (n) {
-    var dx = mouseX - n.x;
-    var dy = mouseY - n.y;
+    let dx = mouseX - n.x;
+    let dy = mouseY - n.y;
     if (sqrt((dx*dx) + (dy*dy)) < (options.nodeRadius/2)) {
       selectedNode = n;
     }
@@ -92,15 +92,15 @@ function mouseDragged() {
 }
 
 function dashedLine(x1, y1, x2, y2, c1, c2) {
-  var dx = x2-x1;
-  var dy = y2-y1;
-  var d = sqrt((dx*dx) + (dy*dy));
-  var steps = d / 40;
-  var ix1, iy1, ix2, iy2;
-  var mx, my;
+  let dx = x2-x1;
+  let dy = y2-y1;
+  let d = sqrt((dx*dx) + (dy*dy));
+  let steps = d / 40;
+  let ix1, iy1, ix2, iy2;
+  let mx, my;
   stroke(c1);
   line(x1, y1, x2, y2);
-  for(var i=0; i<steps; i++) {
+  for(let i=0; i<steps; i++) {
     ix1 = lerp(x1, x2, i/steps);
     iy1 = lerp(y1, y2, i/steps);
     ix2 = lerp(x1, x2, (i+1)/steps);
@@ -144,11 +144,11 @@ function Mesh(){
 
 // n is number, routes is object with route tables
 Mesh.prototype.updateNode = function(n, routes) {
-    var nodeKey = n.toString();
-    var node = this.nodes[nodeKey];
+    let nodeKey = n.toString();
+    let node = this.nodes[nodeKey];
 
     if (!node) {
-        var pos = new Vec2D((width/2) + random(-50, 50), (height/2) + random(-50, 50));
+        let pos = new Vec2D((width/2) + random(-50, 50), (height/2) + random(-50, 50));
         node = new Node(n, routes, pos);
         this.nodes[nodeKey] = node;
         console.log('created node ' + nodeKey);
@@ -170,22 +170,22 @@ Mesh.prototype.updateNode = function(n, routes) {
       );
     });
 
-    for (var r=1;r<=routes.length;r++) {
+    for (let r=1;r<=routes.length;r++) {
       if (r == n) continue; // self
-      var route = routes[r-1];
-      var nextNodeKey = route.n;
-      var nextNode = parseInt(route.n);
+      let route = routes[r-1];
+      let nextNodeKey = route.n;
+      let nextNode = parseInt(route.n);
       if (nextNode == 0) {
         console.log('route to node ' + r + ' is unknown');
       } else {
         if (r == nextNode) {
           // direct route
-          var strength = abs(route.r);
+          let strength = abs(route.r);
           console.log('route to node ' + r + ' is direct with strength ' + strength);
-          var node2 = this.nodes[nextNodeKey];
+          let node2 = this.nodes[nextNodeKey];
           if (node2) {
             // see if there is already a spring between the nodes. If so, remove it.
-            var spring = physics.getSpring(node, node2);
+            let spring = physics.getSpring(node, node2);
             if (spring) {
               //console.log('--- removed spring between ' + n + ' and ' + nextNode);
               physics.removeSpring(spring);
@@ -195,11 +195,11 @@ Mesh.prototype.updateNode = function(n, routes) {
               //console.log('--- removed spring between ' + nextNode + ' and ' + n);
               physics.removeSpring(spring);
             }
-            var node2Routes = node2.routes;
-            var reverseRoute = node2Routes[n-1];
+            let node2Routes = node2.routes;
+            let reverseRoute = node2Routes[n-1];
             if (parseInt(reverseRoute.n) == n) {
               //console.log('found reverse route from ' + nextNode + ' to ' + n + ': ' + JSON.stringify(reverseRoute));
-              var strength2 = abs(reverseRoute.r);
+              let strength2 = abs(reverseRoute.r);
               strength = (strength + strength2) / 2.0;
               //console.log('using average strength = ' + strength);
             }
@@ -223,19 +223,19 @@ Mesh.prototype.updateNode = function(n, routes) {
 }
 
 Mesh.prototype.display = function() {
-    var nodeNums = Object.keys(this.nodes);
-    for(var i=0;i<nodeNums.length;i++) {
-      var n = this.nodes[nodeNums[i]];
-      var now = new Date();
+    let nodeNums = Object.keys(this.nodes);
+    for(let i=0;i<nodeNums.length;i++) {
+      let n = this.nodes[nodeNums[i]];
+      let now = new Date();
       if (now.getTime() - n.lastUpdate.getTime() > options.ageThreshold) {
         continue;
       }
       fill(nodeColors[n.nodeNum - 1]);
-      for(var j=0;j<n.routes.length;j++) {
-        var r = n.routes[j];
+      for(let j=0;j<n.routes.length;j++) {
+        let r = n.routes[j];
         if (r.n != '255') { // if not self
-          var n2, via;
-          var direct = false;
+          let n2, via;
+          let direct = false;
           if (r.n == (j+1).toString()) {
             // direct route
             direct = true;
@@ -246,15 +246,15 @@ Mesh.prototype.display = function() {
             via = this.nodes[r.n];
           }
           if (n2) {
-            var m = (n.y-n2.y)/(n.x-n2.x);
-            var mp = -(n.x-n2.x)/(n.y-n2.y); // slope of perpendicular
-            var q = sqrt(1.0/(1.0 + (mp*mp)));
-            var tx, ty;
-            var tOffset = 15;
-            var lineWeight = 3;
+            let m = (n.y-n2.y)/(n.x-n2.x);
+            let mp = -(n.x-n2.x)/(n.y-n2.y); // slope of perpendicular
+            let q = sqrt(1.0/(1.0 + (mp*mp)));
+            let tx, ty;
+            let tOffset = 15;
+            let lineWeight = 3;
             strokeWeight(lineWeight);
-            var lineOffset = lineWeight/2.0;
-            var s = r.r.toString();
+            let lineOffset = lineWeight/2.0;
+            let s = r.r.toString();
             if (n.x < n2.x) {
               if (direct && (r.r != 0)) {
                 // direct route. Draw solid line
@@ -328,8 +328,8 @@ Node.prototype.display = function(){
     //noStroke();
     ellipse(this.x, this.y, options.nodeRadius, options.nodeRadius);
     fill('white');
-    var s = "" + this.nodeNum;
-    var tx = this.x - textWidth(s)/2.0;
-    var ty = this.y + textAscent()/2.0 - textDescent()/2.0;
+    let s = "" + this.nodeNum;
+    let tx = this.x - textWidth(s)/2.0;
+    let ty = this.y + textAscent()/2.0 - textDescent()/2.0;
     text(this.nodeNum, tx, ty);
 };

@@ -5,7 +5,7 @@
 * based on original work by [Karsten Schmidt](http://toxiclibs.org).
 * Licensed [GPLv2](http://www.gnu.org/licenses/lgpl-2.1.html) 
 */
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.toxi = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{let g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.toxi = f()}})(function(){let define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){let a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);let f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}let l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){let n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}let i=typeof require=="function"&&require;for(let o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
 /** @module toxi.THREE */
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
 
 },{"./THREE/ToxiclibsSupport":2}],2:[function(require,module,exports){
 /*global THREE*/
-var is = require('../internals/is');
+let is = require('../internals/is');
     /**
      * @author Kyle Phillips  / haptic-data.com
      * a bridge between Toxiclibs.js and Three.js
@@ -23,7 +23,7 @@ var is = require('../internals/is');
      * Three.js does type-checking to ensure that vectors, vertices and faces are of THREE's types
      * this helps to do that conversion process.
      */
-    var	ToxiclibsSupport = function(scene){
+    let	ToxiclibsSupport = function(scene){
         if(THREE === undefined){
             throw new Error("THREE.js has not been loaded");
         }
@@ -46,8 +46,8 @@ var is = require('../internals/is');
         geometry = geometry || new THREE.Geometry();
         //create a map where the unique id of the Vertex
         //references the index in the array
-        var idIndexMap = {};
-        var v, i, f, len, vertices;
+        let idIndexMap = {};
+        let v, i, f, len, vertices;
         //add all vertices
         vertices = is.Array(obj) ? obj : obj.vertices;
         len = vertices.length;
@@ -82,12 +82,12 @@ var is = require('../internals/is');
         if(material === undefined){
             material = new THREE.MeshBasicMaterial();
         }
-        var geometry = ToxiclibsSupport.createMeshGeometry(triangleMesh);
+        let geometry = ToxiclibsSupport.createMeshGeometry(triangleMesh);
         return new THREE.Mesh(geometry,material);
     };
 
     ToxiclibsSupport.createParticle = function(position, materials){
-        var particle = new THREE.Particle(materials);
+        let particle = new THREE.Particle(materials);
         particle.position.x = position.x;
         particle.position.y = position.y;
         particle.position.z = position.z;
@@ -99,8 +99,8 @@ var is = require('../internals/is');
             if(material === undefined){
                 material = new THREE.LineBasicMaterial();
             }
-            var geom = ToxiclibsSupport.createLineGeometry(line3d);
-            var line = new THREE.Line(geom,material);
+            let geom = ToxiclibsSupport.createLineGeometry(line3d);
+            let line = new THREE.Line(geom,material);
             this.scene.add(line);
             return line;
         },
@@ -116,14 +116,14 @@ var is = require('../internals/is');
          * @param {THREE.Material} [threeMaterials] the three.js material for the mesh
          */
         addMesh: function(obj_or_mesh,threeMaterials){
-            var toxiTriangleMesh;
+            let toxiTriangleMesh;
             if(arguments.length == 1){ //it needs to be an param object
                 toxiTriangleMesh = obj_or_mesh.geometry;
                 threeMaterials = obj_or_mesh.materials;
             } else {
                 toxiTriangleMesh = obj_or_mesh;
             }
-            var threeMesh = this.createMesh(toxiTriangleMesh,threeMaterials);
+            let threeMesh = this.createMesh(toxiTriangleMesh,threeMaterials);
             this.scene.add(threeMesh);
             return threeMesh;
         },
@@ -132,13 +132,13 @@ var is = require('../internals/is');
                 material = new THREE.ParticleBasicMaterial();
             }
             positions =  is.Array( positions ) ? positions : [ positions ];
-            var particle = new THREE.Geometry(),
+            let particle = new THREE.Geometry(),
                 pos;
-            for(var i=0,len = positions.length;i<len;i++){
+            for(let i=0,len = positions.length;i<len;i++){
                 pos = positions[i];
                 particle.vertices[i] = new THREE.Vector3( pos.x, pos.y, pos.z );
             }
-            var particleSystem = new THREE.ParticleSystem(particle,material);
+            let particleSystem = new THREE.ParticleSystem(particle,material);
             this.scene.add(particleSystem);
             return particle;
         },
@@ -200,14 +200,14 @@ var is = require('../internals/is');
 
 
 
-var filter = require('../internals').filter,
+let filter = require('../internals').filter,
 	numberComparator = require('../internals').numberComparator,
 	mathUtils = require('../math/mathUtils'),
 	LinearInterpolation = require('../math/LinearInterpolation'),
 	ColorList = require('./ColorList');
 
 //a protected object for every point on the gradient
-var _GradPoint = function(p, c){
+let _GradPoint = function(p, c){
 	this.pos = p;
 	this.color = c;
 };
@@ -227,7 +227,7 @@ _GradPoint.prototype = {
 	}
 };
 
-var ColorGradient = function(){
+let ColorGradient = function(){
 	this.gradient = [];
 	this.interpolator = new LinearInterpolation();
 	this.maxDither = 0;
@@ -251,16 +251,16 @@ ColorGradient.prototype = {
 	calcGradient: function(pos, width){
 		if( arguments.length === 0 ){
 			pos = this.gradient[0].getPosition();
-			var last = this.gradient[this.gradient.length-1].getPosition();
+			let last = this.gradient[this.gradient.length-1].getPosition();
 			width = Math.floor(last - pos);
 		}
 
-		var result = new ColorList();
+		let result = new ColorList();
 		if( this.gradient.length === 0 ){
 			return result;
 		}
 
-		var frac = 0,
+		let frac = 0,
 			currPoint, nextPoint,
 			endPos = pos + width,
 			i = 0,
@@ -272,7 +272,7 @@ ColorGradient.prototype = {
 			}
 		}
 
-		var isPremature = (currPoint===undefined),
+		let isPremature = (currPoint===undefined),
 			activeGradient;
 		if( !isPremature ){
 			activeGradient = filter(this.gradient, function( g ){ return g.pos >= currPoint.pos; });
@@ -282,14 +282,14 @@ ColorGradient.prototype = {
 			currPoint = this.gradient[0];
 		}
 
-		var currWidth = 0;
+		let currWidth = 0;
 		//start over with i, and use it to iterate
 		i = 0;
 		l = activeGradient.length;
 		if( currPoint !== activeGradient[l-1] ){
 			nextPoint = activeGradient[i];
 			if( isPremature ){
-				var d = currPoint.pos - pos;
+				let d = currPoint.pos - pos;
 				currWidth = mathUtils.abs( d ) > 0 ? 1 / d : 1;
 			} else {
 				if( nextPoint.pos - currPoint.pos > 0 ) {
@@ -319,7 +319,7 @@ ColorGradient.prototype = {
 				}
 			}
 			if( currPoint  !== activeGradient[l-1] ){
-				var ditheredFrac = mathUtils.clip( frac+mathUtils.normalizedRandom() * this.maxDither, 0, 1 );
+				let ditheredFrac = mathUtils.clip( frac+mathUtils.normalizedRandom() * this.maxDither, 0, 1 );
 				ditheredFrac = this.interpolator.interpolate( 0, 1, ditheredFrac );
 				result.add( currPoint.color.getBlended(nextPoint.color, ditheredFrac) );
 			} else {
@@ -367,7 +367,7 @@ ColorGradient.prototype = {
 },{"../internals":98,"../math/LinearInterpolation":119,"../math/mathUtils":125,"./ColorList":8}],8:[function(require,module,exports){
 
 
-var is = require('../internals/is'),
+let is = require('../internals/is'),
     each = require('../internals/each'),
     Iterator = require('../internals/Iterator'),
 	mathUtils = require('../math/mathUtils'),
@@ -379,9 +379,9 @@ var is = require('../internals/is'),
 
 /**
  * A container class of concrete colors. ColorLists can be built manually and
- * are also created when working with {@link ColorRange}s. The class has various
+ * are also created when working with {@link ColorRange}s. The class has letious
  * methods to manipulate all colors in the list in parallel, as well as sort
- * them by various criteria.
+ * them by letious criteria.
  * @see ColorRange
  * @see AccessCriteria
  */
@@ -393,12 +393,12 @@ var is = require('../internals/is'),
  of the given colors are created (shallow copy only).
  @param {TColor[]} colors
 */
-var ColorList = function(colors){
+let ColorList = function(colors){
 	if(arguments.length > 1){
 		return ColorList.call(this,arguments);
 	}
 	this.colors = [];
-    var i = 0;
+    let i = 0;
     if( is.Array(colors) && colors.length ){
         if( typeof colors[0] === 'number' ){
             //argb integers
@@ -437,7 +437,7 @@ ColorList.prototype = {
 	* @return itself
 	*/
 	addAll:	function(collection){
-		var self = this;
+		let self = this;
         if( !is.Array(collection) ){
             this.colors.push(collection);
         } else {
@@ -480,7 +480,7 @@ ColorList.prototype = {
 	* @return itself
 	*/
 	clusterSort: function(clusterCriteria, subClusterCriteria, numClusters, isReversed){
-		var sorted = this.colors.slice(0),
+		let sorted = this.colors.slice(0),
 			clusters = [],
 			d = 1,
 			i = 0,
@@ -488,8 +488,8 @@ ColorList.prototype = {
 			slice;
 
 		sorted.sort( clusterCriteria.compare ).reverse();
-		for(var j=0;j<num;j++){
-			var c = sorted[j];
+		for(let j=0;j<num;j++){
+			let c = sorted[j];
 			if(c.getComponentValue(clusterCriteria) < d){
 				slice = sorted.slice(i, j);
 				slice.sort( subClusterCriteria.compare );
@@ -525,7 +525,7 @@ ColorList.prototype = {
 	* @return true, if the color is present.
 	*/
 	contains: function(color){
-		for( var i=0, l= this.colors.length; i<l; i++){
+		for( let i=0, l= this.colors.length; i<l; i++){
 			if( this.colors[i].equals( color ) ){
 				return true;
 			}
@@ -556,7 +556,7 @@ ColorList.prototype = {
 	* @return average color or null, if there're no entries yet.
 	*/
 	getAverage: function(){
-		var r = 0,
+		let r = 0,
 			g = 0,
 			b = 0,
 			a = 0;
@@ -568,7 +568,7 @@ ColorList.prototype = {
 			a += c.alpha();
 		});
 
-		var num = this.colors.length;
+		let num = this.colors.length;
 		if(num > 0){
 			return TColor.newRGBA(r / num, g / num, b / num, a / num);
 		}
@@ -582,10 +582,10 @@ ColorList.prototype = {
 	* @return new color list
 	*/
 	getBlended: function(amount){
-		var clrs = [],
+		let clrs = [],
 			len = this.colors.length;
-		for(var i=0; i< len; i++){
-			var index = i > 0 ? i -1 : clrs.length - 1,
+		for(let i=0; i< len; i++){
+			let index = i > 0 ? i -1 : clrs.length - 1,
 				c = this.colors[index];
 			clrs.push(this.colors[i].getBlended(c,amount));
 		}
@@ -596,10 +596,10 @@ ColorList.prototype = {
 	* @return darkest color or null if there're no entries yet.
 	*/
 	getDarkest: function(){
-		var darkest,
+		let darkest,
 			minBrightness = Number.MAX_VALUE;
 		this.each(function(c){
-			var luma = c.luminance();
+			let luma = c.luminance();
 			if(luma < minBrightness){
 				darkest = c;
 				minBrightness = luma;
@@ -612,10 +612,10 @@ ColorList.prototype = {
 	* @return lightest color or null, if there're no entries yet.
 	*/
 	getLightest: function(){
-		var lightest,
+		let lightest,
 			maxBrightness = Number.MIN_VALUE;
 		this.each(function(c){
-			var luma = c.luminance();
+			let luma = c.luminance();
 			if(luma > maxBrightness){
 				lightest = c;
 				maxBrightness = luma;
@@ -625,7 +625,7 @@ ColorList.prototype = {
 	},
 
 	getRandom: function(){
-		var index = Math.floor(mathUtils.random(this.colors.length));
+		let index = Math.floor(mathUtils.random(this.colors.length));
 		return this.colors[index];
 	},
 
@@ -650,7 +650,7 @@ ColorList.prototype = {
 	},
 
 	rotateRYB: function(theta, isRadians){
-		var angle;
+		let angle;
 		if(theta !== Math.floor(theta) || isRadians){
 			angle = mathUtils.degrees(theta);
 		} else {
@@ -721,7 +721,7 @@ ColorList.prototype = {
 
 		// Remove the darkest color from the stack,
 		// put it in the sorted list as starting element.
-		var root = this.getDarkest(),
+		let root = this.getDarkest(),
 			stack = this.colors.slice(0),
 			sorted = [];
 
@@ -731,14 +731,14 @@ ColorList.prototype = {
 		// Now find the color in the stack closest to that color.
 		// Take this color from the stack and add it to the sorted list.
 		// Now find the color closest to that color, etc.
-		var sortedCount = 0;
+		let sortedCount = 0;
 		while(stack.length > 1){
-			var closest = stack[0],
+			let closest = stack[0],
 				lastSorted = sorted[sortedCount],
 				distance = proxy.distanceBetween(closest, lastSorted);
 
-			for(var i = stack.length - 1; i >= 0; i--){
-				var c = stack[i],
+			for(let i = stack.length - 1; i >= 0; i--){
+				let c = stack[i],
 					d = proxy.distanceBetween(c, lastSorted);
 				if(d < distance){
 					closest = c;
@@ -776,7 +776,7 @@ ColorList.prototype = {
 	},
 
 	toARGBArray: function(){
-		var array = [];
+		let array = [];
 		this.each(function(c){
 			array.push(c.toARGB());
 		});
@@ -810,7 +810,7 @@ ColorList.prototype = {
 		return new ColorList(pixels);
 	}
 
-	var colors = [],
+	let colors = [],
 		temp = TColor.BLACK.copy(),
 		i = 0,
 		isUnique = true,
@@ -847,14 +847,14 @@ module.exports = ColorList;
 
 
 },{"../internals/Iterator":99,"../internals/each":102,"../internals/is":106,"../math/mathUtils":125,"./HSVDistanceProxy":12,"./ProximityComparator":17,"./RGBDistanceProxy":19,"./TColor":20,"./accessCriteria":22}],9:[function(require,module,exports){
-var TColor = require('./TColor');
-var ColorList = require('./ColorList');
-var FloatRange = require('../util/datatypes/FloatRange');
-var is = require('../internals/is');
-var each = require('../internals/each');
-var MathUtils = require('../math/mathUtils');
+let TColor = require('./TColor');
+let ColorList = require('./ColorList');
+let FloatRange = require('../util/datatypes/FloatRange');
+let is = require('../internals/is');
+let each = require('../internals/each');
+let MathUtils = require('../math/mathUtils');
 
-    var ColorRange,
+    let ColorRange,
         UNTITLED_ID = 1,
         addRange,
         addAll,
@@ -890,7 +890,7 @@ var MathUtils = require('../math/mathUtils');
     * preset ranges reflecting common demands and color characters. You can also
     * construct new ranges and manually add additional constraints. Unless the
     * constraints in a range are very narrow the class will always create random
-    * variations within the constraints. Please see the examples for further
+    * letiations within the constraints. Please see the examples for further
     * details.
     *
     * {@link ColorRange}s are a key ingredient for defining {@link ColorTheme}s but
@@ -900,7 +900,7 @@ var MathUtils = require('../math/mathUtils');
 
     /**
     * construct a new ColorRange,
-    * this constructor takes a wide variety of param signatures,
+    * this constructor takes a wide letiety of param signatures,
     * 1.
         * @param {toxi.color.ColorList} list
     * 2.
@@ -928,7 +928,7 @@ var MathUtils = require('../math/mathUtils');
         * @param {toxi.color.TColor} c
     */
     ColorRange = function( hue, sat, bri, alpha, black, white, name ){
-        var self = this, list; //if ColorList is supplied
+        let self = this, list; //if ColorList is supplied
         if( arguments.length === 0 ){
             return this;
         }
@@ -959,7 +959,7 @@ var MathUtils = require('../math/mathUtils');
             list.each(function(c){ self.add(c); });
         }
         //search arguments for a string that would be the name
-        var i=arguments.length-1;
+        let i=arguments.length-1;
         for(; i>=0; i--){
             if( typeof arguments[i] === 'string' ){
                 this.name = arguments[i];
@@ -1018,7 +1018,7 @@ var MathUtils = require('../math/mathUtils');
          * @return true if is contained
          */
         contains: function( c ){
-            var isInRange = this.isValueInConstraint(c.hue(), this.hueConstraint);
+            let isInRange = this.isValueInConstraint(c.hue(), this.hueConstraint);
             isInRange &= this.isValueInConstraint(c.saturation(), this.saturationConstraint);
             isInRange &= this.isValueInConstraint(c.brightness(), this.brightnessConstraint);
             isInRange &= this.isValueInConstraint(c.alpha(), this.alphaConstraint);
@@ -1028,15 +1028,15 @@ var MathUtils = require('../math/mathUtils');
          * creates a copy of the range but overrides the hue
          * and alpha constraints taken from the given color (if specified)
          * @param {toxi.color.TColor} [c]
-         * @param {Number} [variance]
+         * @param {Number} [letiance]
          * @return copy
          */
-        copy: function( c, variance ){
-            variance = typeof variance === 'number' ? variance : 0;
-            var range = new ColorRange();
+        copy: function( c, letiance ){
+            letiance = typeof letiance === 'number' ? letiance : 0;
+            let range = new ColorRange();
             range.name = this.name;
             if( c ){
-                var hue = c.hue() + variance * MathUtils.normalizedRandom();
+                let hue = c.hue() + letiance * MathUtils.normalizedRandom();
                 range.hueConstraint = [ new FloatRange(hue,hue) ];
                 range.alphaConstraint = [ new FloatRange(c.alpha(),c.alpha()) ];
             } else {
@@ -1057,9 +1057,9 @@ var MathUtils = require('../math/mathUtils');
             * @param {toxi.color.Hue} hue
          * 3.
             * @param {toxi.color.TColor} c
-            * @param {Number} variance
+            * @param {Number} letiance
         */
-        getColor: function( hue_c, variance ){
+        getColor: function( hue_c, letiance ){
             if( is.Hue(hue_c) ){
                 return TColor.newHSVA(
                     hue_c.getHue(),
@@ -1069,7 +1069,7 @@ var MathUtils = require('../math/mathUtils');
                 );
             }
             //must be a TColor
-            var c = hue_c, h, s, b, a;
+            let c = hue_c, h, s, b, a;
             if( c ){
                 if( c.isBlack() ){
                     return TColor.newHSVA(c.hue(), 0, this.black.pickRandom(), c.alpha() );
@@ -1084,7 +1084,7 @@ var MathUtils = require('../math/mathUtils');
                         c.alpha()
                     );
                 }
-                h = c.hue() + variance * MathUtils.normalizedRandom();
+                h = c.hue() + letiance * MathUtils.normalizedRandom();
                 a = c.alpha();
             } else {
                 h = pickRandom(this.hueConstraint).pickRandom();
@@ -1102,30 +1102,30 @@ var MathUtils = require('../math/mathUtils');
         * 2.
             * @param {toxi.color.TColor} c
             * @param {Number} num
-            * @param {Number} variance
+            * @param {Number} letiance
         * @return {toxi.color.ColorList} list
         */
-        getColors: function( c, num, variance ){
+        getColors: function( c, num, letiance ){
             if( arguments.length < 3 ){
-                variance = ColorRange.DEFAULT_VARIANCE;
+                letiance = ColorRange.DEFAULT_letIANCE;
             }
             if( arguments.length === 1 ){
                 num = c;
                 c = undefined;
             }
-            var list = new ColorList();
-            for( var i=0; i<num; i++){
-                list.add(this.getColor(c, variance));
+            let list = new ColorList();
+            for( let i=0; i<num; i++){
+                list.add(this.getColor(c, letiance));
             }
             return list;
         },
         /**
          * creates a new shade of gray
          * @param {Number} brightness
-         * @param {Number} variance
+         * @param {Number} letiance
          */
-        getGrayscale: function( brightness, variance ){
-            return this.getColor( TColor.newGray(brightness), variance);
+        getGrayscale: function( brightness, letiance ){
+            return this.getColor( TColor.newGray(brightness), letiance);
         },
         getName: function(){
             return this.name;
@@ -1139,7 +1139,7 @@ var MathUtils = require('../math/mathUtils');
             return this.copy().add(range);
         },
         isValueInConstraint: function( val, rangeSet ){
-            var isValid = false;
+            let isValid = false;
             each(rangeSet, function(r){
                 isValid |= r.isValueInRange(val);
             });
@@ -1148,8 +1148,8 @@ var MathUtils = require('../math/mathUtils');
     };
 
 
-    //default hue variance for #getColor
-    ColorRange.DEFAULT_VARIANCE = 0.035;
+    //default hue letiance for #getColor
+    ColorRange.DEFAULT_letIANCE = 0.035;
 
     //build static pre-defined ColorRange's
     (function(FR, un){
@@ -1168,7 +1168,7 @@ var MathUtils = require('../math/mathUtils');
             'intense': [un, new FR(0.9,1.0), new FR(0.2,0.35)]
         }, function( args, name ){
             args.push(name);
-            var nameUC = name.toUpperCase();
+            let nameUC = name.toUpperCase();
             //construct a new ColorRange without params (only do this internally)
             ColorRange[nameUC] = new ColorRange();
             //apply the arguments to the constructor
@@ -1188,14 +1188,14 @@ var MathUtils = require('../math/mathUtils');
 
 
 },{"../internals/each":102,"../internals/is":106,"../math/mathUtils":125,"../util/datatypes/FloatRange":165,"./ColorList":8,"./TColor":20}],10:[function(require,module,exports){
-var each = require('../internals/each');
-var MathUtils = require('../math/mathUtils');
-var ColorRange = require('./ColorRange');
-var NamedColor = require('./namedColor');
-var ColorList = require('./ColorList');
+let each = require('../internals/each');
+let MathUtils = require('../math/mathUtils');
+let ColorRange = require('./ColorRange');
+let NamedColor = require('./namedColor');
+let ColorList = require('./ColorList');
 
 
-    var ColorTheme, _ThemePart;
+    let ColorTheme, _ThemePart;
 
 
     /**
@@ -1211,7 +1211,7 @@ var ColorList = require('./ColorList');
         this.weight = weight;
     };
     _ThemePart.prototype.getColor = function(){
-        return this.range.getColor(this.color, ColorRange.DEFAULT_VARIANCE);
+        return this.range.getColor(this.color, ColorRange.DEFAULT_letIANCE);
     };
 
     /**
@@ -1243,8 +1243,8 @@ var ColorList = require('./ColorList');
          * @return itself
          */
         addRange: function( range_or_descriptor, color_or_weight, weight ){
-            var self = this;
-            var _range, _col;
+            let self = this;
+            let _range, _col;
             if( arguments.length === 3 ){
                 this.parts.push( new _ThemePart(range_or_descriptor, color_or_weight, weight) );
                 this._weightedSum += weight;
@@ -1264,11 +1264,11 @@ var ColorList = require('./ColorList');
             return this;
         },
         getColor: function(){
-            var self = this,
+            let self = this,
                 rnd = Math.random(),
                 t,
                 currWeight;
-            for( var i = 0, l = this.parts.length; i<l; i++){
+            for( let i = 0, l = this.parts.length; i<l; i++){
                 t = this.parts[i];
                 currWeight = t.weight / this._weightedSum;
                 if( currWeight >= rnd ){
@@ -1284,8 +1284,8 @@ var ColorList = require('./ColorList');
          * @param {Number} num the number of colors to put in the list
          */
         getColors: function( num ){
-           var list = new ColorList();
-           for( var i = 0; i < num; i++) {
+           let list = new ColorList();
+           for( let i = 0; i < num; i++) {
                list.add( this.getColor() );
             }
            return list;
@@ -1312,7 +1312,7 @@ var ColorList = require('./ColorList');
 
 },{"./distanceProxies":25}],13:[function(require,module,exports){
 
-	var HistEntry = function( c ){
+	let HistEntry = function( c ){
 		this.col = c;
 		this.freq = 1;
 	};
@@ -1334,7 +1334,7 @@ var ColorList = require('./ColorList');
 },{}],14:[function(require,module,exports){
 
 
-	var each = require('../internals').each,
+	let each = require('../internals').each,
 		Iterator = require('../internals').Iterator,
 		HistEntry = require('./HistEntry'),
 		ColorList = require('./ColorList');
@@ -1343,7 +1343,7 @@ var ColorList = require('./ColorList');
 	 * Histogram constructor
 	 * @param {toxi.color.ColorList} palette
 	 */
-	var Histogram = function( palette ){
+	let Histogram = function( palette ){
 		this.palette = palette;
 	};
 
@@ -1356,11 +1356,11 @@ var ColorList = require('./ColorList');
 		 * @type sorted histogram as List of HistEntry
 		 */
 		compute: function( tolerance, blendCols ){
-			var self = this;
+			let self = this;
 			this.entries = [];
-			var maxFreq = 1;
+			let maxFreq = 1;
 			this.palette.each(function( c ){
-				var existing, e, i=0, l=self.entries.length;
+				let existing, e, i=0, l=self.entries.length;
 				for( i=0; i<l; i++ ){
 					e = self.entries[i];
 					if( e.col.distanceToRGB(c) < tolerance ){
@@ -1404,7 +1404,7 @@ var ColorList = require('./ColorList');
 	};
 
 	Histogram.newFromARGBArray = function( pixels, numSamples, tolerance, blendCols ){
-		var h = new Histogram( ColorList.createFromARGBArray(pixels, numSamples, false) );
+		let h = new Histogram( ColorList.createFromARGBArray(pixels, numSamples, false) );
 		h.compute( tolerance, blendCols );
 		return h;
 	};
@@ -1412,10 +1412,10 @@ var ColorList = require('./ColorList');
 	module.exports = Histogram;
 
 },{"../internals":98,"./ColorList":8,"./HistEntry":13}],15:[function(require,module,exports){
-var LinkedMap = require('../internals/LinkedMap');
-var each = require('../internals/each');
+let LinkedMap = require('../internals/LinkedMap');
+let each = require('../internals/each');
 
-    var namedHues = new LinkedMap(),
+    let namedHues = new LinkedMap(),
         primaryHues = [],
         Hue;
     /*
@@ -1470,7 +1470,7 @@ var each = require('../internals/each');
         ['purple',true],
         ['pink',true]
     ], function( item, i ){
-        var name = item[0],
+        let name = item[0],
             nameUC = name.toUpperCase(),
             isPrimary = item[1];
         Hue[nameUC] = new Hue( name, i * 30 / 360.0, isPrimary );
@@ -1478,7 +1478,7 @@ var each = require('../internals/each');
     });
 
     // Tolerance value for checking if a given hue is primary
-    Hue.PRIMARY_VARIANCE = 0.01;
+    Hue.PRIMARY_letIANCE = 0.01;
 
     /**
      * Finds the closest defined & named Hue for the given hue vale.
@@ -1490,11 +1490,11 @@ var each = require('../internals/each');
     Hue.getClosest = function( hue, primaryOnly ){
         hue %= 1;
         primaryOnly = (primaryOnly === true);
-        var dist = Number.MAX_VALUE,
+        let dist = Number.MAX_VALUE,
             closest,
             hues = primaryOnly ? primaryHues : namedHues.getArray();
         each(hues, function(h){
-            var d = Math.min( Math.abs(h.getHue() - hue), Math.abs(1 + h.getHue() - hue) );
+            let d = Math.min( Math.abs(h.getHue() - hue), Math.abs(1 + h.getHue() - hue) );
             if( d < dist ) {
                 dist = d;
                 closest = h;
@@ -1507,12 +1507,12 @@ var each = require('../internals/each');
         return namedHues.get(name);
     };
 
-    Hue.isPrimary = function( hue, variance ){
-        variance = typeof variance === 'number' ? variance : Hue.PRIMARY_VARIANCE;
-        var isPrimary = false;
-        for( var i=0, len = primaryHues.length; i<len; i++ ){
-            var h = primaryHues[i];
-            if( Math.abs( hue - h.getHue() ) < variance ) {
+    Hue.isPrimary = function( hue, letiance ){
+        letiance = typeof letiance === 'number' ? letiance : Hue.PRIMARY_letIANCE;
+        let isPrimary = false;
+        for( let i=0, len = primaryHues.length; i<len; i++ ){
+            let h = primaryHues[i];
+            if( Math.abs( hue - h.getHue() ) < letiance ) {
                 isPrimary = true;
                 break;
             }
@@ -1530,13 +1530,13 @@ var each = require('../internals/each');
 
 },{"./accessors":23}],17:[function(require,module,exports){
 
-	var ProximityComparator = function( col, proxy ){
+	let ProximityComparator = function( col, proxy ){
 		this.col = col;
 		this.proxy = proxy;
 	};
 	ProximityComparator.prototype.compare = function( a, b ){
-		var da = this.proxy.distanceBetween( this.col, a );
-		var db = this.proxy.distanceBetween( this.col, b );
+		let da = this.proxy.distanceBetween( this.col, a );
+		let db = this.proxy.distanceBetween( this.col, b );
 		return da < db ? -1 : da > db ? 1 : 0;
 	};
 	module.exports = ProximityComparator;
@@ -1553,7 +1553,7 @@ var each = require('../internals/each');
 },{"./distanceProxies":25}],20:[function(require,module,exports){
 
 
-var	numberComparator = require('../internals/numberComparator'),
+let	numberComparator = require('../internals/numberComparator'),
     is = require('../internals/is'),
 	mathUtils = require('../math/mathUtils'),
     vectors = require('../geom/vectors'),
@@ -1563,7 +1563,7 @@ var	numberComparator = require('../internals/numberComparator'),
 
 
 //private
-var dec2hex = function decimalToHexString(number){
+let dec2hex = function decimalToHexString(number){
 	if (number < 0){
 		number = 0xFFFFFFFF + number + 1;
 	}
@@ -1575,13 +1575,13 @@ var dec2hex = function decimalToHexString(number){
  @class Creates a new TColor instance
  @memberOf toxi.color
  */
-var	TColor = function(tcolor){
+let	TColor = function(tcolor){
 	this.rgb = [];
 	this.hsv = [];
 	this.cmyk = [];
 	this._alpha = 1.0;
 	if(tcolor !== undefined){
-		var buffer = tcolor.toCMYKAArray();
+		let buffer = tcolor.toCMYKAArray();
 		this.cmyk = buffer.splice(0,4);
 		this.hsv = tcolor.toHSVAArray().splice(0,3);
 		this.rgb = tcolor.toRGBAArray().splice(0,3);
@@ -1646,16 +1646,16 @@ TColor.prototype = {
 
 	/**
 	 * Rotates this color by a random amount (not exceeding the one specified)
-	 * and creates variations in saturation and brightness based on the 2nd
+	 * and creates letiations in saturation and brightness based on the 2nd
 	 * parameter.
 	 * @param theta
 	 *            max. rotation angle (in radians)
 	 * @param delta
-	 *            max. sat/bri variance
+	 *            max. sat/bri letiance
 	 * @return itself
 	 */
 	analog: function(theta, delta) {
-		var angle = mathUtils.degrees(theta);
+		let angle = mathUtils.degrees(theta);
 		this.rotateRYB(angle * mathUtils.normalizedRandom());
 		this.hsv[1] += delta * mathUtils.normalizedRandom();
 		this.hsv[2] += delta * mathUtils.normalizedRandom();
@@ -1676,7 +1676,7 @@ TColor.prototype = {
 	 */
 	blend: function(c, t) {
 		if(t === undefined) { t = 0.5; }
-		var crgb = c.toRGBAArray();
+		let crgb = c.toRGBAArray();
 		this.rgb[0] += (crgb[0] - this.rgb[0]) * t;
 		this.rgb[1] += (crgb[1] - this.rgb[1]) * t;
 		this.rgb[2] += (crgb[2] - this.rgb[2]) * t;
@@ -1725,38 +1725,38 @@ TColor.prototype = {
 	},
 
 	distanceToCMYK: function(c) {
-		var ccmyk = c.toCMYKAArray();
-		var dc = this.cmyk[0] - ccmyk[0];
-		var dm = this.cmyk[1] - ccmyk[1];
-		var dy = this.cmyk[2] - ccmyk[2];
-		var dk = this.cmyk[3] - ccmyk[3];
+		let ccmyk = c.toCMYKAArray();
+		let dc = this.cmyk[0] - ccmyk[0];
+		let dm = this.cmyk[1] - ccmyk[1];
+		let dy = this.cmyk[2] - ccmyk[2];
+		let dk = this.cmyk[3] - ccmyk[3];
 		return Math.sqrt(dc * dc + dm * dm + dy * dy + dk * dk);
 	},
 
 	distanceToHSV: function(c) {
-		var hue = this.hsv[0] * mathUtils.TWO_PI;
-		var hue2 = c.hue() * mathUtils.TWO_PI;
-		var v1 = new Vec3D((mathUtils.cos(hue) * this.hsv[1]), (mathUtils.sin(hue) * this.hsv[1]), this.hsv[2]);
-		var v2 = new Vec3D((mathUtils.cos(hue2) * c.saturation()), (mathUtils.sin(hue2) * c.saturation()), c.brightness());
+		let hue = this.hsv[0] * mathUtils.TWO_PI;
+		let hue2 = c.hue() * mathUtils.TWO_PI;
+		let v1 = new Vec3D((mathUtils.cos(hue) * this.hsv[1]), (mathUtils.sin(hue) * this.hsv[1]), this.hsv[2]);
+		let v2 = new Vec3D((mathUtils.cos(hue2) * c.saturation()), (mathUtils.sin(hue2) * c.saturation()), c.brightness());
 		return v1.distanceTo(v2);
 	},
 
 	distanceToRGB: function(c) {
-		var crgb = c.toRGBAArray();
-		var dr = this.rgb[0] - crgb[0];
-		var dg = this.rgb[1] - crgb[1];
-		var db = this.rgb[2] - crgb[2];
+		let crgb = c.toRGBAArray();
+		let dr = this.rgb[0] - crgb[0];
+		let dg = this.rgb[1] - crgb[1];
+		let db = this.rgb[2] - crgb[2];
 		return Math.sqrt(dr * dr + dg * dg + db * db);
 	},
 
 	equals: function(o) {
 		if ( is.TColor( o ) ) {
-			var c =  o;
-			var dr = c.rgb[0] - this.rgb[0];
-			var dg = c.rgb[1] - this.rgb[1];
-			var db = c.rgb[2] - this.rgb[2];
-			var da = c.alpha() - this._alpha;
-			var d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
+			let c =  o;
+			let dr = c.rgb[0] - this.rgb[0];
+			let dg = c.rgb[1] - this.rgb[1];
+			let db = c.rgb[2] - this.rgb[2];
+			let da = c.alpha() - this._alpha;
+			let d = Math.sqrt(dr * dr + dg * dg + db * db + da * da);
 			return d < TColor.EPS;
 		}
 		return false;
@@ -1859,14 +1859,14 @@ TColor.prototype = {
 	},
 
 	rotateRYB: function(theta) {
-		var deg = parseInt(mathUtils.degrees(theta),10),
+		let deg = parseInt(mathUtils.degrees(theta),10),
 			h = this.hsv[0] * 360,
 			i = 0,
 			p,
 			q;
 		theta %= 360;
 
-		var resultHue = 0;
+		let resultHue = 0;
 		for (i = 0; i < TColor.RYB_WHEEL.length - 1; i++) {
 			p = TColor.RYB_WHEEL[i];
 			q = TColor.RYB_WHEEL[i + 1];
@@ -1974,7 +1974,7 @@ TColor.prototype = {
 			v = h[2];
 			h = h[0];
 		}
-		var newHSV = [h,s,v];
+		let newHSV = [h,s,v];
 		this.hsv[0] = newHSV[0] % 1;
 		if (this.hsv[0] < 0) {
 			this.hsv[0]++;
@@ -2041,7 +2041,7 @@ TColor.prototype = {
 	},
 
 	toARGB: function() {
-		var r = parseInt((this.rgb[0] * 255),10),
+		let r = parseInt((this.rgb[0] * 255),10),
 			g = parseInt((this.rgb[1] * 255),10),
 			b = parseInt((this.rgb[2] * 255),10),
 			a = parseInt((this._alpha * 255),10);
@@ -2061,7 +2061,7 @@ TColor.prototype = {
 	},
 
 	toHex: function() {
-		var hex = dec2hex(this.toARGB());
+		let hex = dec2hex(this.toARGB());
 		if (hex.length > 6) {
 			hex = hex.substring(2);
 		}
@@ -2087,13 +2087,13 @@ TColor.prototype = {
 	* to CSS's hsl() string
 	*/
 	toHSLCSS: function(){
-        var hsv = this.hsv;
+        let hsv = this.hsv;
 
         //hue is 0 - 360
-        var h = Math.floor(hsv[0] * 360);
+        let h = Math.floor(hsv[0] * 360);
         //saturation & value/luminosity is 0-100 (%)
-        var s = Math.floor(hsv[1] * 100);
-        var v = Math.floor(hsv[2] * 100);
+        let s = Math.floor(hsv[1] * 100);
+        let v = Math.floor(hsv[2] * 100);
 		return "hsl(" +h+ "," +s+ "%," +v+ "%)";
 	},
 
@@ -2101,13 +2101,13 @@ TColor.prototype = {
 	 * to CSS's hsla() string
 	 */
 	toHSLACSS: function(){
-        var hsv = this.hsv;
+        let hsv = this.hsv;
 
         //hue is 0 - 360
-        var h = Math.floor(hsv[0] * 360);
+        let h = Math.floor(hsv[0] * 360);
         //saturation & value/luminosity is 0-100 (%)
-        var s = Math.floor(hsv[1] * 100);
-        var v = Math.floor(hsv[2] * 100);
+        let s = Math.floor(hsv[1] * 100);
+        let v = Math.floor(hsv[2] * 100);
         //alpha stays in range 0 - 1
 		return "hsla(" +h+ "," +s+ "%," +v+ "%," +this._alpha+ ")";
 	},
@@ -2151,7 +2151,7 @@ TColor.prototype = {
     },
 
 	toRGBCSS: function( asPercents ){
-        var rgb = this.rgb,
+        let rgb = this.rgb,
             mult = asPercents ? 100 : 255,
             u = asPercents ? '%' : '',
             f = Math.floor;
@@ -2164,7 +2164,7 @@ TColor.prototype = {
 	 * @param asPercents if true creates string based on percents rather than 0-255
 	 */
 	toRGBACSS: function(asPercents){
-        var rgb = this.rgb,
+        let rgb = this.rgb,
             mult = asPercents ? 100 : 255,
             u = asPercents ? '%' : '',
             f = Math.floor;
@@ -2237,7 +2237,7 @@ TColor.cmykToRGB = function(c,m,y,k,rgb) {
  */
 TColor.hexToRGB = function(hexRGB,rgb) {
 	if(rgb === undefined){ rgb = []; }
-	//var rgbInt = parseInt(hexRGB,16);
+	//let rgbInt = parseInt(hexRGB,16);
 	hexRGB = (hexRGB.charAt(0)=="#") ? hexRGB.substring(1,7):hexRGB;
 	rgb[0] = parseInt(hexRGB.substring(0,2),16) * TColor.INV8BIT;//((rgbInt >> 16) & 0xff) * TColor.INV8BIT;
 	rgb[1] = parseInt(hexRGB.substring(2,4),16) * TColor.INV8BIT;//((rgbInt >> 8) & 0xff) * TColor.INV8BIT;
@@ -2260,7 +2260,7 @@ TColor.hsvToRGB = function(h, s, v,rgb) {
 		rgb[0] = rgb[1] = rgb[2] = v;
 	} else {
 		h /= TColor.INV60DEGREES;
-		var i =  parseInt(h,10),
+		let i =  parseInt(h,10),
 			f = h - i,
 			p = v * (1 - s),
 			q = v * (1 - s * f),
@@ -2308,7 +2308,7 @@ TColor.hsvToRGB = function(h, s, v,rgb) {
  */
 TColor.labToRGB = function(l, a, b,rgb) {
 	if(rgb === undefined){ rgb = []; }
-	var y = (l + 16) / 116.0,
+	let y = (l + 16) / 116.0,
 		x = a / 500.0 + y,
 		z = y - b / 200.0,
 		i = 0;
@@ -2316,7 +2316,7 @@ TColor.labToRGB = function(l, a, b,rgb) {
 	rgb[1] = y;
 	rgb[2] = z;
 	for (i = 0; i < 3; i++) {
-		var p = Math.pow(rgb[i], 3);
+		let p = Math.pow(rgb[i], 3);
 		if (p > 0.008856) {
 			rgb[i] = p;
 		} else {
@@ -2332,7 +2332,7 @@ TColor.labToRGB = function(l, a, b,rgb) {
 	rgb[0] = x * 3.2406 + y * -1.5372 + z * -0.4986;
 	rgb[1] = x * -0.9689 + y * 1.8758 + z * 0.0415;
 	rgb[2] = x * 0.0557 + y * -0.2040 + z * 1.0570;
-	var tpow = 1 / 2.4;
+	let tpow = 1 / 2.4;
 	for (i = 0; i < 3; i++) {
 		if (rgb[i] > 0.0031308) {
 			rgb[i] = (1.055 * Math.pow(rgb[i], tpow) - 0.055);
@@ -2374,7 +2374,7 @@ Factory method. Creates new color from CMYK + alpha values.
 @return new color
 */
 TColor.newCMYKA = function(c, m, y, k, a) {
-	var col = new TColor();
+	let col = new TColor();
 	col.setCMYK([c, m, y, k ]);
 	col.setAlpha(mathUtils.clip(a, 0, 1));
 	return col;
@@ -2394,26 +2394,26 @@ TColor.newCSS = function( css ){
 
 	function digits( colorFnStr ){
 		//hack off the trailing )
-		var str = css.substr(0, css.length-1);
+		let str = css.substr(0, css.length-1);
 		//hack off rgb(, rgba(, hsl(, hsla(
 		return str.substr( colorFnStr.length + 1, str.length).split(',');
 	}
 	function makeNumbers( digits ){
-		var i=0, l = digits.length;
+		let i=0, l = digits.length;
 		for ( i=0; i<l; i++){
 			//cast to numbers from Strings
 			digits[i] = Number( digits[i] );
 		}
 		return digits;
 	}
-	var conversions = {
+	let conversions = {
 		'#': function(){ return TColor.newHex( css.substr(1,css.length) ); },
 		'rgba': function(){
-			var vals = makeNumbers( digits( 'rgba' ) );
+			let vals = makeNumbers( digits( 'rgba' ) );
 			return TColor.newRGBA( vals[0]/255, vals[1]/255, vals[2]/255, vals[3] );
 		},
 		'rgb': function(){
-			var vals = makeNumbers( digits( 'rgb' ) );
+			let vals = makeNumbers( digits( 'rgb' ) );
 			return TColor.newRGBA( vals[0]/255, vals[1]/255, vals[2]/255, 1.0 );
 		},
 		'hsla': function( vals ){
@@ -2425,7 +2425,7 @@ TColor.newCSS = function( css ){
 			return TColor.newHSVA( vals[0], vals[1], vals[2], vals[3] );
 		},
 		'hsl': function(){
-			var vals = digits('hsl');
+			let vals = digits('hsl');
 			vals.push( 1.0 );
 			return conversions.hsla( vals );
 		}
@@ -2436,7 +2436,7 @@ TColor.newCSS = function( css ){
 		return TColor.X11[css].copy();
 	}
 	//else get it from hex or color function
-	for( var method in conversions ){
+	for( let method in conversions ){
 		if( css.indexOf(method) > -1 ){
 			return conversions[method]();
 		}
@@ -2454,7 +2454,7 @@ TColor.newGray = function(gray) {
 };
 
 TColor.newGrayAlpha = function(gray, alpha) {
-	var c = new TColor();
+	let c = new TColor();
 	c.setRGB([gray, gray, gray ]);
 	c.setAlpha(alpha);
 	return c;
@@ -2466,7 +2466,7 @@ Factory method. New color from hex string.
 @return new color
 */
 TColor.newHex = function(hexRGB) {
-	var c = new TColor();
+	let c = new TColor();
 	c.setRGB(TColor.hexToRGB(hexRGB));
 	c.setAlpha(1);
 	return c;
@@ -2485,7 +2485,7 @@ TColor.newHSV = function(h, s, v) {
 
 
 TColor.newHSVA = function(h, s,v,a) {
-	var c = new TColor();
+	let c = new TColor();
 	c.setHSV(h, s, v);
 	c.setAlpha(mathUtils.clip(a, 0, 1));
 	return c;
@@ -2511,7 +2511,7 @@ TColor.newRGB = function(r, g, b) {
 };
 
 TColor.newRGBA = function( r, g, b, a) {
-	var c = new TColor();
+	let c = new TColor();
 	c.setRGB( r, g, b );
 	c.setAlpha(mathUtils.clip(a, 0, 1));
 	return c;
@@ -2547,7 +2547,7 @@ Formats the RGB float values into hex integers.
 @return hex string
 */
 TColor.rgbToHex = function(r, g, b) {
-	var hex = dec2hex(mathUtils.clip(r, 0, 1) * 0xff) + dec2hex(mathUtils.clip(g, 0, 1) * 0xff) + dec2hex(mathUtils.clip(b, 0, 1) * 0xff);
+	let hex = dec2hex(mathUtils.clip(r, 0, 1) * 0xff) + dec2hex(mathUtils.clip(g, 0, 1) * 0xff) + dec2hex(mathUtils.clip(b, 0, 1) * 0xff);
 	return hex;
 };
 
@@ -2561,7 +2561,7 @@ Converts the RGB values into an HSV array.
 */
 TColor.rgbToHSV = function(r, g, b,hsv) {
 	if(hsv ===undefined){ hsv = []; }
-	var h = 0,
+	let h = 0,
 		s = 0,
 		v = mathUtils.max(r, g, b),
 		d = v - mathUtils.min(r, g, b);
@@ -2614,7 +2614,7 @@ TColor.X11 = {};
  (function(){
 	//RGB values for every X11 Color Name
 	//http://en.wikipedia.org/wiki/Web_colors
-	var x11 = {
+	let x11 = {
 		indianred: [205, 92, 92],
 		lightcoral: [240, 128, 128],
 		salmon: [250, 128, 114],
@@ -2758,7 +2758,7 @@ TColor.X11 = {};
 		bark: [64, 48, 33]
 	};
 
-	var name, clr;
+	let name, clr;
 	for( name in x11 ){
         if( x11.hasOwnProperty( name ) ){
             clr = x11[name];
@@ -2780,12 +2780,12 @@ module.exports = TColor;
 
 
 },{"../geom/vectors":96,"../internals/is":106,"../internals/numberComparator":109,"../math/mathUtils":125,"./Hue":15}],21:[function(require,module,exports){
-var is = require('../internals/is');
-var ScaleMap = require('../math/ScaleMap');
-var ColorList = require('./ColorList');
-var ColorGradient = require('./ColorGradient');
+let is = require('../internals/is');
+let ScaleMap = require('../math/ScaleMap');
+let ColorList = require('./ColorList');
+let ColorGradient = require('./ColorGradient');
 
-    var ToneMap;
+    let ToneMap;
     /**
      * ToneMap
      * @constructor
@@ -2805,20 +2805,20 @@ var ColorGradient = require('./ColorGradient');
      * new ToneMap( min, max, colorA, colorB, resolution );
      */
     ToneMap = function( min, max, list, colorB, resolution ){
-        var al = arguments.length;
+        let al = arguments.length;
         if( al > 3 ){
             //( a, b, colorA, colorB )
             if( al === 4 ){
                 list = new ColorList( list, colorB );
             } else {
                 //( min, max, colorA, colorB, resolution )
-                var colA = list;
+                let colA = list;
                 list = new ColorGradient();
                 list.addColorAt(0, colA);
                 list.addColorAt(resolution-1, colorB);
                 list = list.calcGradient(0, resolution);
             }
-        //by now all of the variables are syphoned down to min, max, colorList
+        //by now all of the letiables are syphoned down to min, max, colorList
         }
         //( min, max, gradient ) or
         //( min, max, colorlist )
@@ -2841,7 +2841,7 @@ var ColorGradient = require('./ColorGradient');
         * @return {toxi.color.TColor}
         */
         getToneFor: function( t ){
-            var idx;
+            let idx;
             if( this.colors.size() > 2 ){
                 idx = Math.floor( this.map.getClippedValueFor(t) + 0.5 );
             } else {
@@ -2868,7 +2868,7 @@ var ColorGradient = require('./ColorGradient');
                 throw new Error("offset into target pixel array is negative");
             }
             pixels = pixels || new Array(src.length);
-            for(var i=0, l=src.length; i<l; i++){
+            for(let i=0, l=src.length; i<l; i++){
                 pixels[offset++] = this.getToneFor(src[i]).toARGB();
             }
             return pixels;
@@ -2889,7 +2889,7 @@ var ColorGradient = require('./ColorGradient');
 
 
 
-var HSVAccessor = require('./HSVAccessor'),
+let HSVAccessor = require('./HSVAccessor'),
 	RGBAccessor = require('./RGBAccessor'),
 	CMYKAccessor = require('./CMYKAccessor'),
 	AlphaAccessor = require('./AlphaAccessor'),
@@ -2922,12 +2922,12 @@ exports.LUMINANCE = new LuminanceAccessor();
 },{"./AlphaAccessor":4,"./CMYKAccessor":5,"./HSVAccessor":11,"./LuminanceAccessor":16,"./RGBAccessor":18}],23:[function(require,module,exports){
 
 
-	var numberComparator = require('../internals').numberComparator,
+	let numberComparator = require('../internals').numberComparator,
 		bind = require('../internals').bind;
 
 	//this will attach proper exported objects for each accessor
 	function make( type, setters ){
-		var name = type + 'Accessor', arry = type.toLowerCase(); //make HSV hsv etc
+		let name = type + 'Accessor', arry = type.toLowerCase(); //make HSV hsv etc
 		exports[name] = function( comp ){
 			this.component = comp;
 			//compare() could easily be used in incorrect scope, bind it
@@ -2935,7 +2935,7 @@ exports.LUMINANCE = new LuminanceAccessor();
 		};
 
 		exports[name].prototype.compare = function( a, b ){
-			var ca = a[arry][this.component],
+			let ca = a[arry][this.component],
 				cb = b[arry][this.component];
 			return numberComparator( ca, cb );
 		};
@@ -2954,7 +2954,7 @@ exports.LUMINANCE = new LuminanceAccessor();
 	make('HSV',['Hue','Saturation','Brightness']);
 	make('CMYK',['Cyan','Magenta','Yellow','Black']);
 
-	var LuminanceAccessor = function(){};
+	let LuminanceAccessor = function(){};
 	LuminanceAccessor.prototype.compare = function( a, b ){
 		return numberComparator( a.luminance(), b.luminance() );
 	};
@@ -2963,7 +2963,7 @@ exports.LUMINANCE = new LuminanceAccessor();
 	};
 	LuminanceAccessor.prototype.setComponentValueFor = function(){};
 
-	var AlphaAccessor = function(){};
+	let AlphaAccessor = function(){};
 	AlphaAccessor.prototype.compare = function(a,b){
 		return numberComparator( a.alpha(), b.alpha() );
 	};
@@ -2980,11 +2980,11 @@ exports.LUMINANCE = new LuminanceAccessor();
 
 
 },{"../internals":98}],24:[function(require,module,exports){
-var ColorTheoryRegistry = require('./theory/colorTheoryRegistry');
+let ColorTheoryRegistry = require('./theory/colorTheoryRegistry');
     /**
     * Factory method. Creates a new ColorList based on the given
     * {@link ColorTheoryStrategy} instance and the given source color. The
-    * number of colors returned will vary with the strategy chosen.
+    * number of colors returned will lety with the strategy chosen.
     * @param {string|toxi.color.theory.*Strategy} strategy either a string
     * for a strategy, such as "splitComplementary" or an instance of a strategy
     * @param {toxi.color.TColor} c a color to base the strategy off
@@ -2994,7 +2994,7 @@ var ColorTheoryRegistry = require('./theory/colorTheoryRegistry');
         if(typeof strategy == 'string'){
             strategy = ColorTheoryRegistry.getStrategyForName(strategy);
         }
-        var list;
+        let list;
         if(strategy !== undefined){
             list = strategy.createListFromColor(c);
         }
@@ -3005,7 +3005,7 @@ var ColorTheoryRegistry = require('./theory/colorTheoryRegistry');
 },{"./theory/colorTheoryRegistry":38}],25:[function(require,module,exports){
 
 	function makeProxy( type ){
-		var name = type + 'DistanceProxy';
+		let name = type + 'DistanceProxy';
 		exports[name] = function(){};
 		exports[name].prototype.distanceBetween = function( a, b ){
 			//a.distanceToHSV( b );
@@ -3017,9 +3017,9 @@ var ColorTheoryRegistry = require('./theory/colorTheoryRegistry');
 	makeProxy('CMYK');
 
 },{}],26:[function(require,module,exports){
-var TColor = require('./TColor');
-var internals = require('../internals');
-    var each = internals.each,
+let TColor = require('./TColor');
+let internals = require('../internals');
+    let each = internals.each,
         names = [],
         //kept private, used for `getForName`
         namedColorMap = {};
@@ -3027,7 +3027,7 @@ var internals = require('../internals');
     //attach every one of the X11 colors to NamedColor
     //make all names uppercase
     each(TColor.X11, function( value, key ){
-        var upkey = key.toUpperCase();
+        let upkey = key.toUpperCase();
         names.push(upkey);
         namedColorMap[upkey] = value;
         namedColorMap[key] = value;
@@ -3075,16 +3075,16 @@ var internals = require('../internals');
 
 
 },{"./theory/AnalagousStrategy":28,"./theory/ComplementaryStrategy":29,"./theory/CompoundTheoryStrategy":30,"./theory/LeftSplitComplementaryStrategy":31,"./theory/MonochromeTheoryStrategy":32,"./theory/RightSplitComplementaryStrategy":33,"./theory/SingleComplementStrategy":34,"./theory/SplitComplementaryStrategy":35,"./theory/TetradTheoryStrategy":36,"./theory/TriadTheoryStrategy":37,"./theory/colorTheoryRegistry":38,"./theory/strategies":39}],28:[function(require,module,exports){
-var strategies = require('./strategies');
-var vectors = require('../../geom/vectors');
-var MathUtils = require('../../math/mathUtils');
-var internals = require('../../internals');
-var ColorList = require('../ColorList');
-    var each = internals.each,
+let strategies = require('./strategies');
+let vectors = require('../../geom/vectors');
+let MathUtils = require('../../math/mathUtils');
+let internals = require('../../internals');
+let ColorList = require('../ColorList');
+    let each = internals.each,
         Vec2D = vectors.Vec2D;
 
     //@private
-    var _tones = [
+    let _tones = [
         new Vec2D(1,2.2),
         new Vec2D(2,1),
         new Vec2D(-1,-0.5),
@@ -3102,11 +3102,11 @@ var ColorList = require('../ColorList');
             this.theta = MathUtils.radians( typeof theta === 'number' ? theta : 10 );
         }, {
         createListFromColor: function( src ){
-            var self = this;
+            let self = this;
             this.contrast = MathUtils.clipNormalized( this.contrast );
-            var colors = new ColorList( src );
+            let colors = new ColorList( src );
             each(_tones, function(currTone){
-                var c = src.getRotatedRYB(self.theta * currTone.x),
+                let c = src.getRotatedRYB(self.theta * currTone.x),
                     t = 0.44 - currTone.y * 0.1;
                 if(src.brightness() - self.contras * currTone.y < t){
                     c.setBrightness(t);
@@ -3125,11 +3125,11 @@ var ColorList = require('../ColorList');
 
 
 },{"../../geom/vectors":96,"../../internals":98,"../../math/mathUtils":125,"../ColorList":8,"./strategies":39}],29:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
 
-    var adjust = function( c, thresh ){
-        var b = c.brightness();
+    let adjust = function( c, thresh ){
+        let b = c.brightness();
         if( b > thresh ){
             c.setBrightness( 0.1 + b * 0.25 );
         } else {
@@ -3140,7 +3140,7 @@ var ColorList = require('../ColorList');
 
     module.exports = strategies.create('Complementary',{
         createListFromColor: function( src ){
-            var colors = new ColorList(src),
+            let colors = new ColorList(src),
                 c;
 
             // A contrasting color: much darker or lighter than the original
@@ -3155,7 +3155,7 @@ var ColorList = require('../ColorList');
             // A contrasting complement: very dark or very light
             colors.add( adjust(src.getComplement(),0.3) );
 
-            // The complment and a light supporting variant
+            // The complment and a light supporting letiant
             colors.add( src.getComplement() );
 
             c = src.getComplement();
@@ -3169,17 +3169,17 @@ var ColorList = require('../ColorList');
 
 
 },{"../ColorList":8,"./strategies":39}],30:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
 
-    var wrap = strategies.wrap;
+    let wrap = strategies.wrap;
 
     module.exports = strategies.create('Compound',
         function( flipped ){
             this._isFlipped = flipped === true;
         }, {
         createListFromColor: function( src ){
-            var colors = new ColorList(src),
+            let colors = new ColorList(src),
                 direction = this._isFlipped ? -1 : 1,
                 c;
 
@@ -3224,11 +3224,11 @@ var ColorList = require('../ColorList');
 
 
 },{"../ColorList":8,"./strategies":39}],31:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
-var ComplementaryStrategy = require('./ComplementaryStrategy');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
+let ComplementaryStrategy = require('./ComplementaryStrategy');
 
-    var complementary;
+    let complementary;
 
     /**
      * creates an instance of a LeftSplitComplementaryStrategy
@@ -3238,10 +3238,10 @@ var ComplementaryStrategy = require('./ComplementaryStrategy');
         createListFromColor: function( src ){
             //first time create the instance, then just reuse it
             complementary = complementary || new ComplementaryStrategy();
-            var left = src.getComplement().rotateRYB(-30).lighten(0.1),
+            let left = src.getComplement().rotateRYB(-30).lighten(0.1),
                 colors = complementary.createListFromColor(src),
                 c;
-            for( var i = 3; i < 6; i++){
+            for( let i = 3; i < 6; i++){
                 c = colors.get(i);
                 c.setHue(left.hue());
             }
@@ -3251,14 +3251,14 @@ var ComplementaryStrategy = require('./ComplementaryStrategy');
 
 
 },{"../ColorList":8,"./ComplementaryStrategy":29,"./strategies":39}],32:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
 
-    var wrap = strategies.wrap;
+    let wrap = strategies.wrap;
 
     module.exports = strategies.create('Monochrome', {
         createListFromColor: function( src ){
-            var colors = new ColorList(src),
+            let colors = new ColorList(src),
                 c = src.copy();
             c.setBrightness(wrap(c.brightness(), 0.5, 0.2, 0.3));
             c.setSaturation(wrap(c.saturation(), 0.3, 0.1, 0.3));
@@ -3283,20 +3283,20 @@ var ColorList = require('../ColorList');
 
 
 },{"../ColorList":8,"./strategies":39}],33:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
-var ComplementaryStrategy = require('./ComplementaryStrategy');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
+let ComplementaryStrategy = require('./ComplementaryStrategy');
 
-    var complementary;
+    let complementary;
 
     module.exports = strategies.create('RightSplitComplementary', {
         createListFromColor: function( src ){
             complementary = complementary || new ComplementaryStrategy();
-            var left = src.getComplement().rotateRYB(30).lighten(0.1),
+            let left = src.getComplement().rotateRYB(30).lighten(0.1),
                 colors = complementary.createListFromColor(src),
                 c;
 
-            for(var i=3; i<6; i++){
+            for(let i=3; i<6; i++){
                 c = colors.get(i);
                 c.setHue(left.hue());
             }
@@ -3306,8 +3306,8 @@ var ComplementaryStrategy = require('./ComplementaryStrategy');
 
 
 },{"../ColorList":8,"./ComplementaryStrategy":29,"./strategies":39}],34:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
     /**
     * Implements the <a href=
     * "http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#complementary"
@@ -3315,11 +3315,11 @@ var ColorList = require('../ColorList');
     * given one.
     */
 
-    var getName = function(){ return "complement"; };
+    let getName = function(){ return "complement"; };
 
     module.exports = strategies.create('SingleComplement', {
         createListFromColor: function( src ){
-            var list = new ColorList(src);
+            let list = new ColorList(src);
             list.add(src.getComplement());
             return list;
         },
@@ -3330,8 +3330,8 @@ var ColorList = require('../ColorList');
 
 
 },{"../ColorList":8,"./strategies":39}],35:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
     /**
     * Implements the <a href=
     * "http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#split-complementary"
@@ -3340,7 +3340,7 @@ var ColorList = require('../ColorList');
     */
     module.exports = strategies.create('SplitComplementary', {
         createListFromColor: function( src ){
-            var colors = new ColorList(src);
+            let colors = new ColorList(src);
             colors.add(src.getRotatedRYB(150).lighten(0.1));
             colors.add(src.getRotatedRYB(210).lighten(0.1));
             return colors;
@@ -3349,10 +3349,10 @@ var ColorList = require('../ColorList');
 
 
 },{"../ColorList":8,"./strategies":39}],36:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
 
-    var getName = function(){ return 'tetrad'; },
+    let getName = function(){ return 'tetrad'; },
         adjust = function( c ){
             return c[ c.brightness() < 0.5 ? 'lighten' : 'darken'](0.2);
         };
@@ -3370,7 +3370,7 @@ var ColorList = require('../ColorList');
             this.theta = typeof theta === 'number' ? theta : 90;
         }, {
         createListFromColor: function( src ){
-            var colors = new ColorList(src);
+            let colors = new ColorList(src);
             colors.add( adjust(src.getRotatedRYB(this.theta)) );
             colors.add( adjust(src.getRotatedRYB(this.theta*2)) );
             colors.add( src.getRotatedRYB(this.theta*3).lighten(0.1));
@@ -3382,10 +3382,10 @@ var ColorList = require('../ColorList');
 
 
 },{"../ColorList":8,"./strategies":39}],37:[function(require,module,exports){
-var strategies = require('./strategies');
-var ColorList = require('../ColorList');
+let strategies = require('./strategies');
+let ColorList = require('../ColorList');
 
-    var getName = function(){ return 'triad'; };
+    let getName = function(){ return 'triad'; };
     /**
     * Implements the <a href=
     * "http://www.tigercolor.com/color-lab/color-theory/color-theory-intro.htm#triadic"
@@ -3393,7 +3393,7 @@ var ColorList = require('../ColorList');
     */
     module.exports = strategies.create('TriadTheory', {
         createListFromColor: function( src ){
-            var colors = new ColorList(src);
+            let colors = new ColorList(src);
             colors.add( src.getRotatedRYB(120).lighten(0.1) );
             colors.add( src.getRotatedRYB(-120).lighten(0.1) );
             return colors;
@@ -3406,13 +3406,13 @@ var ColorList = require('../ColorList');
 },{"../ColorList":8,"./strategies":39}],38:[function(require,module,exports){
 
 
-    var internals = require('../../internals'),
+    let internals = require('../../internals'),
         each = internals.each,
         keys = internals.keys,
         values = internals.values,
         implementations = {};
 
-    var strats = {
+    let strats = {
         SINGLE_COMPLEMENT: require('./SingleComplementStrategy'),
         COMPLEMENTARY: require('./ComplementaryStrategy'),
         SPLIT_COMPLEMENTARY: require('./SplitComplementaryStrategy'),
@@ -3450,10 +3450,10 @@ var ColorList = require('../ColorList');
 
 
 },{"../../internals":98,"./AnalagousStrategy":28,"./ComplementaryStrategy":29,"./CompoundTheoryStrategy":30,"./LeftSplitComplementaryStrategy":31,"./MonochromeTheoryStrategy":32,"./RightSplitComplementaryStrategy":33,"./SingleComplementStrategy":34,"./SplitComplementaryStrategy":35,"./TetradTheoryStrategy":36,"./TriadTheoryStrategy":37}],39:[function(require,module,exports){
-var has = require('../../internals/has');
-var is = require('../../internals/is');
+let has = require('../../internals/has');
+let is = require('../../internals/is');
 
-    var has = has.all,
+    let has = has.all,
         isTColor = is.TColor;
 
     exports.create = function( name, constructor, extend ){
@@ -3461,11 +3461,11 @@ var is = require('../../internals/is');
             extend = constructor;
             constructor = function(){};
         }
-        var _NAME = name.charAt(0).toLowerCase() + name.slice(1,name.length);
+        let _NAME = name.charAt(0).toLowerCase() + name.slice(1,name.length);
         constructor.prototype.constructor = constructor;
         constructor.prototype.getName = function(){ return _NAME; };
         constructor.prototype.toString = constructor.prototype.getName;
-        for( var prop in extend ){
+        for( let prop in extend ){
             constructor.prototype[prop] = extend[prop];
         }
         //wrap this function in an error-condition
@@ -3532,7 +3532,7 @@ module.exports = require("./index");
 },{"./geom/AABB":42,"./geom/BernsteinPolynomial":44,"./geom/Circle":45,"./geom/CircleIntersector":46,"./geom/Cone":47,"./geom/ConvexPolygonClipper":48,"./geom/Ellipse":49,"./geom/IsectData2D":50,"./geom/IsectData3D":51,"./geom/Line2D":52,"./geom/Line3D":53,"./geom/LineStrip3D":54,"./geom/Matrix4x4":55,"./geom/Plane":56,"./geom/Polygon2D":57,"./geom/Quaternion":58,"./geom/Ray2D":59,"./geom/Ray3D":60,"./geom/Ray3DIntersector":61,"./geom/Rect":62,"./geom/Sphere":63,"./geom/Spline2D":64,"./geom/Spline3D":65,"./geom/SutherlandHodgemanClipper":66,"./geom/Triangle2D":67,"./geom/Triangle3D":68,"./geom/Vec2D":70,"./geom/Vec3D":71,"./geom/XAxisCylinder":72,"./geom/YAxisCylinder":73,"./geom/ZAxisCylinder":74,"./geom/mesh":75}],42:[function(require,module,exports){
 
 
-var	internals = require('../internals'),
+let	internals = require('../internals'),
 	Vec3D = require('./Vec3D'),
 	Vec2D = require('./Vec2D'),
 	mathUtils = require('../math/mathUtils');
@@ -3544,7 +3544,7 @@ var	internals = require('../internals'),
  @class Axis-aligned Bounding Box
  @member
  */
-var AABB = function(a,b){
+let AABB = function(a,b){
 	if(a === undefined){
 		Vec3D.call(this);
 		this.setExtent(new Vec3D());
@@ -3570,8 +3570,8 @@ var AABB = function(a,b){
 internals.extend(AABB,Vec3D);
 
 AABB.fromMinMax = function(min,max){
-	var a = Vec3D.min(min, max);
-	var b = Vec3D.max(min, max);
+	let a = Vec3D.min(min, max);
+	let b = Vec3D.max(min, max);
 	return new AABB( a.interpolateTo(b,0.5), b.sub(a).scaleSelf(0.5) );
 };
 
@@ -3605,10 +3605,10 @@ AABB.prototype.getMin = function() {
 
 AABB.prototype.getNormalForPoint = function(p) {
     p = p.sub(this);
-    var pabs = this.extent.sub(p.getAbs());
-    var psign = p.getSignum();
-    var normal = Vec3D.X_AXIS.scale(psign.x);
-    var minDist = pabs.x;
+    let pabs = this.extent.sub(p.getAbs());
+    let psign = p.getSignum();
+    let normal = Vec3D.X_AXIS.scale(psign.x);
+    let minDist = pabs.x;
     if (pabs.y < minDist) {
         minDist = pabs.y;
         normal = Vec3D.Y_AXIS.scale(psign.y);
@@ -3642,7 +3642,7 @@ AABB.prototype.includePoint = function(p) {
 * @return true, if boxes overlap
 */
 AABB.prototype.intersectsBox = function(box) {
-    var t = box.sub(this);
+    let t = box.sub(this);
     return Math.abs(t.x) <= (this.extent.x + box.extent.x) && Math.abs(t.y) <= (this.extent.y + box.extent.y) && Math.abs(t.z) <= (this.extent.z + box.extent.z);
 };
 
@@ -3665,18 +3665,18 @@ AABB.prototype.intersectsBox = function(box) {
  */
 
 AABB.prototype.intersectsRay = function(ray, minDist, maxDist) {
-    var invDir = ray.getDirection().reciprocal();
-    var signDirX = invDir.x < 0;
-    var signDirY = invDir.y < 0;
-    var signDirZ = invDir.z < 0;
-    var bbox = signDirX ? this.max : this.min;
-    var tmin = (bbox.x - ray.x) * invDir.x;
+    let invDir = ray.getDirection().reciprocal();
+    let signDirX = invDir.x < 0;
+    let signDirY = invDir.y < 0;
+    let signDirZ = invDir.z < 0;
+    let bbox = signDirX ? this.max : this.min;
+    let tmin = (bbox.x - ray.x) * invDir.x;
     bbox = signDirX ? this.min : this.max;
-    var tmax = (bbox.x - ray.x) * invDir.x;
+    let tmax = (bbox.x - ray.x) * invDir.x;
     bbox = signDirY ? this.max : this.min;
-    var tymin = (bbox.y - ray.y) * invDir.y;
+    let tymin = (bbox.y - ray.y) * invDir.y;
     bbox = signDirY ? this.min : this.max;
-    var tymax = (bbox.y - ray.y) * invDir.y;
+    let tymax = (bbox.y - ray.y) * invDir.y;
     if ((tmin > tymax) || (tymin > tmax)) {
         return null;
     }
@@ -3687,9 +3687,9 @@ AABB.prototype.intersectsRay = function(ray, minDist, maxDist) {
         tmax = tymax;
     }
     bbox = signDirZ ? this.max : this.min;
-    var tzmin = (bbox.z - ray.z) * invDir.z;
+    let tzmin = (bbox.z - ray.z) * invDir.z;
     bbox = signDirZ ? this.min : this.max;
-    var tzmax = (bbox.z - ray.z) * invDir.z;
+    let tzmax = (bbox.z - ray.z) * invDir.z;
     if ((tmin > tzmax) || (tzmin > tmax)) {
         return null;
     }
@@ -3717,7 +3717,7 @@ AABB.prototype.intersectsSphere = function(c, r) {
 	if(arguments.length == 1){ //must've been a sphere
 		r = c.radius;
 	}
-    var s,
+    let s,
 		d = 0;
     // find the square of the distance
     // from the sphere to the box
@@ -3758,7 +3758,7 @@ AABB.prototype.intersectsTriangle = function(tri) {
 	// 2) normal of the triangle
 	// 3) crossproduct(edge from tri, {x,y,z}-directin)
 	// this gives 3x3=9 more tests
-	var v0,
+	let v0,
 		v1,
 		v2,
 		normal,
@@ -3834,7 +3834,7 @@ AABB.prototype.intersectsTriangle = function(tri) {
 	// test if the box intersects the plane of the triangle
 	// compute plane equation of triangle: normal*x+d=0
 	normal = e0.cross(e1);
-	var d = -normal.dot(v0);
+	let d = -normal.dot(v0);
 	if (!this.planeBoxOverlap(normal, d, this.extent)) {
 		return false;
 	}
@@ -3842,8 +3842,8 @@ AABB.prototype.intersectsTriangle = function(tri) {
 };
 
 AABB.prototype.planeBoxOverlap = function(normal, d, maxbox) {
-    var vmin = new Vec3D();
-    var vmax = new Vec3D();
+    let vmin = new Vec3D();
+    let vmax = new Vec3D();
 
     if (normal.x > 0.0) {
         vmin.x = -maxbox.x;
@@ -3908,10 +3908,10 @@ AABB.prototype.setExtent = function(extent) {
 };
 
 AABB.prototype.testAxis = function(a, b, fa, fb, va, vb, wa, wb, ea, eb) {
-    var p0 = a * va + b * vb;
-    var p2 = a * wa + b * wb;
-    var min;
-	var max;
+    let p0 = a * va + b * vb;
+    let p2 = a * wa + b * wb;
+    let min;
+	let max;
     if (p0 < p2) {
         min = p0;
         max = p2;
@@ -3919,16 +3919,16 @@ AABB.prototype.testAxis = function(a, b, fa, fb, va, vb, wa, wb, ea, eb) {
         min = p2;
         max = p0;
     }
-    var rad = fa * ea + fb * eb;
+    let rad = fa * ea + fb * eb;
     return (min > rad || max < -rad);
 };
 
 AABB.prototype.toMesh = function(mesh){
 	if(mesh === undefined){
-		var TriangleMesh = require('./mesh/meshCommon').TriangleMesh;
+		let TriangleMesh = require('./mesh/meshCommon').TriangleMesh;
 		mesh = new TriangleMesh("aabb",8,12);
 	}
-	var a = this.min,//new Vec3D(this.min.x,this.max.y,this.max.z),
+	let a = this.min,//new Vec3D(this.min.x,this.max.y,this.max.z),
 		g = this.max,//new Vec3D(this.max.x,this.max.y,this.max.z),
 		b = new Vec3D(a.x, a.y, g.z),
 		c = new Vec3D(g.x, a.y, g.z),
@@ -3989,14 +3989,14 @@ module.exports = AABB;
 },{"../internals":98,"../math/mathUtils":125,"./Vec2D":70,"./Vec3D":71,"./mesh/meshCommon":92}],43:[function(require,module,exports){
 
 
-var Cone = require('./Cone');
+let Cone = require('./Cone');
 
 /** 
  @member toxi
  @constructor
  @description An Abstract (don't use this directly) Axis-aligned Cylinder class
  */
-var	AxisAlignedCylinder = function(pos,radius,length) {
+let	AxisAlignedCylinder = function(pos,radius,length) {
 	this.pos = (pos===undefined)? undefined: pos.copy();
 	this.setRadius(radius);
 	this.setLength(length);
@@ -4066,20 +4066,20 @@ AxisAlignedCylinder.prototype = {
 	@return mesh instance
 	*/
 	toMesh: function(a,b,c) {
-		var opts = {
+		let opts = {
 			mesh: undefined,
 			steps: 12,
 			thetaOffset: 0
 		};
 		if(arguments.length == 1 && typeof arguments[0] == 'object'){ //options object
-			for(var prop in arguments[0]){
+			for(let prop in arguments[0]){
 				opts[prop] = arguments[0][prop];
 			}
 		} else if(arguments.length == 2){
 			opts.steps = arguments[0];
 			opts.thetaOffset = arguments[1];
 		}
-		var cone = new Cone(this.pos,this.getMajorAxis().getVector(), this.radius, this.radius, this.length);
+		let cone = new Cone(this.pos,this.getMajorAxis().getVector(), this.radius, this.radius, this.length);
 		return cone.toMesh(opts.mesh,opts.steps,opts.thetaOffset,true,true);
 	}
 };
@@ -4096,18 +4096,18 @@ module.exports = AxisAlignedCylinder;
  * @member toxi
  * @param {Number} res number of subdivision steps between each control point of the spline3d
  */
-var	BernsteinPolynomial = function(res) {
+let	BernsteinPolynomial = function(res) {
 	this.resolution = res;
-	var b0 = [],
+	let b0 = [],
 		b1 = [],
 		b2 = [],
 		b3 = [];
-	var t = 0;
-	var dt = 1.0 / (res - 1);
-	for (var i = 0; i < res; i++) {
-		var t1 = 1 - t;
-		var t12 = t1 * t1;
-		var t2 = t * t;
+	let t = 0;
+	let dt = 1.0 / (res - 1);
+	for (let i = 0; i < res; i++) {
+		let t1 = 1 - t;
+		let t12 = t1 * t1;
+		let t2 = t * t;
 		b0[i] = t1 * t12;
 		b1[i] = 3 * t * t12;
 		b2[i] = 3 * t2 * t1;
@@ -4135,7 +4135,7 @@ module.exports = BernsteinPolynomial;
  @class CircleIntersector
  @member toxi
  */
-var CircleIntersector = function(circle) {
+let CircleIntersector = function(circle) {
     this.circle = circle;
     this.isec = undefined;
 };
@@ -4148,7 +4148,7 @@ CircleIntersector.prototype = {
 
     intersectsRay: function(ray) {
         this.isec.clear();
-        var q = circle.sub(ray),
+        let q = circle.sub(ray),
         distSquared = q.magSquared(),
         v = q.dot(ray.getDirection()),
         r = circle.getRadius(),
@@ -4169,7 +4169,7 @@ module.exports = CircleIntersector;
 },{}],47:[function(require,module,exports){
 
 
-var extend = require('../internals').extend,
+let extend = require('../internals').extend,
 	Vec3D = require('./Vec3D'),
 	TriangleMesh = require('./mesh/TriangleMesh');
 
@@ -4195,9 +4195,9 @@ var extend = require('../internals').extend,
 function err( param ){
 	throw Error("Missing parameter: " + param);
 }
-var	Cone = function(pos,dir,rNorth, rSouth,len) {
+let	Cone = function(pos,dir,rNorth, rSouth,len) {
 	//if its a parameter object
-	var self = this;
+	let self = this;
 	if ( typeof pos === 'object' && arguments.length === 1 ){
 		process(
 			pos.pos || pos.position || new Vec3D(),
@@ -4221,7 +4221,7 @@ var	Cone = function(pos,dir,rNorth, rSouth,len) {
 extend(Cone,Vec3D);
 
 Cone.prototype.toMesh = function(args) {
-	var opts = {
+	let opts = {
 		mesh : undefined,
 		steps : NaN,
 		thetaOffset : 0,
@@ -4233,7 +4233,7 @@ Cone.prototype.toMesh = function(args) {
 	if ( arguments.length == 1) {
 		if (typeof arguments[0] == 'object') {
 			//##then it was a javascript option-object
-			var optionsObject = arguments[0];
+			let optionsObject = arguments[0];
 			opts.mesh = optionsObject.mesh;
 			opts.steps = optionsObject.steps || optionsObject.resolution || optionsObject.res;
 			opts.thetaOffset = optionsObject.thetaOffset || opts.thetaOffset;
@@ -4255,7 +4255,7 @@ Cone.prototype.toMesh = function(args) {
 		opts.bottomClosed = arguments[4];
 	}
 	
-	var c = this.add(0.01, 0.01, 0.01),
+	let c = this.add(0.01, 0.01, 0.01),
 		n = c.cross(this.dir.getNormalized()).normalize(),
 		halfAxis = this.dir.scale(this.length * 0.5),
 		p = this.sub(halfAxis),
@@ -4265,17 +4265,17 @@ Cone.prototype.toMesh = function(args) {
 		phi = (Math.PI*2) / opts.steps;
 	
 	
-	var i = 0, j=1;
+	let i = 0, j=1;
 	for(i=0;i<opts.steps;i++){
-		var theta = i * phi + opts.thetaOffset;
-		var nr = n.getRotatedAroundAxis(this.dir,theta);
+		let theta = i * phi + opts.thetaOffset;
+		let nr = n.getRotatedAroundAxis(this.dir,theta);
 			
 		south[i] = nr.scale(this.radiusSouth).addSelf(p);
 		north[i] = nr.scale(this.radiusNorth).addSelf(q);
 	}
 	
 	
-	var numV = opts.steps * 2 + 2,
+	let numV = opts.steps * 2 + 2,
 		numF = opts.steps * 2 + (opts.topClosed ? opts.steps : 0) + (opts.bottomClosed ? opts.steps : 0),
 		mesh = opts.mesh || new TriangleMesh("cone",numV,numF);
 
@@ -4301,10 +4301,10 @@ module.exports = Cone;
 
 
 },{"../internals":98,"./Vec3D":71,"./mesh/TriangleMesh":87}],48:[function(require,module,exports){
-var Line2D = require('./Line2D');
-var Polygon2D = require('./Polygon2D');
+let Line2D = require('./Line2D');
+let Polygon2D = require('./Polygon2D');
 
-    var ConvexPolygonClipper = function(polygonBounds){
+    let ConvexPolygonClipper = function(polygonBounds){
         this.setBounds(polygonBounds);
     };
 
@@ -4315,7 +4315,7 @@ var Polygon2D = require('./Polygon2D');
         clipPolygon: function(poly){
 
             //make a shallow copy to a new array
-            var points = poly.vertices.slice(0),
+            let points = poly.vertices.slice(0),
                 //hold clipped points
                 clipped,
                 //the boundary edges of the clipping path
@@ -4382,7 +4382,7 @@ var Polygon2D = require('./Polygon2D');
 
         //unused but included to match, source
         _isKnownVertex: function(list, q){
-            for(var i=0, l=list.length; i<l; i++){
+            for(let i=0, l=list.length; i<l; i++){
                 if( list[i].equalsWitTolerance(q, 0.001) ){
                     return true;
                 }
@@ -4406,7 +4406,7 @@ var Polygon2D = require('./Polygon2D');
 },{"./Line2D":52,"./Polygon2D":57}],49:[function(require,module,exports){
 
 
-var extend = require('../internals/extend'),
+let extend = require('../internals/extend'),
 	has = require('../internals/has'),
 	is = require('../internals/is'),
 	mathUtils = require('../math/mathUtils'),
@@ -4414,7 +4414,7 @@ var extend = require('../internals/extend'),
 
 
 //declared in this module
-var Ellipse, Circle;
+let Ellipse, Circle;
 
 /**
  * @class defines a 2D ellipse and provides several utility methods for it.
@@ -4458,7 +4458,7 @@ Ellipse.prototype.containsPoint = function(p) {
         mathUtils.abs(p.y - this.y) > this.radius.y) {
         return false;
     }
-    var foci = this.getFoci();
+    let foci = this.getFoci();
     return p.distanceTo(foci[0]) + p.distanceTo(foci[1]) < 2 * mathUtils.max(this.radius.x, this.radius.y);
 };
 
@@ -4543,11 +4543,11 @@ Ellipse.prototype.setRadii = function(rx,ry) {
  * @return ellipse as polygon
  */
 Ellipse.prototype.toPolygon2D = function(res) {
-    var Polygon2D = require('./Polygon2D');
-    var poly = new Polygon2D();
-    var step = mathUtils.TWO_PI / res;
-    for (var i = 0; i < res; i++) {
-		var v = Vec2D.fromTheta(i * step).scaleSelf(this.radius).addSelf(this);
+    let Polygon2D = require('./Polygon2D');
+    let poly = new Polygon2D();
+    let step = mathUtils.TWO_PI / res;
+    for (let i = 0; i < res; i++) {
+		let v = Vec2D.fromTheta(i * step).scaleSelf(this.radius).addSelf(this);
 		poly.add(v);
 	}
     return poly;
@@ -4594,8 +4594,8 @@ extend(Circle,Ellipse);
  * @return new circle instance
  */
 Circle.from2Points = function(p1,p2) {
-    var m = p1.interpolateTo(p2, 0.5);
-    var distanceTo = m.distanceTo(p1);
+    let m = p1.interpolateTo(p2, 0.5);
+    let distanceTo = m.distanceTo(p1);
     return new Circle(m, distanceTo);
 };
 
@@ -4613,7 +4613,7 @@ Circle.from2Points = function(p1,p2) {
  * @return new circle instance or null
  */
 Circle.from3Points = function(p1,p2,p3) {
-    var circle,
+    let circle,
 		deltaA = p2.sub(p1),
 		deltaB = p3.sub(p2),
 		centroid,
@@ -4623,11 +4623,11 @@ Circle.from3Points = function(p1,p2,p3) {
 		radius = centroid.distanceTo(p1);
 		circle = new Circle(centroid, radius);
 	} else {
-		var aSlope = deltaA.y / deltaA.x;
-		var bSlope = deltaB.y / deltaB.x;
+		let aSlope = deltaA.y / deltaA.x;
+		let bSlope = deltaB.y / deltaB.x;
 		if (mathUtils.abs(aSlope - bSlope) > 0.0000001 && aSlope !== 0) {
-			var x = (aSlope * bSlope * (p1.y - p3.y) + bSlope * (p1.x + p2.x) - aSlope * (p2.x + p3.x)) / (2 * (bSlope - aSlope));
-			var y = -(x - (p1.x + p2.x) / 2) / aSlope + (p1.y + p2.y) / 2;
+			let x = (aSlope * bSlope * (p1.y - p3.y) + bSlope * (p1.x + p2.x) - aSlope * (p2.x + p3.x)) / (2 * (bSlope - aSlope));
+			let y = -(x - (p1.x + p2.x) / 2) / aSlope + (p1.y + p2.y) / 2;
 			centroid = new Vec2D(x, y);
 			radius = centroid.distanceTo(p1);
 			circle = new Circle(centroid, radius);
@@ -4638,16 +4638,16 @@ Circle.from3Points = function(p1,p2,p3) {
 
 
 Circle.newBoundingCircle = function( vertices ){
-	var origin = new Vec2D();
-	var maxD = 0;
-	var i = 0;
-	var l = vertices.length;
+	let origin = new Vec2D();
+	let maxD = 0;
+	let i = 0;
+	let l = vertices.length;
 	for( ; i<l; i++ ){
 		origin.addSelf( vertices[i] );
 	}
 	origin.scaleSelf( 1 / vertices.length );
 	for( i = 0; i<l; i++ ){
-		var d = origin.distanceToSquared( vertices[i] );
+		let d = origin.distanceToSquared( vertices[i] );
 		if( d > maxD ) {
 			maxD = d;
 		}
@@ -4671,25 +4671,25 @@ Circle.prototype.getRadius = function() {
 };
 
 Circle.prototype.getTangentPoints = function(p) {
-    var m = this.interpolateTo(p, 0.5);
+    let m = this.interpolateTo(p, 0.5);
     return this.intersectsCircle(new Circle(m, m.distanceTo(p)));
 };
 
 
 Circle.prototype.intersectsCircle = function(c) {
-    var res,
+    let res,
 		delta = c.sub(this),
 		d = delta.magnitude(),
 		r1 = this.radius.x,
 		r2 = c.radius.x;
     if (d <= r1 + r2 && d >= Math.abs(r1 - r2)) {
-        var a = (r1 * r1 - r2 * r2 + d * d) / (2.0 * d);
+        let a = (r1 * r1 - r2 * r2 + d * d) / (2.0 * d);
         d = 1 / d;
-        var p = this.add(delta.scale(a * d));
-        var h = Math.sqrt(r1 * r1 - a * a);
+        let p = this.add(delta.scale(a * d));
+        let h = Math.sqrt(r1 * r1 - a * a);
         delta.perpendicular().scaleSelf(h * d);
-        var i1 = p.add(delta);
-        var i2 = p.sub(delta);
+        let i1 = p.add(delta);
+        let i2 = p.sub(delta);
         res = [i1, i2 ];
     }
     return res;
@@ -4708,13 +4708,13 @@ exports.Circle = Circle;
 },{"../internals/extend":103,"../internals/has":105,"../internals/is":106,"../math/mathUtils":125,"./Polygon2D":57,"./Vec2D":70}],50:[function(require,module,exports){
 
 
-var Vec2D = require('./Vec2D');
+let Vec2D = require('./Vec2D');
 
 /**
  * @class
  * @member toxi
  */
-var	IsectData2D = function(isec){
+let	IsectData2D = function(isec){
 	if(isec !== undefined){
 		this.isIntersection = isec.isIntersection;
 		this.dist = isec.dist;
@@ -4737,7 +4737,7 @@ IsectData2D.prototype = {
 	},
 	
 	toString: function(){
-		var s = "isec: "+this.isIntersection;
+		let s = "isec: "+this.isIntersection;
 		if(this.isIntersection){
 			s+= " at:"+this.pos+ " dist:"+this.dist+" normal:"+this.normal;
 		}
@@ -4751,13 +4751,13 @@ module.exports = IsectData2D;
 },{"./Vec2D":70}],51:[function(require,module,exports){
 
 
-var Vec3D = require('./Vec3D');
+let Vec3D = require('./Vec3D');
 
 /**
  * @class
  * @member toxi
  */
-var	IsectData3D = function(isec){
+let	IsectData3D = function(isec){
 	if(isec !== undefined){
 		this.isIntersection = isec.isIntersection;
 		this.dist = isec.dist;
@@ -4780,7 +4780,7 @@ IsectData3D.prototype = {
 	},
 	
 	toString: function(){
-		var s = "isec: "+this.isIntersection;
+		let s = "isec: "+this.isIntersection;
 		if(this.isIntersection){
 			s += " at:"+this.pos+ " dist:"+this.dist+" normal:"+this.normal;
 		}
@@ -4794,7 +4794,7 @@ module.exports = IsectData3D;
 },{"./Vec3D":71}],52:[function(require,module,exports){
 
 
-var	Ray2D = require('./Ray2D'),
+let	Ray2D = require('./Ray2D'),
 	internals = require('../internals'),
     mathUtils = require('../math/mathUtils');
 
@@ -4803,7 +4803,7 @@ var	Ray2D = require('./Ray2D'),
  @class
  @member toxi
  */
-var Line2D = function( a, b) {
+let Line2D = function( a, b) {
 	this.a = a;
 	this.b = b;
 };
@@ -4820,8 +4820,8 @@ Line2D.prototype = {
      * @return classifier Number
      */
     classifyPoint: function(p){
-        var normal = this.b.sub(this.a).perpendicular();
-        var d = p.sub(this.a).dot(normal);
+        let normal = this.b.sub(this.a).perpendicular();
+        let d = p.sub(this.a).dot(normal);
         return mathUtils.sign(d);
     },
 
@@ -4832,8 +4832,8 @@ Line2D.prototype = {
     * @return closest point on the line
     */
 	closestPointTo: function(p) {
-		var v = this.b.sub(this.a);
-		var t = p.sub(this.a).dot(v) / v.magSquared();
+		let v = this.b.sub(this.a);
+		let t = p.sub(this.a).dot(v) / v.magSquared();
 		// Check to see if t is beyond the extents of the line segment
 		if (t < 0.0) {
 			return this.a.copy();
@@ -4863,7 +4863,7 @@ Line2D.prototype = {
 		if (!( internals.is.Line2D( obj ) ) ) {
 			return false;
 		}
-		var l = obj;
+		let l = obj;
 		return (this.a.equals(l.a) || this.a.equals(l.b)) && (this.b.equals(l.b) || this.b.equals(l.a));
 	},
 
@@ -4912,14 +4912,14 @@ Line2D.prototype = {
     */
 	intersectLine: function(l) {
 
-        var Type = Line2D.LineIntersection.Type;
+        let Type = Line2D.LineIntersection.Type;
 
-		var isec,
+		let isec,
 			denom = (l.b.y - l.a.y) * (this.b.x - this.a.x) - (l.b.x - l.a.x) * (this.b.y - this.a.y),
 			na = (l.b.x - l.a.x) * (this.a.y - l.a.y) - (l.b.y - l.a.y) * (this.a.x - l.a.x),
 			nb = (this.b.x - this.a.x) * (this.a.y - l.a.y) - (this.b.y - this.a.y) * (this.a.x - l.a.x);
 		if (denom !== 0) {
-			var ua = na / denom,
+			let ua = na / denom,
 				ub = nb / denom,
                 vecI = this.a.interpolateTo(this.b, ua);
 
@@ -4943,9 +4943,9 @@ Line2D.prototype = {
 	},
 
 	offsetAndGrowBy: function(offset,scale, ref) {
-		var m = this.getMidPoint();
-		var d = this.getDirection();
-		var n = d.getPerpendicular();
+		let m = this.getMidPoint();
+		let d = this.getDirection();
+		let n = d.getPerpendicular();
 		if (ref !== undefined && m.sub(ref).dot(n) < 0) {
 			n.invert();
 		}
@@ -4959,8 +4959,8 @@ Line2D.prototype = {
 	},
 
 	scale: function(scale) {
-		var delta = (1 - scale) * 0.5;
-		var newA = this.a.interpolateTo(this.b, delta);
+		let delta = (1 - scale) * 0.5;
+		let newA = this.a.interpolateTo(this.b, delta);
 		this.b.interpolateToSelf(this.a, delta);
 		this.a.set(newA);
 		return this;
@@ -4977,7 +4977,7 @@ Line2D.prototype = {
 	},
 
 	toRay2D: function() {
-        var Ray2D = require('./Ray2D');
+        let Ray2D = require('./Ray2D');
 		return new Ray2D(this.a.copy(), this.b.sub(this.a).normalize());
 	}
 };
@@ -5006,10 +5006,10 @@ Line2D.splitIntoSegments = function(a, b, stepLength, segments, addFirst) {
 	if (addFirst) {
 		segments.push(a.copy());
 	}
-	var dist = a.distanceTo(b);
+	let dist = a.distanceTo(b);
 	if (dist > stepLength) {
-		var pos = a.copy();
-		var step = b.sub(a).limit(stepLength);
+		let pos = a.copy();
+		let step = b.sub(a).limit(stepLength);
 		while (dist > stepLength) {
 			pos.addSelf(step);
 			segments.push(pos.copy());
@@ -5067,14 +5067,14 @@ module.exports = Line2D;
 },{"../internals":98,"../math/mathUtils":125,"./Ray2D":59}],53:[function(require,module,exports){
 
 
-var mathUtils = require('../math/mathUtils'),
+let mathUtils = require('../math/mathUtils'),
     Ray3D = require('./Ray3D');
 
 /**
  @class
  @member toxi
  */
-var Line3D = function(vec_a, vec_b) {
+let Line3D = function(vec_a, vec_b) {
     this.a = vec_a;
     this.b = vec_b;
 };
@@ -5083,33 +5083,33 @@ Line3D.prototype = {
     constructor: Line3D,
     closestLineTo: function(l) {
 
-        var p43 = l.a.sub(l.b);
+        let p43 = l.a.sub(l.b);
         if (p43.isZeroVector()) {
             return new Line3D.LineIntersection(Line3D.LineIntersection.Type.NON_INTERSECTING);
         }
 
-        var p21 = this.b.sub(this.a);
+        let p21 = this.b.sub(this.a);
         if (p21.isZeroVector()) {
             return new Line3D.LineIntersection(Line3D.LineIntersection.Type.NON_INTERSECTING);
         }
-        var p13 = this.a.sub(l.a);
+        let p13 = this.a.sub(l.a);
 
-        var d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
-        var d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
-        var d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
-        var d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
-        var d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
+        let d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
+        let d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
+        let d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
+        let d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
+        let d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
 
-        var denom = d2121 * d4343 - d4321 * d4321;
+        let denom = d2121 * d4343 - d4321 * d4321;
         if (Math.abs(denom) < mathUtils.EPS) {
             return new Line3D.LineIntersection(Line3D.LineIntersection.Type.NON_INTERSECTING);
         }
-        var numer = d1343 * d4321 - d1321 * d4343;
-        var mua = numer / denom;
-        var mub = (d1343 + d4321 * mua) / d4343;
+        let numer = d1343 * d4321 - d1321 * d4343;
+        let mua = numer / denom;
+        let mub = (d1343 + d4321 * mua) / d4343;
 
-        var pa = this.a.add(p21.scaleSelf(mua));
-        var pb = l.a.add(p43.scaleSelf(mub));
+        let pa = this.a.add(p21.scaleSelf(mua));
+        let pb = l.a.add(p43.scaleSelf(mub));
         return new Line3D.LineIntersection(Line3D.LineIntersection.Type.INTERSECTING, new Line3D(pa, pb), mua,mub);
     },
 
@@ -5121,8 +5121,8 @@ Line3D.prototype = {
     * @return closest point on the line
     */
     closestPointTo: function(p) {
-        var v = this.b.sub(this.a);
-        var t = p.sub(this.a).dot(v) / v.magSquared();
+        let v = this.b.sub(this.a);
+        let t = p.sub(this.a).dot(v) / v.magSquared();
         // Check to see if t is beyond the extents of the line segment
         if (t < 0.0) {
             return this.a.copy();
@@ -5173,7 +5173,7 @@ Line3D.prototype = {
 
 
     offsetAndGrowBy: function(offset,scale,ref) {
-        var m = this.getMidPoint(),
+        let m = this.getMidPoint(),
             d = this.getDirection(),
             n = this.a.cross(d).normalize();
         if (ref !== undefined && m.sub(ref).dot(n) < 0) {
@@ -5234,10 +5234,10 @@ Line3D.splitIntoSegments = function(vec_a, vec_b, stepLength, segments, addFirst
     if (addFirst) {
         segments.push(vec_a.copy());
     }
-    var dist = vec_a.distanceTo(vec_b);
+    let dist = vec_a.distanceTo(vec_b);
     if (dist > stepLength) {
-        var pos = vec_a.copy();
-        var step = vec_b.sub(vec_a).limit(stepLength);
+        let pos = vec_a.copy();
+        let step = vec_b.sub(vec_a).limit(stepLength);
         while (dist > stepLength) {
             pos.addSelf(step);
             segments.push(pos.copy());
@@ -5298,7 +5298,7 @@ module.exports = Line3D;
 },{"../math/mathUtils":125,"./Ray3D":60}],54:[function(require,module,exports){
 
 
-	var Vec3D = require('./vectors').Vec3D,
+	let Vec3D = require('./vectors').Vec3D,
 		Line3D = require('./Line3D'),
 		hasXYZ = require('../internals/has').XYZ,
 		Iterator = require('../internals/Iterator');
@@ -5308,7 +5308,7 @@ module.exports = Line3D;
 	* @constructor
 	* @param {Vec3D[]} [vertices] optional vertices to start with
 	*/
-	var LineStrip3D = function( vertices ){
+	let LineStrip3D = function( vertices ){
 		this.vertices = vertices || [];
 	};
 
@@ -5348,7 +5348,7 @@ module.exports = Line3D;
 			if( doAddFinalVertex !== false ){
 				doAddFinalVertex = true;
 			}
-			var uniform = [];
+			let uniform = [];
 			if( this.vertices.length < 3 ){
 				if( this.vertices.length === 2 ){
 					new Line3D( this.vertices[0], this.vertices[1])
@@ -5360,7 +5360,7 @@ module.exports = Line3D;
 					return;
 				}
 			}
-			var arcLen = this.getEstimatedArcLength(),
+			let arcLen = this.getEstimatedArcLength(),
 				delta = step / arcLen,
 				currIdx = 0,
 				currT,
@@ -5390,10 +5390,10 @@ module.exports = Line3D;
 			if( this.arcLenIndex === undefined || this.arcLenIndex.length !== this.vertices.length ){
 				this.arcLenIndex = [0];
 			}
-			var arcLen = 0,
+			let arcLen = 0,
 				p,
 				q;
-			for( var i=1, l = this.vertices.length; i<l; i++){
+			for( let i=1, l = this.vertices.length; i<l; i++){
 				p = this.vertices[i-1];
 				q = this.vertices[i];
 				arcLen += p.distanceTo(q);
@@ -5403,7 +5403,7 @@ module.exports = Line3D;
 			return arcLen;
 		},
 		getSegments: function(){
-			var i = 1,
+			let i = 1,
 				num = this.vertices.length,
 				segments = [];
 			for( ; i<num; i++ ){
@@ -5428,7 +5428,7 @@ module.exports = Line3D;
 },{"../internals/Iterator":99,"../internals/has":105,"./Line3D":53,"./vectors":96}],55:[function(require,module,exports){
 
 
-var mathUtils = require('../math/mathUtils'),
+let mathUtils = require('../math/mathUtils'),
     internals = require('../internals'),
 	Vec3D = require('./Vec3D');
 
@@ -5440,23 +5440,23 @@ var mathUtils = require('../math/mathUtils'),
  * @exports Matrix4x4 as toxi.Matrix4x4
  * @constructor
  */
-var Matrix4x4 = function(v11,v12,v13,v14,v21,v22,v23,v24,v31,v32,v33,v34,v41,v42,v43,v44){
+let Matrix4x4 = function(v11,v12,v13,v14,v21,v22,v23,v24,v31,v32,v33,v34,v41,v42,v43,v44){
 	this.temp = [];
 	this.matrix = [];
-	var self = this;
-	if(arguments.length === 0) { //if no variables were supplied
+	let self = this;
+	if(arguments.length === 0) { //if no letiables were supplied
 		this.matrix[0] = [1,0,0,0];
 		this.matrix[1] = [0,1,0,0];
 		this.matrix[2] = [0,0,1,0];
 		this.matrix[3] = [0,0,0,1];
-	} else if(typeof(v11) == 'number'){ //if the variables were numbers
-		var m1 = [v11,v12,v13,v14];
-		var m2 = [v21,v22,v23,v24];
-		var m3 = [v31,v32,v33,v34];
-		var m4 = [v41,v42,v43,v44];
+	} else if(typeof(v11) == 'number'){ //if the letiables were numbers
+		let m1 = [v11,v12,v13,v14];
+		let m2 = [v21,v22,v23,v24];
+		let m3 = [v31,v32,v33,v34];
+		let m4 = [v41,v42,v43,v44];
 		this.matrix = [m1,m2,m3,m4];
 	} else if( internals.is.Array( v11 ) ){ //if it was sent in as one array
-		var array = v11;
+		let array = v11;
 		if (array.length != 9 && array.length != 16) {
 			throw new Error("Matrix4x4: Array length must == 9 or 16");
 		}
@@ -5478,7 +5478,7 @@ var Matrix4x4 = function(v11,v12,v13,v14,v21,v22,v23,v24,v31,v32,v33,v34,v41,v42
 	} else if( internals.is.Matrix4x4( v11 ) ){
 
 	//else it should've been a Matrix4x4 that was passed in
-		var m = v11,
+		let m = v11,
 			i = 0,
 			j = 0,
 			lenM,
@@ -5513,14 +5513,14 @@ var Matrix4x4 = function(v11,v12,v13,v14,v21,v22,v23,v24,v31,v32,v33,v34,v41,v42
 
 Matrix4x4.prototype = {
 	add: function(rhs) {
-        var result = new Matrix4x4(this);
+        let result = new Matrix4x4(this);
         return result.addSelf(rhs);
     },
 
     addSelf: function(m) {
-        for (var i = 0; i < 4; i++) {
-            var mi = this.matrix[i];
-            var rhsm = m.matrix[i];
+        for (let i = 0; i < 4; i++) {
+            let mi = this.matrix[i];
+            let rhsm = m.matrix[i];
             mi[0] += rhsm[0];
             mi[1] += rhsm[1];
             mi[2] += rhsm[2];
@@ -5540,8 +5540,8 @@ Matrix4x4.prototype = {
     },
 
     applyToSelf: function(v) {
-        for (var i = 0; i < 4; i++) {
-            var m = this.matrix[i];
+        for (let i = 0; i < 4; i++) {
+            let m = this.matrix[i];
             this.temp[i] = v.x * m[0] + v.y * m[1] + v.z * m[2] + m[3];
         }
         v.set(this.temp[0], this.temp[1], this.temp[2]).scaleSelf((1.0 / this.temp[3]));
@@ -5577,7 +5577,7 @@ Matrix4x4.prototype = {
     },
 
     identity: function() {
-        var m = this.matrix[0];
+        let m = this.matrix[0];
         m[1] = m[2] = m[3] = 0;
         m = this.matrix[1];
         m[0] = m[2] = m[3] = 0;
@@ -5600,14 +5600,14 @@ Matrix4x4.prototype = {
      * @return itself
      */
 	invert: function() {
-        var tmp = [], //12
+        let tmp = [], //12
 			src = [], //16
 			dst = [], //16
 			mat = this.toArray(),
 			i = 0;
 
         for (i = 0; i < 4; i++) {
-            var i4 = i << 2;
+            let i4 = i << 2;
             src[i] = mat[i4];
             src[i + 4] = mat[i4 + 1];
             src[i + 8] = mat[i4 + 2];
@@ -5629,7 +5629,7 @@ Matrix4x4.prototype = {
         tmp[11] = src[9] * src[12];
 
         // calculate first 8 elements (cofactors)
-        var src0 = src[0],
+        let src0 = src[0],
 			src1 = src[1],
 			src2 = src[2],
 			src3 = src[3],
@@ -5694,10 +5694,10 @@ Matrix4x4.prototype = {
 		dst[15] = tmp[10] * src2 + tmp[4] * src0 + tmp[9] * src1;
 		dst[15] -= tmp[8] * src1 + tmp[11] * src2 + tmp[5] * src0;
 
-		var det = 1.0 / (src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3] * dst[3]);
+		let det = 1.0 / (src[0] * dst[0] + src[1] * dst[1] + src[2] * dst[2] + src[3] * dst[3]);
 		for (i = 0, k = 0; i < 4; i++) {
-			var m = this.matrix[i];
-			for (var j = 0; j < 4; j++) {
+			let m = this.matrix[i];
+			for (let j = 0; j < 4; j++) {
 				m[j] = dst[k++] * det;
 			}
 		}
@@ -5713,7 +5713,7 @@ Matrix4x4.prototype = {
     },
 
     multiplySelf: function(a) {
-		var i = 0,
+		let i = 0,
 			m;
 		if(typeof(a) == "number"){
 			for (i = 0; i < 4; i++) {
@@ -5726,13 +5726,13 @@ Matrix4x4.prototype = {
 			return this;
 		}
 		//otherwise it should be a matrix4x4
-		var mm0 = a.matrix[0],
+		let mm0 = a.matrix[0],
 			mm1 = a.matrix[1],
 			mm2 = a.matrix[2],
 			mm3 = a.matrix[3];
         for (i = 0; i < 4; i++) {
             m = this.matrix[i];
-            for (var j = 0; j < 4; j++) {
+            for (let j = 0; j < 4; j++) {
                 this.temp[j] = m[0] * mm0[j] + m[1] * mm1[j] + m[2] * mm2[j] + m[3] * mm3[j];
             }
             m[0] = this.temp[0];
@@ -5750,7 +5750,7 @@ Matrix4x4.prototype = {
      * @return rotation applied to this matrix
      */
     rotateAroundAxis: function(axis, theta) {
-        var x, y, z, s, c, t, tx, ty;
+        let x, y, z, s, c, t, tx, ty;
         x = axis.x;
         y = axis.y;
         z = axis.z;
@@ -5827,7 +5827,7 @@ Matrix4x4.prototype = {
     },
 
 	set: function(a,b,c, d, e,f,g, h, i, j, k, l, m, n, o, p) {
-		var mat;
+		let mat;
 		if(typeof(a) == "number"){
 			mat = this.matrix[0];
 			mat[0] = a;
@@ -5851,9 +5851,9 @@ Matrix4x4.prototype = {
 			mat[3] = p;
 		} else {
 			//it must be a matrix4x4
-			for (var it_n = 0; it_n < 4; it_n++) {
+			for (let it_n = 0; it_n < 4; it_n++) {
 	            mat = this.matrix[it_n];
-				var mat_n = mat.matrix[it_n];
+				let mat_n = mat.matrix[it_n];
 				mat[0] = mat_n[0];
 				mat[1] = mat_n[1];
 				mat[2] = mat_n[2];
@@ -5864,7 +5864,7 @@ Matrix4x4.prototype = {
     },
 
     setFrustrum: function(left,right,top,bottom,near,far){
-    	var rl = (right - left),
+    	let rl = (right - left),
     		tb = (top - bottom),
     		fn = (far - near);
 
@@ -5890,7 +5890,7 @@ Matrix4x4.prototype = {
     },
 
     setOrtho: function(left,right,top,bottom,near,far){
-    	var mat = [
+    	let mat = [
     		2.0 / (right - left),
     		0,
     		0,
@@ -5913,7 +5913,7 @@ Matrix4x4.prototype = {
     },
 
     setPerspective: function(fov,aspect,near,far){
-    	var y = near * Math.tan(0.5 * mathUtils.radians(fov)),
+    	let y = near * Math.tan(0.5 * mathUtils.radians(fov)),
     		x = aspect * y;
     	return this.setFrustrum(-x,x,y,-y,near,far);
     },
@@ -5938,9 +5938,9 @@ Matrix4x4.prototype = {
     },
 
     subSelf: function(mat) {
-        for (var i = 0; i < 4; i++) {
-            var m = this.matrix[i];
-            var n = mat.matrix[i];
+        for (let i = 0; i < 4; i++) {
+            let m = this.matrix[i];
+            let n = mat.matrix[i];
             m[0] -= n[0];
             m[1] -= n[1];
             m[2] -= n[2];
@@ -5960,9 +5960,9 @@ Matrix4x4.prototype = {
         if (result === undefined) {
             result = [];
         }
-        for (var i = 0, k = 0; i < 4; i++) {
-            var m = this.matrix[i];
-            for (var j = 0; j < 4; j++) {
+        for (let i = 0, k = 0; i < 4; i++) {
+            let m = this.matrix[i];
+            for (let j = 0; j < 4; j++) {
                 result[k++] = m[j];
             }
         }
@@ -5986,8 +5986,8 @@ Matrix4x4.prototype = {
         if (result === undefined) {
             result = [];
         }
-        for (var i = 0, k = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
+        for (let i = 0, k = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
                 result[k++] = this.matrix[j][i];
             }
         }
@@ -6026,7 +6026,7 @@ Matrix4x4.prototype = {
 };
 
 //private temp matrix
-var _TEMP = new Matrix4x4();
+let _TEMP = new Matrix4x4();
 
 module.exports = Matrix4x4;
 
@@ -6035,7 +6035,7 @@ module.exports = Matrix4x4;
 },{"../internals":98,"../math/mathUtils":125,"./Vec3D":71}],56:[function(require,module,exports){
 
 
-    var extend = require('../internals').extend,
+    let extend = require('../internals').extend,
         mathUtils = require('../math/mathUtils'),
         Ray3D = require('./Ray3D'),
         vectors = require('./vectors'),
@@ -6048,8 +6048,8 @@ module.exports = Matrix4x4;
     * @member toxi
     * @augments Vec3D
     */
-    var	Plane = function(tri_or_origin,norm) {
-        var origin, normal;
+    let	Plane = function(tri_or_origin,norm) {
+        let origin, normal;
         if(arguments.length === 0){
             origin = new Vec3D();
             normal = Vec3D.Y_AXIS.copy();
@@ -6080,7 +6080,7 @@ module.exports = Matrix4x4;
     * @return One of the 3 classification types: FRONT, BACK, ON_PLANE
     */
     Plane.prototype.classifyPoint = function(p, tolerance){
-        var d = this.sub(p).normalize().dot(this.normal);
+        let d = this.sub(p).normalize().dot(this.normal);
         if( d < -tolerance){
             return Plane.Classifier.FRONT;
         } else if( d > tolerance){
@@ -6094,14 +6094,14 @@ module.exports = Matrix4x4;
     };
 
     Plane.prototype.getDistanceToPoint = function(p){
-        var sn = this.normal.dot(p.sub(this)),
+        let sn = this.normal.dot(p.sub(this)),
             sd = this.normal.magSquared(),
             isec = p.add(this.normal.scale(sn / sd));
             return isec.distanceTo(p);
     };
 
     Plane.prototype.getIntersectionWithRay = function(r){
-        var denom = this.normal.dot(r.getDirection()),
+        let denom = this.normal.dot(r.getDirection()),
             u;
         if(denom > mathUtils.EPS){
             u = this.normal.dot(this.sub(r)) / denom;
@@ -6112,7 +6112,7 @@ module.exports = Matrix4x4;
     };
 
     Plane.prototype.getProjectedPoint = function(p){
-        var dir, proj;
+        let dir, proj;
         if(this.normal.dot(this.sub(p)) < 0){
             dir = this.normal.getInverted();
         } else {
@@ -6132,7 +6132,7 @@ module.exports = Matrix4x4;
     */
 
     Plane.prototype.intersectRayDistance = function(ray){
-        var d = this.normal.dot(this),
+        let d = this.normal.dot(this),
             numer = this.normal.dot(ray) + d,
             denom = this.normal.dot(ray.dir);
 
@@ -6156,9 +6156,9 @@ module.exports = Matrix4x4;
             mesh = null;
         }
         mesh = mesh || new TriangleMesh("plane", 4, 2);
-        var p = this.equalsWithTolerance(Vec3D.ZERO, 0.01) ? this.add(0.01, 0.01, 0.01) : this;
+        let p = this.equalsWithTolerance(Vec3D.ZERO, 0.01) ? this.add(0.01, 0.01, 0.01) : this;
         size *= 0.5;
-        var n = p.cross(this.normal).normalizeTo(size),
+        let n = p.cross(this.normal).normalizeTo(size),
             m = n.cross(this.normal).normalizeTo(size),
             a = this.add(n).addSelf(m),
             b = this.add(n).subSelf(m),
@@ -6177,29 +6177,29 @@ module.exports = Matrix4x4;
 
 
 },{"../internals":98,"../math/mathUtils":125,"./Ray3D":60,"./mesh/TriangleMesh":87,"./vectors":96}],57:[function(require,module,exports){
-var MathUtils = require('../math/mathUtils');
-var Vec2D = require('./Vec2D');
-var Line2D = require('./Line2D');
-var Circle = require('./Circle');
-var Rect = require('./Rect');
-var TriangleMesh = require('./mesh/TriangleMesh');
-var has = require('../internals/has');
-var is = require('../internals/is');
+let MathUtils = require('../math/mathUtils');
+let Vec2D = require('./Vec2D');
+let Line2D = require('./Line2D');
+let Circle = require('./Circle');
+let Rect = require('./Rect');
+let TriangleMesh = require('./mesh/TriangleMesh');
+let has = require('../internals/has');
+let is = require('../internals/is');
 
     /**
     * @class
     * @member toxi
     * @param {Array<Vec2D>|Vec2D...} [points] optionally provide points for the polygon
     */
-    var Polygon2D = function(){
+    let Polygon2D = function(){
         this.vertices = [];
-        var i,l;
+        let i,l;
         if(arguments.length > 1){ //comma-separated Vec2D's were passed in
             for(i=0, l = arguments.length;i<l;i++){
                 this.add(arguments[i].copy());
             }
         } else if(arguments.length == 1){
-            var arg = arguments[0];
+            let arg = arguments[0];
             if( is.Array( arg ) ){ // if it was an array of points
                 for(i=0,l = arg.length;i<l;i++){
                     this.add(arg[i].copy());
@@ -6216,7 +6216,7 @@ var is = require('../internals/is');
         add: function(p){
             //accept an array also
             if( is.Array(p) ){
-                for( var i=0, l = p.length; i<l; i++ ){
+                for( let i=0, l = p.length; i<l; i++ ){
                     if( this.vertices.indexOf(p[i]) < 0 ){
                         this.vertices.push(p[i]);
                     }
@@ -6234,23 +6234,23 @@ var is = require('../internals/is');
         * @return itself
         */
         center: function( origin ){
-            var centroid = this.getCentroid();
-            var delta = origin !== undefined ? origin.sub( centroid ) : centroid.invert();
-            for( var i=0, l = this.vertices.length; i<l; i++){
+            let centroid = this.getCentroid();
+            let delta = origin !== undefined ? origin.sub( centroid ) : centroid.invert();
+            for( let i=0, l = this.vertices.length; i<l; i++){
                 this.vertices[i].addSelf( delta );
             }
             return this;
         },
 
         containsPoint: function(p){
-            var num = this.vertices.length,
+            let num = this.vertices.length,
                 i = 0,
                 j = num-1,
                 oddNodes = false,
                 px = p.x,
                 py = p.y;
             for(i=0;i<num;i++){
-                var vi = this.vertices[i],
+                let vi = this.vertices[i],
                     vj = this.vertices[j];
                 if (vi.y < py && vj.y >= py || vj.y < py && vi.y >= py) {
                     if (vi.x + (py - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < px) {
@@ -6263,7 +6263,7 @@ var is = require('../internals/is');
         },
 
         containsPolygon: function(poly) {
-            for (var i=0,num=poly.vertices.length; i<num; i++) {
+            for (let i=0,num=poly.vertices.length; i<num; i++) {
                 if (!this.containsPoint(poly.vertices[i])) {
                     return false;
                 }
@@ -6307,10 +6307,10 @@ var is = require('../internals/is');
         },
 
         getArea: function(){
-            var area = 0,
+            let area = 0,
                 numPoints = this.vertices.length;
-            for(var i=0;i<numPoints;i++){
-                var a = this.vertices[i],
+            for(let i=0;i<numPoints;i++){
+                let a = this.vertices[i],
                     b = this.vertices[(i+1) % numPoints];
                 area += a.x * b.y;
                 area -= a.y * b.x;
@@ -6320,20 +6320,20 @@ var is = require('../internals/is');
         },
 
         getBoundingCircle: function() {
-            var Circle = require('./Circle');
+            let Circle = require('./Circle');
             return Circle.newBoundingCircle( this.vertices );
         },
 
         getBounds: function(){
-            var Rect = require('./Rect');
+            let Rect = require('./Rect');
             return Rect.getBoundingRect(this.vertices);
         },
 
         getCentroid: function(){
-            var res = new Vec2D(),
+            let res = new Vec2D(),
                 numPoints = this.vertices.length;
-            for(var i=0;i<numPoints;i++){
-                var a = this.vertices[i],
+            for(let i=0;i<numPoints;i++){
+                let a = this.vertices[i],
                     b = this.vertices[(i+1) %numPoints],
                     factor = a.x * b.y - b.x * a.y;
                 res.x += (a.x + b.x) * factor;
@@ -6343,18 +6343,18 @@ var is = require('../internals/is');
         },
 
         getCircumference: function(){
-            var circ = 0;
-            for(var i=0,num=this.vertices.length;i<num;i++){
+            let circ = 0;
+            for(let i=0,num=this.vertices.length;i<num;i++){
                 circ += this.vertices[i].distanceTo(this.vertices[(i+1)%num]);
             }
             return circ;
         },
 
         getClosestPointTo: function( p ){
-            var minD = Number.MAX_VALUE;
-            var q, c, d;
-            var edges = this.getEdges();
-            for( var i=0, len = edges.length; i<len; i++ ){
+            let minD = Number.MAX_VALUE;
+            let q, c, d;
+            let edges = this.getEdges();
+            for( let i=0, len = edges.length; i<len; i++ ){
                 c = edges[i].closestPointTo( p );
                 d = c.distanceToSquared( p );
                 if( d < minD ){
@@ -6366,8 +6366,8 @@ var is = require('../internals/is');
         },
 
         getClosestVertexTo: function( p ){
-            var minD = Number.MAX_VALUE;
-            var q, d, i = 0, len = this.vertices.length;
+            let minD = Number.MAX_VALUE;
+            let q, d, i = 0, len = this.vertices.length;
             for( ; i<len; i++){
                 d = this.vertices[i].distanceToSquared( p );
                 if( d < minD ){
@@ -6379,9 +6379,9 @@ var is = require('../internals/is');
         },
 
         getEdges: function() {
-            var num = this.vertices.length,
+            let num = this.vertices.length,
                 edges = [];
-            for (var i = 0; i < num; i++) {
+            for (let i = 0; i < num; i++) {
                 edges[i] = new Line2D(this.vertices[i], this.vertices[(i + 1) % num]);
             }
             return edges;
@@ -6397,15 +6397,15 @@ var is = require('../internals/is');
         },
 
         getRandomPoint: function(){
-            var edges = this.getEdges();
-            var numEdges = edges.length;
-            var ea = edges[MathUtils.random(numEdges)],
+            let edges = this.getEdges();
+            let numEdges = edges.length;
+            let ea = edges[MathUtils.random(numEdges)],
                 eb;
             while( eb === undefined || eb.equals( ea ) ){
                 eb = edges[ MathUtils.random(numEdges) ];
             }
             //pick a random point on edge A
-            var p = ea.a.interpolateTo( ea.b, Math.random() );
+            let p = ea.a.interpolateTo( ea.b, Math.random() );
             //then randomly interpolate to another point on b
             return p.interpolateToSelf(
                 eb.a.interpolateTo( eb.b, Math.random() ),
@@ -6420,7 +6420,7 @@ var is = require('../internals/is');
         * @return itself
         */
         increaseVertexCount: function( count ){
-            var num = this.vertices.length,
+            let num = this.vertices.length,
                 longestID = 0,
                 maxD = 0,
                 i = 0,
@@ -6451,10 +6451,10 @@ var is = require('../internals/is');
 
         intersectsPolygon: function(poly) {
             if (!this.containsPolygon(poly)) {
-                var edges=this.getEdges();
-                var pedges=poly.getEdges();
-                for(var i=0, n=edges.length; i < n; i++) {
-                    for(var j=0, m = pedges.length, e = edges[i]; j < m; j++) {
+                let edges=this.getEdges();
+                let pedges=poly.getEdges();
+                for(let i=0, n=edges.length; i < n; i++) {
+                    for(let j=0, m = pedges.length, e = edges[i]; j < m; j++) {
                         if (e.intersectLine(pedges[j]).getType() == Line2D.LineIntersection.Type.INTERSECTING) {
                             return true;
                         }
@@ -6475,7 +6475,7 @@ var is = require('../internals/is');
         * @return true, if convex.
         */
         isConvex: function(){
-            var isPositive = false,
+            let isPositive = false,
                 num = this.vertices.length,
                 prev,
                 next,
@@ -6483,7 +6483,7 @@ var is = require('../internals/is');
                 d1,
                 newIsP;
 
-            for( var i = 0; i < num; i++ ){
+            for( let i = 0; i < num; i++ ){
                 prev = (i===0) ? num -1 : i - 1;
                 next = (i===num-1) ? 0 : i + 1;
                 d0 = this.vertices[i].sub(this.vertices[prev]);
@@ -6517,11 +6517,11 @@ var is = require('../internals/is');
         * @see http://alienryderflex.com/polygon_inset/
         */
         _offsetCorner: function( x1, y1, x2, y2, x3, y3, distance, out ){
-            var c1 = x2,
+            let c1 = x2,
                 d1 = y2,
                 c2 = x2,
                 d2 = y2;
-            var dx1,
+            let dx1,
                 dy1,
                 dist1,
                 dx2,
@@ -6562,7 +6562,7 @@ var is = require('../internals/is');
                 return;
             }
 
-            var l1 = new Line2D( new Vec2D(x1,y1), new Vec2D(c1,d1) ),
+            let l1 = new Line2D( new Vec2D(x1,y1), new Vec2D(c1,d1) ),
                 l2 = new Line2D( new Vec2D(c2,d2), new Vec2D(x3,y3) ),
                 isec = l1.intersectLine(l2),
                 ipos = isec.getPos();
@@ -6576,7 +6576,7 @@ var is = require('../internals/is');
         * given distance. New line segments and polygon vertices are created by
         * computing the intersection points of the displaced segments. Choosing an
         * too large displacement amount will result in deformation/undefined
-        * behavior with various self intersections. Should that happen, please try
+        * behavior with letious self intersections. Should that happen, please try
         * to clean up the shape using the {@link #toOutline()} method.
         *
         * @param distance
@@ -6584,10 +6584,10 @@ var is = require('../internals/is');
         * @return itself
         */
         offsetShape: function( distance ){
-            var v = this.vertices;
-            var num = v.length - 1;
+            let v = this.vertices;
+            let num = v.length - 1;
             if( num > 1 ){
-                var startX = v[0].x,
+                let startX = v[0].x,
                     startY = v[0].y,
                     c = v[num].x,
                     d = v[num].y,
@@ -6595,7 +6595,7 @@ var is = require('../internals/is');
                     f = startY,
                     a,
                     b;
-                for( var i = 0; i < num; i++ ){
+                for( let i = 0; i < num; i++ ){
                     a = c;
                     b = d;
                     c = e;
@@ -6619,13 +6619,13 @@ var is = require('../internals/is');
         */
         reduceVertices: function( minEdgeLen ){
             minEdgeLen *= minEdgeLen;
-            var vs = this.vertices,
+            let vs = this.vertices,
                 reduced = [],
                 prev = vs[0],
                 num = vs.length - 1,
                 vec;
             reduced.push(prev);
-            for( var i = 0; i < num; i++ ){
+            for( let i = 0; i < num; i++ ){
                 vec = vs[i];
                 if( prev.distanceToSquared(vec) >= minEdgeLen ){
                     reduced.push(vec);
@@ -6648,9 +6648,9 @@ var is = require('../internals/is');
         */
         removeDuplicates: function( tolerance ){
             //if tolerance is 0, it will be faster to just use 'equals' method
-            var equals = tolerance ? 'equalsWithTolerance' : 'equals';
-            var p, prev, i = 0, num = this.vertices.length;
-            var last;
+            let equals = tolerance ? 'equalsWithTolerance' : 'equals';
+            let p, prev, i = 0, num = this.vertices.length;
+            let last;
             for( ; i<num; i++ ){
                 p = this.vertices[i];
                 //if its the 'equals' method tolerance will just be ingored
@@ -6674,7 +6674,7 @@ var is = require('../internals/is');
         },
 
         rotate: function(theta) {
-            for (var i=0, num=this.vertices.length; i < num; i++) {
+            for (let i=0, num=this.vertices.length; i < num; i++) {
                 this.vertices[i].rotate(theta);
             }
             return this;
@@ -6682,7 +6682,7 @@ var is = require('../internals/is');
 
         scale: function( x, y ) {
             if (arguments.length==1) {
-                var arg = arguments[0];
+                let arg = arguments[0];
                 if( has.XY( arg ) ){
                     x=arg.x;
                     y=arg.y;
@@ -6697,16 +6697,16 @@ var is = require('../internals/is');
             } else {
                 throw "Invalid argument(s) passed.";
             }
-            for (var i=0, num=this.vertices.length; i < num; i++) {
+            for (let i=0, num=this.vertices.length; i < num; i++) {
                 this.vertices[i].scaleSelf(x, y);
             }
             return this;
         },
 
         scaleSize: function( x, y ){
-            var centroid;
+            let centroid;
             if(arguments.length===1) {
-                var arg = arguments[0];
+                let arg = arguments[0];
                 if( has.XY(arg) ){
                     x = arg.x;
                     y = arg.y;
@@ -6722,20 +6722,20 @@ var is = require('../internals/is');
                 throw new Error('Invalid argument(s) passed.');
             }
             centroid = this.getCentroid();
-            for( var i = 0, l = this.vertices.length; i<l; i++ ){
-                var v = this.vertices[i];
+            for( let i = 0, l = this.vertices.length; i<l; i++ ){
+                let v = this.vertices[i];
                 v.subSelf(centroid).scaleSelf(x,y).addSelf(centroid);
             }
             return this;
         },
 
         smooth: function(amount, baseWeight){
-            var centroid = this.getCentroid();
-            var num = this.vertices.length;
-            var filtered = [];
-            for(var i=0,j=num-1,k=1;i<num;i++){
-                var a = this.vertices[i];
-                var dir = this.vertices[j].sub(a).addSelf(this.vertices[k].sub(a))
+            let centroid = this.getCentroid();
+            let num = this.vertices.length;
+            let filtered = [];
+            for(let i=0,j=num-1,k=1;i<num;i++){
+                let a = this.vertices[i];
+                let dir = this.vertices[j].sub(a).addSelf(this.vertices[k].sub(a))
                     .addSelf(a.sub(centroid).scaleSelf(baseWeight));
                 filtered.push(a.add(dir.scaleSelf(amount)));
                 j++;
@@ -6753,16 +6753,16 @@ var is = require('../internals/is');
 
         toMesh: function( mesh, centroid2D, extrude ){
             mesh = mesh || new TriangleMesh();
-            var num = this.vertices.length;
+            let num = this.vertices.length;
             centroid2D = centroid2D || this.getCentroid();
-            var centroid = centroid2D.to3DXY();
+            let centroid = centroid2D.to3DXY();
             centroid.z = extrude;
-            var bounds = this.getBounds(),
+            let bounds = this.getBounds(),
                 boundScale = new Vec2D(1/bounds.width, 1/bounds.height),
                 uvC = centroid2D.sub(bounds.getTopLeft()).scaleSelf(boundScale),
                 a, b, uvA, uvB;
 
-            for( var i=1; i<=num; i++ ){
+            for( let i=1; i<=num; i++ ){
                 a = this.vertices[i % num];
                 b = this.vertices[i - 1];
                 uvA = a.sub(bounds.getTopLeft()).scaleSelf(boundScale);
@@ -6777,8 +6777,8 @@ var is = require('../internals/is');
         },
 
         toString: function(){
-            var s = "";
-            for(var i=0;i<this.vertices.length;i++){
+            let s = "";
+            for(let i=0;i<this.vertices.length;i++){
                 s += this.vertices[i];
                 if(i<this.vertices.length-1){
                     s+= ", ";
@@ -6788,7 +6788,7 @@ var is = require('../internals/is');
         },
 
         translate: function() {
-            var x,y;
+            let x,y;
             if (arguments.length==1 && has.XY( arguments[0] ) ){
                 x=arguments[0].x;
                 y=arguments[0].y;
@@ -6798,7 +6798,7 @@ var is = require('../internals/is');
             } else {
                 throw "Invalid argument(s) passed.";
             }
-            for (var i=0, num=this.vertices.length; i < num; i++) {
+            for (let i=0, num=this.vertices.length; i < num; i++) {
                 this.vertices[i].addSelf(x, y);
             }
             return this;
@@ -6813,12 +6813,12 @@ var is = require('../internals/is');
     * @return polygon
     */
     Polygon2D.fromBaseEdge = function( baseA, baseB, res ){
-        var theta = -( MathUtils.PI - (MathUtils.PI*(res-2) / res) ),
+        let theta = -( MathUtils.PI - (MathUtils.PI*(res-2) / res) ),
             dir = baseB.sub( baseA ),
             prev = baseB,
             poly = new Polygon2D( baseA, baseB ),
             p;
-        for( var i=0; i< res-1; i++){
+        for( let i=0; i< res-1; i++){
             p = prev.add( dir.getRotated(theta*i) );
             poly.add( p );
             prev = p;
@@ -6837,7 +6837,7 @@ var is = require('../internals/is');
     * @return polygon
     */
     Polygon2D.fromEdgeLength = function( len, res ){
-        var Circle = require('./Circle');
+        let Circle = require('./Circle');
         return new Circle( Polygon2D.getRadiusForEdgeLength(len,res) ).toPolygon2D( res );
     };
 
@@ -6858,14 +6858,14 @@ var is = require('../internals/is');
 },{"../internals/has":105,"../internals/is":106,"../math/mathUtils":125,"./Circle":45,"./Line2D":52,"./Rect":62,"./Vec2D":70,"./mesh/TriangleMesh":87}],58:[function(require,module,exports){
 
 
-var mathUtils = require('../math/mathUtils'),
+let mathUtils = require('../math/mathUtils'),
 	Matrix4x4 = require('./Matrix4x4');
 
 /**
  * @class
  * @member toxi
  */
-var	Quaternion = function (qw,vx,y,z){
+let	Quaternion = function (qw,vx,y,z){
 	if(arguments.length == 4){
 		this.w = qw;
 		this.x = vx;
@@ -6902,7 +6902,7 @@ Quaternion.prototype = {
 		return (this.x * q.x) + (this.y * q.y) + (this.z * q.z) + (this.w * q.w);
 	},
 	getConjugate: function(){
-		var q = new Quaternion();
+		let q = new Quaternion();
 		q.x = -this.x;
 		q.y = -this.y;
 		q.z = -this.z;
@@ -6923,12 +6923,12 @@ Quaternion.prototype = {
 		if(arguments.length == 3){
 			t = is.interpolate(0,1,t);
 		}
-		var scale,
+		let scale,
 			invscale,
 			dot = mathUtils.clip(this.dot(target),-1,1);
 			if((1.0-dot) >= mathUtils.EPS){
-				var theta = Math.acos(dot);
-				var invsintheta = 1.0 / Math.sin(theta);
+				let theta = Math.acos(dot);
+				let invsintheta = 1.0 / Math.sin(theta);
 				scale = (Math.sin(theta *(1.0 - t)) * invsintheta);
 				invscale = (Math.sin(theta * t) * invsintheta);
 			} else {
@@ -6952,7 +6952,7 @@ Quaternion.prototype = {
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 	},
 	multiply: function(q2){
-		var res = new Quaternion();
+		let res = new Quaternion();
 		res.w = this.w * q2.w - x * q2.x - y * q2.y - z * q2.z;
 		res.x = this.w * q2.x + x * q2.w + y * q2.z - z * q2.y;
 		res.y = this.w * q2.y + y * q2.w + z * q2.x - x * q2.z;
@@ -6961,7 +6961,7 @@ Quaternion.prototype = {
 		return res;
 	},
 	normalize: function(){
-		var mag = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+		let mag = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
 		if(mag > mathUtils.EPS){
 			mag = 1 / mag;
 			this.x *= mag;
@@ -7015,8 +7015,8 @@ Quaternion.prototype = {
 		return [this.w,this.x,this.y,this.z];
 	},
 	toAxisAngle: function(){
-		var res = [];
-		var sa = Math.sqrt(1.0 - this.w * this.w);
+		let res = [];
+		let sa = Math.sqrt(1.0 - this.w * this.w);
 		if(sa < mathUtils.EPS){
 			sa = 1.0;
 		} else {
@@ -7032,20 +7032,20 @@ Quaternion.prototype = {
 		if(result === undefined){
 			result = new Matrix4x4();
 		}
-		var x2 = this.x + this.x;
-		var y2 = this.y + this.y;
-		var z2 = this.z + this.z;
-		var xx = this.x * x2;
-		var xy = this.x * y2;
-		var xz = this.x * z2;
-		var yy = this.y * y2;
-		var yz = this.y * z2;
-		var zz = this.z * z2;
-		var wx = this.w * x2;
-		var wy = this.w * y2;
-		var wz = this.w * z2;
+		let x2 = this.x + this.x;
+		let y2 = this.y + this.y;
+		let z2 = this.z + this.z;
+		let xx = this.x * x2;
+		let xy = this.x * y2;
+		let xz = this.x * z2;
+		let yy = this.y * y2;
+		let yz = this.y * z2;
+		let zz = this.z * z2;
+		let wx = this.w * x2;
+		let wy = this.w * y2;
+		let wz = this.w * z2;
 		
-		var st = x2 +','+y2+','+z2+','+xx+','+xy+','+xz+','+yy+','+yz+','+zz+','+wx+','+wy+','+wz;
+		let st = x2 +','+y2+','+z2+','+xx+','+xy+','+xz+','+yy+','+yz+','+zz+','+wx+','+wy+','+wz;
 		return result.set(
 			1 - (yy + zz), xy - wz, xz + wy, 0, xy + wz,
 			1 - (xx + zz), yz - wx, 0, xz - wy, yz + wx, 1 - (xx + yy), 0,
@@ -7062,7 +7062,7 @@ Quaternion.DOT_THRESHOLD = 0.9995;
 
 Quaternion.createFromAxisAngle = function(axis,angle){
 	angle *= 0.5;
-	var sin = mathUtils.sin(angle),
+	let sin = mathUtils.sin(angle),
 		cos = mathUtils.cos(angle),
 		q = new Quaternion(cos,axis.getNormalizedTo(sin));
 	return q;
@@ -7073,17 +7073,17 @@ Quaternion.createFromEuler = function(pitch,yaw,roll){
 	yaw *=0.5;
 	roll *= 0.5;
 	
-	var sinPitch = mathUtils.sin(pitch),
+	let sinPitch = mathUtils.sin(pitch),
 		cosPitch = mathUtils.cos(pitch),
 		sinYaw = mathUtils.sin(yaw),
 		cosYaw = mathUtils.cos(yaw),
 		sinRoll = mathUtils.sin(roll),
 		cosRoll = mathUtils.cos(roll);
 	
-	var cosPitchCosYaw = cosPitch * cosYaw,
+	let cosPitchCosYaw = cosPitch * cosYaw,
 		sinPitchSinYaw = sinPitch * sinYaw;
 		
-		var q = new Quaternion();
+		let q = new Quaternion();
 		q.x = sinRoll * cosPitchCosYaw - cosRoll * sinPitchSinYaw;
 		q.y = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
 		q.z = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
@@ -7093,9 +7093,9 @@ Quaternion.createFromEuler = function(pitch,yaw,roll){
 };
 
 Quaternion.createFromMatrix = function(m){
-	var s = 0.0;
-	var q = [];
-	var trace = m.matrix[0][0] + m.matrix[1][1] + m.matrix[2][2];
+	let s = 0.0;
+	let q = [];
+	let trace = m.matrix[0][0] + m.matrix[1][1] + m.matrix[2][2];
 	
 	if(trace > 0.0){
 		s = Math.sqrt(trace + 1.0);
@@ -7106,8 +7106,8 @@ Quaternion.createFromMatrix = function(m){
 		q[2] = (m.matrix[0][1] - m.matrix[1][0] * s);
 	} else {
 		
-		var nxt = [ 1, 2, 0 ];
-        var i = 0, j = 0, k = 0;
+		let nxt = [ 1, 2, 0 ];
+        let i = 0, j = 0, k = 0;
 
         if (m.matrix[1][1] > m.matrix[0][0]) {
             i = 1;
@@ -7132,7 +7132,7 @@ Quaternion.createFromMatrix = function(m){
  };
  
  Quaternion.getAlignmentQuat = function(dir,forward){
-		var target = dir.getNormalized(),
+		let target = dir.getNormalized(),
 			axis = forward.cross(target),
 			length = axis.magnitude() + 0.0001,
 			angle = Math.atan2(length, forward.dot(target));
@@ -7145,7 +7145,7 @@ Quaternion.createFromMatrix = function(m){
 },{"../math/mathUtils":125,"./Matrix4x4":55}],59:[function(require,module,exports){
 
 
-var extend = require('../internals').extend,
+let extend = require('../internals').extend,
 	Vec2D = require('./Vec2D'),
 	Line2D = require('./Line2D');
 
@@ -7160,8 +7160,8 @@ var extend = require('../internals').extend,
 * @param {toxi.geom.Vec2D} position
 * @param {toxi.geom.Vec2D} direction
 */
-var	Ray2D = function(a,b,d){
-	var o, dir;
+let	Ray2D = function(a,b,d){
+	let o, dir;
 	if(arguments.length == 3){
 		Vec2D.apply(this,[a,b]);
 		this.dir = d.getNormalized();
@@ -7183,7 +7183,7 @@ Ray2D.prototype.getDirection = function() {
  * coinciding with this ray.
  */
 Ray2D.prototype.getDistanceToPoint = function(p) {
-	var sp = p.sub(this);
+	let sp = p.sub(this);
 	return sp.distanceTo(this.dir.scale(sp.dot(this.dir)));
 };
 
@@ -7211,7 +7211,7 @@ Ray2D.prototype.setDirection = function(d) {
  * @return line segment
  */
 Ray2D.prototype.toLine2DWithPointAtDistance = function(dist) {
-	var Line2D = require('./Line2D');
+	let Line2D = require('./Line2D');
 	return new Line2D(this, this.getPointAtDistance(dist));
 };
 
@@ -7225,7 +7225,7 @@ module.exports = Ray2D;
 },{"../internals":98,"./Line2D":52,"./Vec2D":70}],60:[function(require,module,exports){
 
 
-var extend = require('../internals').extend,
+let extend = require('../internals').extend,
 	Vec3D = require('./Vec3D'),
 	Line3D = require('./Line3D');
 
@@ -7233,8 +7233,8 @@ var extend = require('../internals').extend,
  * @class
  * @member toxi
  */
-var	Ray3D = function(a,b,c,d){
-	var o, dir;
+let	Ray3D = function(a,b,c,d){
+	let o, dir;
 	if(arguments.length == 4){
 		o = new Vec3D(a,b,c);
 		dir = d;
@@ -7267,7 +7267,7 @@ Ray3D.prototype.getDirection = function() {
 	@param p
 */
 Ray3D.prototype.getDistanceToPoint = function(p) {
-    var sp = p.sub(this);
+    let sp = p.sub(this);
     return sp.distanceTo(this.dir.scale(sp.dot(this.dir)));
 };
 
@@ -7314,7 +7314,7 @@ module.exports = Ray3D;
 },{"../internals":98,"./Line3D":53,"./Vec3D":71}],61:[function(require,module,exports){
 
 
-var IsectData3D = require('./IsectData3D'),
+let IsectData3D = require('./IsectData3D'),
 	mathUtils = require('../math/mathUtils'),
     Ray3DIntersector;
 
@@ -7333,12 +7333,12 @@ Ray3DIntersector.prototype = {
 	},
 
 	intersectsRay: function(other){
-		var n = this.ray.dir.cross(other.dir);
-		var sr = this.ray.sub(other);
-		var absX = mathUtils.abs(n.x);
-		var absY = mathUtils.abs(n.y);
-		var absZ = mathUtils.abs(n.z);
-		var t;
+		let n = this.ray.dir.cross(other.dir);
+		let sr = this.ray.sub(other);
+		let absX = mathUtils.abs(n.x);
+		let absY = mathUtils.abs(n.y);
+		let absZ = mathUtils.abs(n.z);
+		let t;
 		if(absZ > absX && absZ > absY){
 			t = (sr.x * other.dir.y - sr.y * other.dir.x) / n.z;
 		} else if(absX > absY){
@@ -7358,7 +7358,7 @@ module.exports = Ray3DIntersector;
 },{"../math/mathUtils":125,"./IsectData3D":51}],62:[function(require,module,exports){
 
 
-    var	internals = require('../internals'),
+    let	internals = require('../internals'),
         mathUtils = require('../math/mathUtils'),
         Vec2D = require('./Vec2D'),
         Line2D = require('./Line2D');
@@ -7371,7 +7371,7 @@ module.exports = Ray3DIntersector;
      * @param {Number} [width]
      * @param {Number} [height]
      */
-    var	Rect = function(a,b,width,height){
+    let	Rect = function(a,b,width,height){
         if(arguments.length === 2){ //then it should've been 2 Vec2D's
             if( !( internals.has.XY( a ) ) ){
                 throw new Error("Rect received incorrect parameters");
@@ -7387,7 +7387,7 @@ module.exports = Ray3DIntersector;
             this.width = width;
             this.height = height;
         } else if(arguments.length === 1){ //object literal with x,y,width,height
-            var o = arguments[0];
+            let o = arguments[0];
             if( internals.has.XYWidthHeight( o ) ){
                 this.x = o.x;
                 this.y = o.y;
@@ -7405,9 +7405,9 @@ module.exports = Ray3DIntersector;
 
 
     Rect.getBoundingRect = function( points ){
-        var first = points[0];
-        var bounds = new Rect(first.x, first.y, 0, 0);
-        for (var i = 1, num = points.length; i < num; i++) {
+        let first = points[0];
+        let bounds = new Rect(first.x, first.y, 0, 0);
+        for (let i = 1, num = points.length; i < num; i++) {
             bounds.growToContainPoint(points[i]);
         }
         return bounds;
@@ -7415,8 +7415,8 @@ module.exports = Ray3DIntersector;
 
     Rect.prototype = {
         containsPoint: function(p){
-            var px = p.x;
-            var py = p.y;
+            let px = p.x;
+            let py = p.y;
             if(px < this.x || px >= this.x + this.width){
                 return false;
             }
@@ -7455,7 +7455,7 @@ module.exports = Ray3DIntersector;
         },
 
         getEdge: function(id){
-            var edge;
+            let edge;
             switch(id){
                 case 0:
                     edge = new Line2D(
@@ -7523,19 +7523,19 @@ module.exports = Ray3DIntersector;
 
         intersectsRay: function(ray,minDist,maxDist){
             //returns Vec2D of point intersection
-            var invDir = ray.getDirection().reciprocal();
-            var signDirX = invDir.x < 0;
-            var signDirY = invDir.y < 0;
-            var min = this.getTopLeft();
-            var max = this.getBottomRight();
-            var bbox = signDirX ? max : min;
-            var tmin = (bbox.x - ray.x) * invDir.x;
+            let invDir = ray.getDirection().reciprocal();
+            let signDirX = invDir.x < 0;
+            let signDirY = invDir.y < 0;
+            let min = this.getTopLeft();
+            let max = this.getBottomRight();
+            let bbox = signDirX ? max : min;
+            let tmin = (bbox.x - ray.x) * invDir.x;
             bbox = signDirX ? min : max;
-            var tmax = (bbox.x - ray.x) * invDir.x;
+            let tmax = (bbox.x - ray.x) * invDir.x;
             bbox = signDirY ? max : min;
-            var tymin = (bbox.y - ray.y) * invDir.y;
+            let tymin = (bbox.y - ray.y) * invDir.y;
             bbox = signDirY ? min : max;
-            var tymax = (bbox.y - ray.y) * invDir.y;
+            let tymax = (bbox.y - ray.y) * invDir.y;
             if((tmin > tymax) || (tymin > tmax)){
                 return undefined;
             }
@@ -7556,7 +7556,7 @@ module.exports = Ray3DIntersector;
         },
 
         scale: function(s){
-            var c = this.getCentroid();
+            let c = this.getCentroid();
             this.width *= s;
             this.height *= s;
             this.x = c.x - this.width * 0.5;
@@ -7596,8 +7596,8 @@ module.exports = Ray3DIntersector;
         },
 
         toPolygon2D: function(){
-            var Polygon2D = require('./Polygon2D');
-            var poly = new Polygon2D();
+            let Polygon2D = require('./Polygon2D');
+            let poly = new Polygon2D();
             poly.add(new Vec2D(this.x,this.y));
             poly.add(new Vec2D(this.x+this.width,this.y));
             poly.add(new Vec2D(this.x+this.width,this.y+this.height));
@@ -7610,7 +7610,7 @@ module.exports = Ray3DIntersector;
         },
 
         union: function(r){
-            var tmp = mathUtils.max(this.x + this.width, r.x + r.width);
+            let tmp = mathUtils.max(this.x + this.width, r.x + r.width);
             this.x = mathUtils.min(this.x,r.x);
             this.width = tmp - this.x;
             tmp = mathUtils.max(this.y + this.height, r.y + r.height);
@@ -7628,13 +7628,13 @@ module.exports = Ray3DIntersector;
 
 
 	//2 modules defined
-	var Sphere, SphereFunction;
+	let Sphere, SphereFunction;
 
 	//Sphere
 	(function(){
-		var internals = require('../internals');
-		var meshCommon = require('./mesh/meshCommon');
-		var Vec3D = require('./Vec3D');
+		let internals = require('../internals');
+		let meshCommon = require('./mesh/meshCommon');
+		let Vec3D = require('./Vec3D');
 		/**
 		 * @module toxi.geom.Sphere
 		 * @augments toxi.geom.Vec3D
@@ -7658,7 +7658,7 @@ module.exports = Ray3DIntersector;
 		internals.extend(Sphere,Vec3D);
 
 		Sphere.prototype.containsPoint = function(p) {
-			var d = this.sub(p).magSquared();
+			let d = this.sub(p).magSquared();
 			return (d <= this.radius * this.radius);
 		};
 
@@ -7677,7 +7677,7 @@ module.exports = Ray3DIntersector;
 		 * doesn't intersect sphere at all.
 		 */
 		Sphere.prototype.intersectRay = function(ray) {
-			var result, a, b, t,
+			let result, a, b, t,
 				q = ray.sub(this),
 				distSquared = q.magSquared(),
 				v = -q.dot(ray.getDirection()),
@@ -7723,7 +7723,7 @@ module.exports = Ray3DIntersector;
 
 			// Sphere and triangle intersect if the (squared) distance from sphere
 			// center to Vec3D p is less than the (squared) sphere radius
-			var v = result.sub(this);
+			let v = result.sub(this);
 			return v.magSquared() <= this.radius * this.radius;
 		};
 
@@ -7740,11 +7740,11 @@ module.exports = Ray3DIntersector;
 
 		Sphere.prototype.toMesh = function() {
 			//this fn requires SurfaceMeshBuilder, loading it here to avoid circular dependency
-			//var SurfaceMeshBuilder = require('./mesh/SurfaceMeshBuilder');
+			//let SurfaceMeshBuilder = require('./mesh/SurfaceMeshBuilder');
 
 			//if one argument is passed it can either be a Number for resolution, or an options object
 			//if 2 parameters are passed it must be a TriangleMesh and then a Number for resolution
-			var opts = {
+			let opts = {
 				mesh: undefined,
 				resolution: 0
 			};
@@ -7760,7 +7760,7 @@ module.exports = Ray3DIntersector;
 				opts.resolution = arguments[1];
 			}
 
-			var builder = new meshCommon.SurfaceMeshBuilder(new SphereFunction(this));
+			let builder = new meshCommon.SurfaceMeshBuilder(new SphereFunction(this));
 			return builder.createMesh(opts.mesh, opts.resolution, 1);
 		};
 	}());
@@ -7769,7 +7769,7 @@ module.exports = Ray3DIntersector;
 	//toxi.geom.mesh.SphereFunction
 	(function( Sphere ){
 		//SphereFunction
-		var mathUtils = require('../math/mathUtils'),
+		let mathUtils = require('../math/mathUtils'),
 			Vec3D = require('./Vec3D'),
 			internals = require('../internals');
 
@@ -7796,11 +7796,11 @@ module.exports = Ray3DIntersector;
 		SphereFunction.prototype = {
 			computeVertexFor: function(p,phi,theta) {
 				phi -= mathUtils.HALF_PI;
-				var cosPhi = mathUtils.cos(phi);
-				var cosTheta = mathUtils.cos(theta);
-				var sinPhi = mathUtils.sin(phi);
-				var sinTheta = mathUtils.sin(theta);
-				var t = mathUtils.sign(cosPhi) * mathUtils.abs(cosPhi);
+				let cosPhi = mathUtils.cos(phi);
+				let cosTheta = mathUtils.cos(theta);
+				let sinPhi = mathUtils.sin(phi);
+				let sinTheta = mathUtils.sin(theta);
+				let t = mathUtils.sign(cosPhi) * mathUtils.abs(cosPhi);
 				p.x = t * mathUtils.sign(cosTheta) * mathUtils.abs(cosTheta);
 				p.y = mathUtils.sign(sinPhi) * mathUtils.abs(sinPhi);
 				p.z = t * mathUtils.sign(sinTheta) * mathUtils.abs(sinTheta);
@@ -7833,9 +7833,9 @@ module.exports = Ray3DIntersector;
 
 
 },{"../internals":98,"../math/mathUtils":125,"./Vec3D":71,"./mesh/meshCommon":92}],64:[function(require,module,exports){
-var Vec2D = require('./Vec2D');
-var is = require('../internals/is');
-var BernsteinPolynomial = require('./BernsteinPolynomial');
+let Vec2D = require('./Vec2D');
+let is = require('../internals/is');
+let BernsteinPolynomial = require('./BernsteinPolynomial');
 
 /**
  * @class
@@ -7843,14 +7843,14 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
  * @param {Vec2D[]} points array of Vec2D's
  * @param {BernsteinPolynomial} [bernsteinPoly]
  */
-var	Spline2D = function(points, bernsteinPoly, tightness){
+let	Spline2D = function(points, bernsteinPoly, tightness){
 	if( arguments.length === 1 && !is.Array( points ) && is.Object(points)){
 		//if its an options object
 		bernsteinPoly = bernsteinPoly || points.bernsteinPoly;
 		tightness = tightness || points.tightness;
 		points = points.points;
 	}
-	var i = 0, l;
+	let i = 0, l;
 	this.pointList = [];
 	if( typeof tightness !== 'number' ){
 		tightness = Spline2D.DEFAULT_TIGHTNESS;
@@ -7892,29 +7892,29 @@ Spline2D.prototype = {
 		if (this.bernstein === undefined || this.bernstein.resolution != res) {
 			this.bernstein = new BernsteinPolynomial(res);
 		}
-		var bst = this.bernstein;
+		let bst = this.bernstein;
 		this.findCPoints();
-		var deltaP = new Vec2D();
-		var deltaQ = new Vec2D();
+		let deltaP = new Vec2D();
+		let deltaQ = new Vec2D();
         res--;
-        var verticeCount = (this.numP - 1) * res + 1;
+        let verticeCount = (this.numP - 1) * res + 1;
         if ( typeof(this.vertices) == 'undefined' || this.vertices.length != verticeCount ) {
         	this.vertices = Array.apply( null, Array( verticeCount ) ).map( function () { return new Vec2D(); } );
         }
-		var vertexIdx = 0;
-		for (var i = 0; i < this.numP - 1; i++) {
-			var p = this.points[i];
-			var q = this.points[i + 1];
+		let vertexIdx = 0;
+		for (let i = 0; i < this.numP - 1; i++) {
+			let p = this.points[i];
+			let q = this.points[i + 1];
 			deltaP.x = this.delta[i].x + p.x;
 			deltaP.y = this.delta[i].y + p.y;
 			deltaQ.x = q.x - this.delta[i + 1].x;
 			deltaQ.y = q.y - this.delta[i + 1].y;
 
-			for (var k = 0; k < res; k++) {
-				var x = p.x * bst.b0[k] + deltaP.x * bst.b1[k] +
+			for (let k = 0; k < res; k++) {
+				let x = p.x * bst.b0[k] + deltaP.x * bst.b1[k] +
 				deltaQ.x * bst.b2[k] +
 				q.x * bst.b3[k];
-				var y = p.y * bst.b0[k] + deltaP.y * bst.b1[k] +
+				let y = p.y * bst.b0[k] + deltaP.y * bst.b1[k] +
 				deltaQ.y * bst.b2[k] +
 				q.y * bst.b3[k];
 				this.vertices[ vertexIdx ].x = x;
@@ -7929,7 +7929,7 @@ Spline2D.prototype = {
 
 	findCPoints: function(){
 		this.bi[1] = -0.25;
-		var i, p0, p2, d0;
+		let i, p0, p2, d0;
 		p0 = this.pointList[0];
 		p2 = this.pointList[2];
 		d0 = this.delta[0];
@@ -7952,20 +7952,20 @@ Spline2D.prototype = {
 		if(this.vertices === undefined || this.vertices.length < 2){
 			this.computeVertices(Spline2D.DEFAULT_RES);
 		}
-		var arcLen = this.getEstimatedArcLength();
-		var uniform = [];
-		var delta = step / arcLen;
-		var currIdx = 0;
-		for(var t =0; t<1.0; t+= delta){
-			var currT = t * arcLen;
+		let arcLen = this.getEstimatedArcLength();
+		let uniform = [];
+		let delta = step / arcLen;
+		let currIdx = 0;
+		for(let t =0; t<1.0; t+= delta){
+			let currT = t * arcLen;
 			while(currT >= this.arcLenIndex[currIdx]){
 				currIdx++;
 			}
-			var p = this.vertices[currIdx - 1];
-			var q = this.vertices[currIdx];
-			var frac = ((currT - this.arcLenIndex[currIdx - 1]) / (this.arcLenIndex[currIdx] - this.arcLenIndex[currIdx - 1]));
+			let p = this.vertices[currIdx - 1];
+			let q = this.vertices[currIdx];
+			let frac = ((currT - this.arcLenIndex[currIdx - 1]) / (this.arcLenIndex[currIdx] - this.arcLenIndex[currIdx - 1]));
 
-			var i = p.interpolateTo(q,frac);
+			let i = p.interpolateTo(q,frac);
 			uniform.push(i);
 		}
 		if(doAddFinalVertex){
@@ -7976,8 +7976,8 @@ Spline2D.prototype = {
 
 
 	getEstimatedArcLength: function(){
-		var len;
-		var arcLen = 0;
+		let len;
+		let arcLen = 0;
 
 		if(this.arcLenIndex === undefined || (this.arcLenIndex !== undefined && this.arcLenIndex.length != this.vertices.length)){
 			this.arcLenIndex = [0];
@@ -7987,9 +7987,9 @@ Spline2D.prototype = {
 			len = this.arcLenIndex.length;
 		}
 
-		for(var i=1;i<len;i++){
-			var p = this.vertices[i-1];
-			var q = this.vertices[i];
+		for(let i=1;i<len;i++){
+			let p = this.vertices[i-1];
+			let q = this.vertices[i];
 			arcLen += p.distanceTo(q);
 			this.arcLenIndex[i] = arcLen;
 		}
@@ -8027,7 +8027,7 @@ Spline2D.prototype = {
 			this.coeffA = [];
 			this.delta = [];
 			this.bi = [];
-			for(var i=0;i<this.numP; i++){
+			for(let i=0;i<this.numP; i++){
 				this.coeffA[i] = new Vec2D();
 				this.delta[i] = new Vec2D();
 			}
@@ -8045,9 +8045,9 @@ module.exports = Spline2D;
 
 
 },{"../internals/is":106,"./BernsteinPolynomial":44,"./Vec2D":70}],65:[function(require,module,exports){
-var Vec3D = require('./Vec3D');
-var is = require('../internals/is');
-var BernsteinPolynomial = require('./BernsteinPolynomial');
+let Vec3D = require('./Vec3D');
+let is = require('../internals/is');
+let BernsteinPolynomial = require('./BernsteinPolynomial');
 
     /**
      * @class
@@ -8055,14 +8055,14 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
      * @param {Vec3D[]} points array of Vec3D's
      * @param {BernsteinPolynomial} [bernsteinPoly]
      */
-    var	Spline3D = function(points, bernsteinPoly, tightness){
+    let	Spline3D = function(points, bernsteinPoly, tightness){
         if( arguments.length === 1 && !is.Array( points ) && is.Object(points) ){
             //if its an options object
             bernsteinPoly = bernsteinPoly || points.bernsteinPoly;
             tightness = tightness || points.tightness;
             points = points.points;
         }
-        var i = 0, l;
+        let i = 0, l;
         this.pointList = [];
         if( typeof tightness !== 'number' ){
             tightness = Spline3D.DEFAULT_TIGHTNESS;
@@ -8104,25 +8104,25 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
             if (this.bernstein === undefined || this.bernstein.resolution != res) {
                 this.bernstein = new BernsteinPolynomial(res);
             }
-            var bst = this.bernstein;
+            let bst = this.bernstein;
             this.vertices = [];
             this.findCPoints();
-            var deltaP = new Vec3D();
-            var deltaQ = new Vec3D();
+            let deltaP = new Vec3D();
+            let deltaQ = new Vec3D();
             res--;
-            for (var i = 0; i < this.numP - 1; i++) {
-                var p = this.points[i];
-                var q = this.points[i + 1];
+            for (let i = 0; i < this.numP - 1; i++) {
+                let p = this.points[i];
+                let q = this.points[i + 1];
                 deltaP.set(this.delta[i]).addSelf(p);
                 deltaQ.set(q).subSelf(this.delta[i + 1]);
-                for (var k = 0; k < res; k++) {
-                    var x = p.x * bst.b0[k] + deltaP.x * bst.b1[k] +
+                for (let k = 0; k < res; k++) {
+                    let x = p.x * bst.b0[k] + deltaP.x * bst.b1[k] +
                         deltaQ.x * bst.b2[k] +
                         q.x * bst.b3[k];
-                    var y = p.y * bst.b0[k] + deltaP.y * bst.b1[k] +
+                    let y = p.y * bst.b0[k] + deltaP.y * bst.b1[k] +
                         deltaQ.y * bst.b2[k] +
                         q.y * bst.b3[k];
-                    var z = p.z * bst.b0[k] + deltaP.z * bst.b1[k] +
+                    let z = p.z * bst.b0[k] + deltaP.z * bst.b1[k] +
                         deltaQ.z * bst.b2[k] + q.z * bst.b3[k];
                     this.vertices.push(new Vec3D(x, y, z));
                 }
@@ -8133,7 +8133,7 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 
         findCPoints: function(){
             this.bi[1] = -0.25;
-            var i, p0, p2, d0;
+            let i, p0, p2, d0;
             p0 = this.pointList[0];
             p2 = this.pointList[2];
             d0 = this.delta[0];
@@ -8164,20 +8164,20 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
             if(this.vertices === undefined || this.vertices.length < 2){
                 this.computeVertices(Spline3D.DEFAULT_RES);
             }
-            var arcLen = this.getEstimatedArcLength();
-            var uniform = [];
-            var delta = step / arcLen;
-            var currIdx = 0;
-            for(var t =0; t<1.0; t+= delta){
-                var currT = t * arcLen;
+            let arcLen = this.getEstimatedArcLength();
+            let uniform = [];
+            let delta = step / arcLen;
+            let currIdx = 0;
+            for(let t =0; t<1.0; t+= delta){
+                let currT = t * arcLen;
                 while(currT >= this.arcLenIndex[currIdx]){
                     currIdx++;
                 }
-                var p = this.vertices[currIdx - 1];
-                var q = this.vertices[currIdx];
-                var frac = ((currT - this.arcLenIndex[currIdx - 1]) / (this.arcLenIndex[currIdx] - this.arcLenIndex[currIdx - 1]));
+                let p = this.vertices[currIdx - 1];
+                let q = this.vertices[currIdx];
+                let frac = ((currT - this.arcLenIndex[currIdx - 1]) / (this.arcLenIndex[currIdx] - this.arcLenIndex[currIdx - 1]));
 
-                var i = p.interpolateTo(q,frac);
+                let i = p.interpolateTo(q,frac);
                 uniform.push(i);
             }
             if(doAddFinalVertex){
@@ -8188,8 +8188,8 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 
 
         getEstimatedArcLength: function(){
-            var len;
-            var arcLen = 0;
+            let len;
+            let arcLen = 0;
 
             if(this.arcLenIndex === undefined || (this.arcLenIndex !== undefined && this.arcLenIndex.length != this.vertices.length)){
                 this.arcLenIndex = [0];
@@ -8199,9 +8199,9 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
                 len = this.arcLenIndex.length;
             }
 
-            for(var i=1;i<len;i++){
-                var p = this.vertices[i-1];
-                var q = this.vertices[i];
+            for(let i=1;i<len;i++){
+                let p = this.vertices[i-1];
+                let q = this.vertices[i];
                 arcLen += p.distanceTo(q);
                 this.arcLenIndex[i] = arcLen;
             }
@@ -8239,7 +8239,7 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
                 this.coeffA = [];
                 this.delta = [];
                 this.bi = [];
-                for(var i=0;i<this.numP; i++){
+                for(let i=0;i<this.numP; i++){
                     this.coeffA[i] = new Vec3D();
                     this.delta[i] = new Vec3D();
                 }
@@ -8263,28 +8263,28 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 	* for rectangular clipping regions.
 	* More information: http://en.wikipedia.org/wiki/Sutherland-Hodgman_algorithm
 	*/
-	var Polygon2D = require('./Polygon2D'),
+	let Polygon2D = require('./Polygon2D'),
 		Vec2D = require('./vectors').Vec2D;
 
 	//function for finding clipped position on each edge
 	//faster than a switch
-	var clippedPos = {
+	let clippedPos = {
 		0: function( b, p1, p2 ){
-			var x = p1.x + ( (b.y-p1.y) * (p2.x-p1.x) ) / ( p2.y-p1.y );
+			let x = p1.x + ( (b.y-p1.y) * (p2.x-p1.x) ) / ( p2.y-p1.y );
 			return new Vec2D( x, b.y );
 		},
 		1: function( b, p1, p2 ){
-			var bx = b.x + b.width;
-			var y = p1.y + ( (bx-p1.x) * (p2.y-p1.y) ) / (p2.x-p1.x);
+			let bx = b.x + b.width;
+			let y = p1.y + ( (bx-p1.x) * (p2.y-p1.y) ) / (p2.x-p1.x);
 			return new Vec2D( bx, y );
 		},
 		2: function( b, p1, p2 ){
-			var by = b.y + b.height;
-			var x = p1.x + ( (by-p1.y) * (p2.x-p1.x) ) / ( p2.y-p1.y );
+			let by = b.y + b.height;
+			let x = p1.x + ( (by-p1.y) * (p2.x-p1.x) ) / ( p2.y-p1.y );
 			return new Vec2D( x, by );
 		},
 		3: function( b, p1, p2 ){
-			var y = p1.y + ( (b.x-p1.x) * (p2.y-p1.y) ) / ( p2.x-p1.x );
+			let y = p1.y + ( (b.x-p1.x) * (p2.y-p1.y) ) / ( p2.x-p1.x );
 			return new Vec2D( b.x, y );
 		}
 	};
@@ -8298,13 +8298,13 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 	 * @param {Vec2D} p2
 	 * @returns Vec2D
 	 */
-	var getClippedPosOnEdge = function( bounds, edgeID, p1, p2 ){
+	let getClippedPosOnEdge = function( bounds, edgeID, p1, p2 ){
 		return clippedPos[edgeID]( bounds, p1, p2 );
 	};
 
 
 	//tests for each edgeID whether the point is within the edge
-	var insideEdgeConditions = {
+	let insideEdgeConditions = {
 		0: function( bounds, p ){
 			return p.y >= bounds.y;
 		},
@@ -8326,7 +8326,7 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 	 * @param {Number} edgeID
 	 * @return {Boolean}
 	 */
-	var isInsideEdge = function( bounds, p, edgeID ){
+	let isInsideEdge = function( bounds, p, edgeID ){
 		return insideEdgeConditions[edgeID]( bounds, p );
 	};
 
@@ -8335,14 +8335,14 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 	 * SutherlandHodgemanClipper constructor
 	 * @param {Rect} bounds
 	 */
-	var SutherlandHodgemanClipper = function( bounds ){
+	let SutherlandHodgemanClipper = function( bounds ){
 		this.bounds = bounds;
 	};
 
 	SutherlandHodgemanClipper.prototype = {
 		constructor: SutherlandHodgemanClipper,
 		clipPolygon: function( poly ){
-			var points = poly.vertices.slice(0), //copy of poly's points
+			let points = poly.vertices.slice(0), //copy of poly's points
 				clipped, //will contain the clipped points
 				edgeID = 0, //numeric id for each edge
 				i = 0,
@@ -8384,7 +8384,7 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 		},
 		//protected + unused in java
 		isKnownVertex: function( list, q ){
-			for( var i=0, l=list.length; i<l; i++){
+			for( let i=0, l=list.length; i<l; i++){
 				if( list[i].equalsWithTolerance(q, 0.0001) ){
 					return true;
 				}
@@ -8401,7 +8401,7 @@ var BernsteinPolynomial = require('./BernsteinPolynomial');
 },{"./Polygon2D":57,"./vectors":96}],67:[function(require,module,exports){
 
 
-var Vec2D = require('./Vec2D'),
+let Vec2D = require('./Vec2D'),
 	Line2D = require('./Line2D'),
 	Rect = require('./Rect'),
 	Circle = require('./Circle'),
@@ -8415,7 +8415,7 @@ var Vec2D = require('./Vec2D'),
  * @param {toxi.Vec2D} b
  * @param {toxi.Vec2D} c
  */
-var	Triangle2D = function(_a,_b,_c){
+let	Triangle2D = function(_a,_b,_c){
 	if(arguments.length === 3){
 		this.a = _a.copy();
 		this.b = _b.copy();
@@ -8424,7 +8424,7 @@ var	Triangle2D = function(_a,_b,_c){
 };
 
 Triangle2D.createEquilateralFrom = function(a,b){
-	var c = a.interpolateTo(b,0.5),
+	let c = a.interpolateTo(b,0.5),
 		dir = a.sub(b),
 		n = dir.getPerpendicular();
 		c.addSelf(n.normalizeTo(dir.magnitude() * mathUtils.SQRT3 / 2));
@@ -8432,7 +8432,7 @@ Triangle2D.createEquilateralFrom = function(a,b){
 };
 
 Triangle2D.isClockwise = function(a,b,c){
-	var determ = (b.x-a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+	let determ = (b.x-a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
 	return (determ < 0.0);
 };
 
@@ -8444,9 +8444,9 @@ Triangle2D.prototype = {
 			offCA = offAB;
 		}
 		this.computeCentroid();
-		var ab = new Line2D(this.a.copy(),this.b.copy()).offsetAndGrowBy(offAB,100000,this.centroid);
-		var bc = new Line2D(this.b.copy(),this.c.copy()).offsetAndGrowBy(offBC,100000,this.centroid);
-		var ca = new Line2D(this.c.copy(),this.a.copy()).offsetAndGrowBy(offCA,100000,this.centroid);
+		let ab = new Line2D(this.a.copy(),this.b.copy()).offsetAndGrowBy(offAB,100000,this.centroid);
+		let bc = new Line2D(this.b.copy(),this.c.copy()).offsetAndGrowBy(offBC,100000,this.centroid);
+		let ca = new Line2D(this.c.copy(),this.a.copy()).offsetAndGrowBy(offCA,100000,this.centroid);
 		
 		this.a = ab.intersectLine(ca).getPos();
 		this.b = ab.intersectLine(bc).getPos();
@@ -8469,7 +8469,7 @@ Triangle2D.prototype = {
      * @return true, if point is in triangle.
      */
      containsPoint: function(_p){
-		var v1 = _p.sub(this.a).normalize(),
+		let v1 = _p.sub(this.a).normalize(),
 			v2 = _p.sub(this.b).normalize(),
 			v3 = _p.sub(this.c).normalize(),
 			totalAngles = Math.acos(v1.dot(v2));
@@ -8483,7 +8483,7 @@ Triangle2D.prototype = {
      },
      
      flipVertexOrder: function(){
-		var t = this.a;
+		let t = this.a;
 		this.a = this.c;
 		this.c = t;
 		return this;
@@ -8498,12 +8498,12 @@ Triangle2D.prototype = {
      },
      
      getCircumCircle: function(){
-		var cr = this.a.bisect(this.b).cross(this.b.bisect(this.c)),
+		let cr = this.a.bisect(this.b).cross(this.b.bisect(this.c)),
 			circa = new Vec2D(cr.x/cr.z, cr.y / cr.z),
 			sa = this.a.distanceTo(this.b),
 			sb = this.b.distanceTo(this.c),
 			sc = this.c.distanceTo(this.a);
-		var radius = sa * sb * sc / Math.sqrt((sa+sb+sc) * (-sa+sb+sc)*(sa-sb+sc)*(sa+sb-sc));
+		let radius = sa * sb * sc / Math.sqrt((sa+sb+sc) * (-sa+sb+sc)*(sa-sb+sc)*(sa+sb-sc));
 		return new Circle(circa,radius);
      },
      
@@ -8512,7 +8512,7 @@ Triangle2D.prototype = {
      },
      
      getClosestPointTo: function(_p){
-		var edge = new Line2D(this.a,this.b),
+		let edge = new Line2D(this.a,this.b),
 			Rab = edge.closestPointTo(_p),
 			Rbc = edge.set(this.b,this.c).closestPointTo(_p),
 			Rca = edge.set(this.c,this.a).closestPointTo(_p),
@@ -8539,21 +8539,21 @@ Triangle2D.prototype = {
 		if(tri.containsPoint(this.a) || tri.containsPoint(this.b) || tri.containsPoint(this.c)){
 			return true;
 		}
-		var ea = [
+		let ea = [
 			new Line2D(this.a,this.b),
 			new Line2D(this.b,this.c),
 			new Line2D(this.c,this.a)
 		];
-		var eb = [
+		let eb = [
 			new Line2D(tri.a,tri.b),
 			new Line2D(tri.b,tri.c),
 			new Line2D(tri.c,tri.a)
 		];
-		for(var i=0,eaLen = ea.length;i<eaLen;i++){
-			var la = ea[i];
-			for(var j=0,ebLen = eb.length;j<ebLen;j++){
-				var lb = eb[j];
-				var type = la.intersectLine(lb).getType();
+		for(let i=0,eaLen = ea.length;i<eaLen;i++){
+			let la = ea[i];
+			for(let j=0,ebLen = eb.length;j<ebLen;j++){
+				let lb = eb[j];
+				let type = la.intersectLine(lb).getType();
 				if(type != Line2D.LineIntersection.Type.NON_INTERSECTING && type != Line2D.LineIntersection.Type.PARALLEL){
 					return true;
 				}
@@ -8573,7 +8573,7 @@ Triangle2D.prototype = {
 	},
 	
 	toPolygon2D: function(){
-		var poly = new Polygon2D();
+		let poly = new Polygon2D();
 		poly.add(this.a.copy());
 		poly.add(this.b.copy());
 		poly.add(this.c.copy());
@@ -8592,7 +8592,7 @@ module.exports = Triangle2D;
 },{"../math/mathUtils":125,"./Circle":45,"./Line2D":52,"./Polygon2D":57,"./Rect":62,"./Vec2D":70}],68:[function(require,module,exports){
 
 
-var mathUtils = require('../math/mathUtils'),
+let mathUtils = require('../math/mathUtils'),
     Vec3D = require('./Vec3D'),
     Line3D = require('./Line3D'),
     AABB = require('./AABB');
@@ -8604,69 +8604,69 @@ var mathUtils = require('../math/mathUtils'),
  * @param {toxi.Vec3D} b
  * @param {toxi.Vec3D} c
  */
-var Triangle3D = function(a,b,c){
+let Triangle3D = function(a,b,c){
 	this.a = a;
 	this.b = b;
 	this.c = c;
 };
 
 Triangle3D.createEquilateralFrom = function(a, b) {
-    var c = a.interpolateTo(b, 0.5);
-    var dir = b.sub(a);
-    var n = a.cross(dir.normalize());
+    let c = a.interpolateTo(b, 0.5);
+    let dir = b.sub(a);
+    let n = a.cross(dir.normalize());
     c.addSelf(n.normalizeTo(dir.magnitude() * mathUtils.SQRT3 / 2));
     return new Triangle3D(a, b, c);
 };
 
 Triangle3D.isClockwiseInXY = function(a, b, c) {
-	var determ = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+	let determ = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
 	return (determ < 0.0);
 };
 
 Triangle3D.isClockwiseInXZ = function(a, b,c) {
-	var determ = (b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z);
+	let determ = (b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z);
 	return (determ < 0.0);
 };
 
 Triangle3D.isClockwiseInYZ = function(a,b,c) {
-    var determ = (b.y - a.y) * (c.z - a.z) - (c.y - a.y) * (b.z - a.z);
+    let determ = (b.y - a.y) * (c.z - a.z) - (c.y - a.y) * (b.z - a.z);
     return (determ < 0.0);
 };
 
 
 Triangle3D.prototype = {
 	closestPointOnSurface: function(p) {
-        var ab = this.b.sub(this.a);
-        var ac = this.c.sub(this.a);
-        var bc = this.c.sub(this.b);
+        let ab = this.b.sub(this.a);
+        let ac = this.c.sub(this.a);
+        let bc = this.c.sub(this.b);
 
-        var pa = p.sub(this.a);
-        var pb = p.sub(this.b);
-        var pc = p.sub(this.c);
+        let pa = p.sub(this.a);
+        let pb = p.sub(this.b);
+        let pc = p.sub(this.c);
 
-        var ap = a.sub(this.p);
-        var bp = b.sub(this.p);
-        var cp = c.sub(this.p);
+        let ap = a.sub(this.p);
+        let bp = b.sub(this.p);
+        let cp = c.sub(this.p);
 
         // Compute parametric position s for projection P' of P on AB,
         // P' = A + s*AB, s = snom/(snom+sdenom)
-        var snom = pa.dot(ab);
+        let snom = pa.dot(ab);
 
         // Compute parametric position t for projection P' of P on AC,
         // P' = A + t*AC, s = tnom/(tnom+tdenom)
-        var tnom = pa.dot(ac);
+        let tnom = pa.dot(ac);
 
         if (snom <= 0.0 && tnom <= 0.0) {
             return this.a; // Vertex region early out
         }
 
-        var sdenom = pb.dot(this.a.sub(this.b));
-        var	tdenom = pc.dot(this.a.sub(this.c));
+        let sdenom = pb.dot(this.a.sub(this.b));
+        let	tdenom = pc.dot(this.a.sub(this.c));
 
         // Compute parametric position u for projection P' of P on BC,
         // P' = B + u*BC, u = unom/(unom+udenom)
-        var unom = pb.dot(bc);
-        var udenom = pc.dot(this.b.sub(this.c));
+        let unom = pb.dot(bc);
+        let udenom = pc.dot(this.b.sub(this.c));
 
         if (sdenom <= 0.0 && unom <= 0.0) {
             return this.b; // Vertex region early out
@@ -8676,8 +8676,8 @@ Triangle3D.prototype = {
         }
 
         // P is outside (or on) AB if the triple scalar product [N PA PB] <= 0
-        var n = ab.cross(ac);
-        var vc = n.dot(ap.crossSelf(bp));
+        let n = ab.cross(ac);
+        let vc = n.dot(ap.crossSelf(bp));
 
         // If P outside AB and within feature region of AB,
         // return projection of P onto AB
@@ -8687,7 +8687,7 @@ Triangle3D.prototype = {
         }
 
         // P is outside (or on) BC if the triple scalar product [N PB PC] <= 0
-        var va = n.dot(bp.crossSelf(cp));
+        let va = n.dot(bp.crossSelf(cp));
         // If P outside BC and within feature region of BC,
         // return projection of P onto BC
         if (va <= 0.0 && unom >= 0.0 && udenom >= 0.0) {
@@ -8696,7 +8696,7 @@ Triangle3D.prototype = {
         }
 
         // P is outside (or on) CA if the triple scalar product [N PC PA] <= 0
-        var vb = n.dot(cp.crossSelf(ap));
+        let vb = n.dot(cp.crossSelf(ap));
         // If P outside CA and within feature region of CA,
         // return projection of P onto CA
         if (vb <= 0.0 && tnom >= 0.0 && tdenom >= 0.0) {
@@ -8706,9 +8706,9 @@ Triangle3D.prototype = {
 
         // P must project inside face region. Compute Q using barycentric
         // coordinates
-        var u = va / (va + vb + vc);
-        var v = vb / (va + vb + vc);
-        var w = 1.0 - u - v; // = vc / (va + vb + vc)
+        let u = va / (va + vb + vc);
+        let v = vb / (va + vb + vc);
+        let w = 1.0 - u - v; // = vc / (va + vb + vc)
         // return u * a + v * b + w * c;
         return this.a.scale(u).addSelf(this.b.scale(v)).addSelf(this.c.scale(w));
     },
@@ -8727,11 +8727,11 @@ Triangle3D.prototype = {
         if (p.equals(this.a) || p.equals(this.b) || p.equals(this.c)) {
             return true;
         }
-        var v1 = p.sub(this.a).normalize();
-        var v2 = p.sub(this.b).normalize();
-        var v3 = p.sub(this.c).normalize();
+        let v1 = p.sub(this.a).normalize();
+        let v2 = p.sub(this.b).normalize();
+        let v3 = p.sub(this.c).normalize();
 
-        var total_angles = Math.acos(v1.dot(v2));
+        let total_angles = Math.acos(v1.dot(v2));
         total_angles += Math.acos(v2.dot(v3));
         total_angles += Math.acos(v3.dot(v1));
 
@@ -8739,7 +8739,7 @@ Triangle3D.prototype = {
     },
 
    flipVertexOrder: function() {
-        var t = this.a;
+        let t = this.a;
         this.a = this.c;
         this.c = this.t;
         return this;
@@ -8750,22 +8750,22 @@ Triangle3D.prototype = {
     },
 
     getBoundingBox: function() {
-        var min = Vec3D.min(Vec3D.min(this.a, this.b), this.c);
-        var max = Vec3D.max(Vec3D.max(this.a, this.b), this.c);
+        let min = Vec3D.min(Vec3D.min(this.a, this.b), this.c);
+        let max = Vec3D.max(Vec3D.max(this.a, this.b), this.c);
         return AABB.fromMinMax(min, max);
     },
     getClosestPointTo: function(p) {
-        var edge = new Line3D(this.a, this.b);
-        var Rab = edge.closestPointTo(p);
-        var Rbc = edge.set(this.b, this.c).closestPointTo(p);
-        var Rca = edge.set(this.c, this.a).closestPointTo(p);
+        let edge = new Line3D(this.a, this.b);
+        let Rab = edge.closestPointTo(p);
+        let Rbc = edge.set(this.b, this.c).closestPointTo(p);
+        let Rca = edge.set(this.c, this.a).closestPointTo(p);
 
-        var dAB = p.sub(Rab).magSquared();
-        var dBC = p.sub(Rbc).magSquared();
-        var dCA = p.sub(Rca).magSquared();
+        let dAB = p.sub(Rab).magSquared();
+        let dBC = p.sub(Rbc).magSquared();
+        let dCA = p.sub(Rca).magSquared();
 
-        var min = dAB;
-        var result = Rab;
+        let min = dAB;
+        let result = Rab;
 
         if (dBC < min) {
             min = dBC;
@@ -8797,21 +8797,21 @@ Triangle3D.prototype = {
     },
 
     toBarycentric: function(p) {
-        var  e = b.sub(this.a).cross(this.c.sub(this.a));
-        var  n = e.getNormalized();
+        let  e = b.sub(this.a).cross(this.c.sub(this.a));
+        let  n = e.getNormalized();
 
         // Compute twice area of triangle ABC
-        var areaABC = n.dot(e);
+        let areaABC = n.dot(e);
         // Compute lambda1
-        var areaPBC = n.dot(this.b.sub(p).cross(this.c.sub(p)));
-        var l1 = areaPBC / areaABC;
+        let areaPBC = n.dot(this.b.sub(p).cross(this.c.sub(p)));
+        let l1 = areaPBC / areaABC;
 
         // Compute lambda2
-        var areaPCA = n.dot(this.c.sub(p).cross(this.a.sub(p)));
-        var l2 = areaPCA / areaABC;
+        let areaPCA = n.dot(this.c.sub(p).cross(this.a.sub(p)));
+        let l2 = areaPCA / areaABC;
 
         // Compute lambda3
-        var l3 = 1.0 - l1 - l2;
+        let l3 = 1.0 - l1 - l2;
 
         return new Vec3D(l1, l2, l3);
     },
@@ -8826,15 +8826,15 @@ module.exports = Triangle3D;
 
 
 },{"../math/mathUtils":125,"./AABB":42,"./Line3D":53,"./Vec3D":71}],69:[function(require,module,exports){
-var mathUtils = require('../math/mathUtils');
-var Triangle3D = require('./Triangle3D');
-var Vec3D = require('./Vec3D');
-var IsectData3D = require('./IsectData3D');
+let mathUtils = require('../math/mathUtils');
+let Triangle3D = require('./Triangle3D');
+let Vec3D = require('./Vec3D');
+let IsectData3D = require('./IsectData3D');
 
 	/**
 	 * @param {Triangle3D} [t]
 	 */
-	var TriangleIntersector = function(t){
+	let TriangleIntersector = function(t){
 		this.triangle = t || new Triangle3D();
 		this.isectData = new IsectData3D();
 	};
@@ -8852,13 +8852,13 @@ var IsectData3D = require('./IsectData3D');
 		 */
 		intersectsRay: function(ray){
 			this.isectData.isIntersection = false;
-			var n = this.triangle.computeNormal(),
+			let n = this.triangle.computeNormal(),
 				dotprod = n.dot(ray.dir);
 			if(dotprod < 0){
-				var rt = ray.sub(this.triangle.a),
+				let rt = ray.sub(this.triangle.a),
 					t = -(n.x * rt.x + n.y * rt.y + n.z * rt.z) / (n.x * ray.dir.x + n.y * ray.dir.y + n.z * ray.dir.z);
 				if(t >= mathUtils.EPS){
-					var pos = ray.getPointAtDistance(t);
+					let pos = ray.getPointAtDistance(t);
 					//check if pos is inside triangle
 					if(this.triangle.containsPoint(pos)){
 						this.isectData.isIntersection = true;
@@ -8897,7 +8897,7 @@ var IsectData3D = require('./IsectData3D');
 },{"./vectors":96}],72:[function(require,module,exports){
 
 
-var extend = require('../internals').extend,
+let extend = require('../internals').extend,
 	mathUtils = require('../math/mathUtils'),
 	Vec3D = require('./Vec3D'),
 	AxisAlignedCylinder = require('./AxisAlignedCylinder');
@@ -8910,7 +8910,7 @@ var extend = require('../internals').extend,
  @author Kyle Phillips
  @augments AxisAlignedCylinder
  */
-var	XAxisCylinder = function(pos,radius,length){
+let	XAxisCylinder = function(pos,radius,length){
 	AxisAlignedCylinder.apply(this,[pos,radius,length]);
 };
 
@@ -8918,8 +8918,8 @@ extend(XAxisCylinder,AxisAlignedCylinder);
 
 XAxisCylinder.prototype.containsPoint = function(p){
 	if(mathUtils.abs(p.x - this.pos.x) < this.length * 0.5){
-		var dy = p.y - this.pos.y;
-		var dz = p.z - this.pos.z;
+		let dy = p.y - this.pos.y;
+		let dz = p.z - this.pos.z;
 		if(Math.abs(dz * dz + dy * dy) < this.radiusSquared){
 			return true;
 		}
@@ -8937,7 +8937,7 @@ module.exports = XAxisCylinder;
 },{"../internals":98,"../math/mathUtils":125,"./AxisAlignedCylinder":43,"./Vec3D":71}],73:[function(require,module,exports){
 
 
-var extend = require('../internals').extend,
+let extend = require('../internals').extend,
 	mathUtils = require('../math/mathUtils'),
 	Vec3D = require('./Vec3D'),
 	AxisAlignedCylinder = require('./AxisAlignedCylinder');
@@ -8946,15 +8946,15 @@ var extend = require('../internals').extend,
  @member toxi
  @class Y-axis aligned Cylinder
  */
-var	YAxisCylinder = function(pos,radius,length){
+let	YAxisCylinder = function(pos,radius,length){
 	AxisAlignedCylinder.apply(this,[pos,radius,length]);
 };
 extend(YAxisCylinder,AxisAlignedCylinder);
 
 YAxisCylinder.prototype.containsPoint = function(p){
 	if(mathUtils.abs(p.y - this.pos.y) < this.length * 0.5){
-		var dx = p.x - this.pos.x;
-		var dz = p.z - this.pos.z;
+		let dx = p.x - this.pos.x;
+		let dz = p.z - this.pos.z;
 		if(Math.abs(dz * dz + dx * dx) < this.radiusSquared){
 			return true;
 		}
@@ -8972,7 +8972,7 @@ module.exports = YAxisCylinder;
 },{"../internals":98,"../math/mathUtils":125,"./AxisAlignedCylinder":43,"./Vec3D":71}],74:[function(require,module,exports){
 
 
-var extend = require('../internals').extend,
+let extend = require('../internals').extend,
 	mathUtils = require('../math/mathUtils'),
 	Vec3D = require('./Vec3D'),
 	AxisAlignedCylinder = require('./AxisAlignedCylinder');
@@ -8981,14 +8981,14 @@ var extend = require('../internals').extend,
  @member toxi
  @constructor Z-axis aligned Cylinder
  */
-var	ZAxisCylinder = function(pos,radius,length){
+let	ZAxisCylinder = function(pos,radius,length){
 	AxisAlignedCylinder.apply(this,[pos,radius,length]);
 };
 extend(ZAxisCylinder,AxisAlignedCylinder);
 ZAxisCylinder.prototype.containsPoint = function(p){
 	 if (mathUtils.abs(p.z - this.pos.z) < this.length * 0.5) {
-            var dx = p.x - this.pos.x;
-            var dy = p.y - this.pos.y;
+            let dx = p.x - this.pos.x;
+            let dy = p.y - this.pos.y;
             if (Math.abs(dx * dx + dy * dy) < this.radiusSquared) {
                 return true;
             }
@@ -9026,7 +9026,7 @@ module.exports = ZAxisCylinder;
 
 },{"./mesh/BezierPatch":76,"./mesh/BoxSelector":77,"./mesh/DefaultSelector":78,"./mesh/Face":79,"./mesh/OBJWriter":80,"./mesh/PlaneSelector":81,"./mesh/SphereFunction":82,"./mesh/SphericalHarmonics":83,"./mesh/SuperEllipsoid":84,"./mesh/SurfaceMeshBuilder":85,"./mesh/Terrain":86,"./mesh/TriangleMesh":87,"./mesh/Vertex":88,"./mesh/VertexSelector":89,"./mesh/WETriangleMesh":90}],76:[function(require,module,exports){
 
-var Vec3D = require('../Vec3D'),
+let Vec3D = require('../Vec3D'),
 	TriangleMesh = require('./TriangleMesh'),
 	is = require('../../internals/is');
 
@@ -9035,14 +9035,14 @@ var Vec3D = require('../Vec3D'),
  * for generating triangle mesh representations.
  * @member toxi
  */
-var BezierPatch = function(points){
+let BezierPatch = function(points){
 	if( is.Array(points) ){
 		this.points = points;
 	} else {
 		this.points = [];
-		for (var i = 0; i < 4; i++) {
+		for (let i = 0; i < 4; i++) {
 			this.points[i] = this.points[i] || [];
-			for (var j = 0; j < 4; j++) {
+			for (let j = 0; j < 4; j++) {
 				this.points[i][j] = new Vec3D();
 			}
 		}
@@ -9061,7 +9061,7 @@ BezierPatch.prototype = {
 	},
 
 	toMesh: function(mesh_or_res,_res) {
-		var mesh,
+		let mesh,
 			res;
 		if(_res === undefined){
 			mesh = new TriangleMesh();
@@ -9070,19 +9070,19 @@ BezierPatch.prototype = {
 			mesh = mesh_or_res;
 			res = _res;
 		}
-		var curr = new Array(res + 1),
+		let curr = new Array(res + 1),
 			prev = new Array(res + 1);
-		var r1 = 1.0 / res;
-		for (var y = 0; y <= res; y++) {
-			for (var x = 0; x <= res; x++) {
-				var p = this.computePointAt(x * r1, y * r1, this.points);
+		let r1 = 1.0 / res;
+		for (let y = 0; y <= res; y++) {
+			for (let x = 0; x <= res; x++) {
+				let p = this.computePointAt(x * r1, y * r1, this.points);
 				if (x > 0 && y > 0) {
 					mesh.addFace(p, curr[x - 1], prev[x - 1]);
 					mesh.addFace(p, prev[x - 1], prev[x]);
 				}
 				curr[x] = p;
 			}
-			var tmp = prev;
+			let tmp = prev;
 			prev = curr;
 			curr = tmp;
 		}
@@ -9104,8 +9104,8 @@ range is exceeded.
 */
 
 BezierPatch.computePointAt = function(u,v,points){
-		var u1 = 1 - u;
-		var u1squared = u1 * u1 * 3 * u,
+		let u1 = 1 - u;
+		let u1squared = u1 * u1 * 3 * u,
 		u1cubed = u1 * u1 * u1,
 		usquared = u * u,
 		v1 = 1 - v,
@@ -9119,16 +9119,16 @@ BezierPatch.computePointAt = function(u,v,points){
 		v1vsq = v1 * vsquared,
 		v1sqv = v1squared * v;
 
-		var p0 = points[0];
-		var p1 = points[1];
-		var p2 = points[2];
-		var p3 = points[3];
+		let p0 = points[0];
+		let p1 = points[1];
+		let p2 = points[2];
+		let p3 = points[3];
 
-		var x = u1cubed * (p0[0].x * v1cubed + p0[1].x * v1sqv + p0[2].x * v1vsq + p0[3].x * vcubed) + u1squared * (p1[0].x * v1cubed + p1[1].x * v1sqv + p1[2].x * v1vsq + p1[3].x * vcubed) + u1usq * (p2[0].x * v1cubed + p2[1].x * v1sqv + p2[2].x * v1vsq + p2[3].x * vcubed) + usqu * (p3[0].x * v1cubed + p3[1].x * v1sqv + p3[2].x * v1vsq + p3[3].x * vcubed);
+		let x = u1cubed * (p0[0].x * v1cubed + p0[1].x * v1sqv + p0[2].x * v1vsq + p0[3].x * vcubed) + u1squared * (p1[0].x * v1cubed + p1[1].x * v1sqv + p1[2].x * v1vsq + p1[3].x * vcubed) + u1usq * (p2[0].x * v1cubed + p2[1].x * v1sqv + p2[2].x * v1vsq + p2[3].x * vcubed) + usqu * (p3[0].x * v1cubed + p3[1].x * v1sqv + p3[2].x * v1vsq + p3[3].x * vcubed);
 
-		var y = u1cubed * (p0[0].y * v1cubed + p0[1].y * v1sqv + p0[2].y * v1vsq + p0[3].y * vcubed) + u1squared * (p1[0].y * v1cubed + p1[1].y * v1sqv + p1[2].y * v1vsq + p1[3].y * vcubed) + u1usq * (p2[0].y * v1cubed + p2[1].y * v1sqv + p2[2].y * v1vsq + p2[3].y * vcubed) + usqu * (p3[0].y * v1cubed + p3[1].y * v1sqv + p3[2].y * v1vsq + p3[3].y * vcubed);
+		let y = u1cubed * (p0[0].y * v1cubed + p0[1].y * v1sqv + p0[2].y * v1vsq + p0[3].y * vcubed) + u1squared * (p1[0].y * v1cubed + p1[1].y * v1sqv + p1[2].y * v1vsq + p1[3].y * vcubed) + u1usq * (p2[0].y * v1cubed + p2[1].y * v1sqv + p2[2].y * v1vsq + p2[3].y * vcubed) + usqu * (p3[0].y * v1cubed + p3[1].y * v1sqv + p3[2].y * v1vsq + p3[3].y * vcubed);
 
-		var z = u1cubed * (p0[0].z * v1cubed + p0[1].z * v1sqv + p0[2].z * v1vsq + p0[3].z * vcubed) + u1squared * (p1[0].z * v1cubed + p1[1].z * v1sqv + p1[2].z * v1vsq + p1[3].z * vcubed) + u1usq * (p2[0].z * v1cubed + p2[1].z * v1sqv + p2[2].z * v1vsq + p2[3].z * vcubed) + usqu * (p3[0].z * v1cubed + p3[1].z * v1sqv + p3[2].z * v1vsq + p3[3].z * vcubed);
+		let z = u1cubed * (p0[0].z * v1cubed + p0[1].z * v1sqv + p0[2].z * v1vsq + p0[3].z * vcubed) + u1squared * (p1[0].z * v1cubed + p1[1].z * v1sqv + p1[2].z * v1vsq + p1[3].z * vcubed) + u1usq * (p2[0].z * v1cubed + p2[1].z * v1sqv + p2[2].z * v1vsq + p2[3].z * vcubed) + usqu * (p3[0].z * v1cubed + p3[1].z * v1sqv + p3[2].z * v1vsq + p3[3].z * vcubed);
 
 		return new Vec3D(x, y, z);
 
@@ -9140,7 +9140,7 @@ module.exports = BezierPatch;
 },{"../../internals/is":106,"../Vec3D":71,"./TriangleMesh":87}],77:[function(require,module,exports){
 
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
     VertexSelector = require('./VertexSelector');
 
 /**
@@ -9148,7 +9148,7 @@ var extend = require('../../internals').extend,
  * @member toxi
  * @augments toxi.VertexSelector
  */
-var BoxSelector = function(mesh,box) {
+let BoxSelector = function(mesh,box) {
     VertexSelector.apply(this,[mesh]);
     this.box = box;
 };
@@ -9157,10 +9157,10 @@ extend(BoxSelector,VertexSelector);
 
 BoxSelector.prototype.selectVertices = function() {
     this.clearSelection();
-    var verts = this.mesh.getVertices();
-    var l = verts.length;
-    for (var i=0;i<l;i++) {
-		var v = verts[i];
+    let verts = this.mesh.getVertices();
+    let l = verts.length;
+    for (let i=0;i<l;i++) {
+		let v = verts[i];
         if (this.box.containsPoint(v)) {
             this.selection.add(v);
         }
@@ -9175,14 +9175,14 @@ module.exports = BoxSelector;
 
 },{"../../internals":98,"./VertexSelector":89}],78:[function(require,module,exports){
 
-	var extend = require('../../internals').extend,
+	let extend = require('../../internals').extend,
 		VertexSelector = require('./VertexSelector');
 	/**
 	 * @class
 	 * @member toxi
 	 * @augments toxi.VertexSelector
 	 */
-	var DefaultSelector = function(mesh){
+	let DefaultSelector = function(mesh){
 		VertexSelector.call(this,mesh);
 	};
 	extend(DefaultSelector,VertexSelector);
@@ -9198,17 +9198,17 @@ module.exports = BoxSelector;
 },{"../../internals":98,"./VertexSelector":89}],79:[function(require,module,exports){
 
 	//these 2 modules get defined
-	var Face, WEFace;
+	let Face, WEFace;
 
 	(function(){
-		var Triangle3D = require('../Triangle3D');
+		let Triangle3D = require('../Triangle3D');
 		Face = function(a,b,c,uvA,uvB,uvC) {
 			this.a = a;
 			this.b = b;
 			this.c = c;
-			var aminusc = this.a.sub(this.c);
-			var aminusb = this.a.sub(this.b);
-			var cross = aminusc.crossSelf(aminusb);
+			let aminusc = this.a.sub(this.c);
+			let aminusb = this.a.sub(this.b);
+			let cross = aminusc.crossSelf(aminusb);
 			this.normal = cross.normalize();
 			this.a.addFaceNormal(this.normal);
 			this.b.addFaceNormal(this.normal);
@@ -9227,7 +9227,7 @@ module.exports = BoxSelector;
 			},
 
 			flipVertexOrder: function() {
-				var t = this.a;
+				let t = this.a;
 				this.a = this.b;
 				this.b = t;
 				this.normal.invert();
@@ -9271,8 +9271,8 @@ module.exports = BoxSelector;
 
 	//define WEFace
 	(function(){
-		var internals = require('../../internals');
-		var proto;
+		let internals = require('../../internals');
+		let proto;
 		//@param {WEVertex} a
 		//@param {WEVertex} b
 		//@param {WEVertex} c
@@ -9309,10 +9309,10 @@ module.exports = BoxSelector;
 
 
 },{"../../internals":98,"../Triangle3D":68}],80:[function(require,module,exports){
-var internals = require('../../internals');
+let internals = require('../../internals');
 
 	//faster than str += " "
-	var StringBuffer = function(){
+	let StringBuffer = function(){
 		this.buffer = [];
 	};
 	StringBuffer.prototype.append = function(string){
@@ -9323,7 +9323,7 @@ var internals = require('../../internals');
 		return this.buffer.join("");
 	};
 	
-	var OBJWriter = function(){
+	let OBJWriter = function(){
 		this.VERSION = "0.3";
 		this.__stringBuffer = new StringBuffer();
 		this.objStream = undefined;
@@ -9410,7 +9410,7 @@ var internals = require('../../internals');
 
 },{"../../internals":98}],81:[function(require,module,exports){
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
     VertexSelector = require('./VertexSelector');
 
 /**
@@ -9418,7 +9418,7 @@ var extend = require('../../internals').extend,
  * @member toxi
  * @augments toxi.VertexSelector
  */
-var PlaneSelector = function(mesh,plane,classifier, tolerance) {
+let PlaneSelector = function(mesh,plane,classifier, tolerance) {
     VertexSelector.apply(this,[mesh]);
     this.plane = plane;
     this.classifier = classifier;
@@ -9427,10 +9427,10 @@ var PlaneSelector = function(mesh,plane,classifier, tolerance) {
 extend(PlaneSelector,VertexSelector);
 PlaneSelector.prototype.selectVertices = function() {
     this.clearSelection();
-    var verts = this.mesh.getVertices();
-    var l = verts.length;
-    for (var i=0;i<l;i++) {
-		var v = verts[i];
+    let verts = this.mesh.getVertices();
+    let l = verts.length;
+    for (let i=0;i<l;i++) {
+		let v = verts[i];
         if (this.plane.classifyPoint(v, this.tolerance) == this.classifier) {
             this.selection.add(v);
         }
@@ -9449,27 +9449,27 @@ module.exports = PlaneSelector;
 },{"../Sphere":63}],83:[function(require,module,exports){
 
 
-var mathUtils = require('../../math/mathUtils');
+let mathUtils = require('../../math/mathUtils');
 
 /**
  * @class Spherical harmonics surface evaluator based on code by Paul Bourke:
  * http://local.wasp.uwa.edu.au/~pbourke/geometry/sphericalh/
  * @member toxi
  */
-var SphericalHarmonics = function(m) {
+let SphericalHarmonics = function(m) {
     this.m = m;
 };
 
 SphericalHarmonics.prototype = {
     // toxiclibs - FIXME check where flipped vertex order is coming from sometimes
     computeVertexFor: function(p,phi,theta) {
-        var r = 0;
+        let r = 0;
         r += Math.pow(mathUtils.sin(this.m[0] * theta), this.m[1]);
         r += Math.pow(mathUtils.cos(this.m[2] * theta), this.m[3]);
         r += Math.pow(mathUtils.sin(this.m[4] * phi), this.m[5]);
         r += Math.pow(mathUtils.cos(this.m[6] * phi), this.m[7]);
 
-        var sinTheta = mathUtils.sin(theta);
+        let sinTheta = mathUtils.sin(theta);
         p.x = r * sinTheta * mathUtils.cos(phi);
         p.y = r * mathUtils.cos(theta);
         p.z = r * sinTheta * mathUtils.sin(phi);
@@ -9499,15 +9499,15 @@ module.exports = SphericalHarmonics;
 },{"../../math/mathUtils":125}],84:[function(require,module,exports){
 
 
-var mathUtils = require('../../math/mathUtils');
+let mathUtils = require('../../math/mathUtils');
 
-var TriangleMesh = require('./TriangleMesh');
+let TriangleMesh = require('./TriangleMesh');
 
 /**
  * @class
  * @member toxi
  */
-var	SuperEllipsoid = function(n1,n2) {
+let	SuperEllipsoid = function(n1,n2) {
 	this.p1 = n1;
 	this.p2 = n2;
 };
@@ -9515,12 +9515,12 @@ var	SuperEllipsoid = function(n1,n2) {
 SuperEllipsoid.prototype = {
 	computeVertexFor: function(p,phi,theta) {
 		phi -= mathUtils.HALF_PI;
-		var cosPhi = mathUtils.cos(phi),
+		let cosPhi = mathUtils.cos(phi),
 			cosTheta = mathUtils.cos(theta),
 			sinPhi = mathUtils.sin(phi),
 			sinTheta = mathUtils.sin(theta);
 
-		var t = mathUtils.sign(cosPhi) * Math.pow(mathUtils.abs(cosPhi), this.p1);
+		let t = mathUtils.sign(cosPhi) * Math.pow(mathUtils.abs(cosPhi), this.p1);
 		p.x = t * mathUtils.sign(cosTheta) * Math.pow(Math.abs(cosTheta), this.p2);
 		p.y = mathUtils.sign(sinPhi) * Math.pow(Math.abs(sinPhi), this.p1);
 		p.z = t * mathUtils.sign(sinTheta) * Math.pow(mathUtils.abs(sinTheta), this.p2);
@@ -9571,10 +9571,10 @@ module.exports = SuperEllipsoid;
 
 
 	//WEVertex becomes a property on Vertex
-	var Vertex, WEVertex;
+	let Vertex, WEVertex;
 
 	(function(){
-		var extend = require('../../internals').extend,
+		let extend = require('../../internals').extend,
 			Vec3D = require('../Vec3D'),
 			proto;
 
@@ -9603,7 +9603,7 @@ module.exports = SuperEllipsoid;
 	}());
 
 	(function(){
-		var extend = require('../../internals').extend, proto;
+		let extend = require('../../internals').extend, proto;
 
 		WEVertex = function( vec3d, id ){
 			Vertex.call(this, vec3d, id);
@@ -9619,10 +9619,10 @@ module.exports = SuperEllipsoid;
 		//@param {Number} tolerance
 		//@return {WingedEdge} closest
 		proto.getNeighborInDirection = function( dir, tolerance ){
-			var closest, delta = 1 - tolerance;
-			var neighbors = this.getNeighbors();
-			var d;
-			for(var i=0, l=neighbors.length; i<l; i++){
+			let closest, delta = 1 - tolerance;
+			let neighbors = this.getNeighbors();
+			let d;
+			for(let i=0, l=neighbors.length; i<l; i++){
 				d = neighbors[i].sub( this ).normalize().dot( dir );
 				if( d > delta ){
 					closest = neighbors[i];
@@ -9633,8 +9633,8 @@ module.exports = SuperEllipsoid;
 		};
 		//@return {WingedEdge[]} neighbors
 		proto.getNeighbors = function(){
-			var neighbors = [];
-			for(var i=0, l=this.edges.length; i<l; i++){
+			let neighbors = [];
+			for(let i=0, l=this.edges.length; i<l; i++){
 				neighbors.push( this.edges[i].getOtherEndFor(this) );
 			}
 			return neighbors;
@@ -9660,7 +9660,7 @@ module.exports = SuperEllipsoid;
  * @class
  * @member toxi
  */
-var VertexSelector = function(mesh){
+let VertexSelector = function(mesh){
 	this.mesh = mesh;
 	this.selection = [];
 };
@@ -9705,11 +9705,11 @@ VertexSelector.prototype = {
      * @return itself
      */
     invertSelection: function() {
-        var newSel = [];
-        var vertices = this.mesh.getVertices();
-        var l = vertices.length;
-        for (var i=0;i<l;i++) {
-			var v = vertices[i];
+        let newSel = [];
+        let vertices = this.mesh.getVertices();
+        let l = vertices.length;
+        for (let i=0;i<l;i++) {
+			let v = vertices[i];
             if (this.selection.indexOf(v) < 0 ) {
                 newSel.push(v);
             }
@@ -9725,9 +9725,9 @@ VertexSelector.prototype = {
      * @return itself
      */
     selectSimilar: function(points) {
-		var l = points.length;
-        for (var i=0;i<l;i++) {
-			var v = points[i];
+		let l = points.length;
+        for (let i=0;i<l;i++) {
+			let v = points[i];
             this.selection.push( this.mesh.getClosestVertexToPoint(v) );
         }
         return this;
@@ -9759,8 +9759,8 @@ VertexSelector.prototype = {
      */
 	subtractSelection: function(sel2) {
         this.checkMeshIdentity(sel2.getMesh());
-        var removeThese = sel2.getSelection();
-        var i,l = removeThese.length;
+        let removeThese = sel2.getSelection();
+        let i,l = removeThese.length;
         for ( i=0; i<l; i++ ) {
             this.selection.splice( this.selection.indexOf(removeThese[i]), 1 );
         }
@@ -9779,10 +9779,10 @@ module.exports = VertexSelector;
 	module.exports = require('./meshCommon').WETriangleMesh;
 
 },{"./meshCommon":92}],91:[function(require,module,exports){
-var internals = require('../../internals');
-var Line3D = require('../Line3D');
+let internals = require('../../internals');
+let Line3D = require('../Line3D');
 
-	var WingedEdge, proto;
+	let WingedEdge, proto;
 	//@param {WEVertex} va
 	//@param {WEVertex} vb
 	//@param {WEFace} face
@@ -9817,11 +9817,11 @@ var Line3D = require('../Line3D');
 	};
 
 	proto.remove = function(){
-		var self = this;
-		var rm = function( edges ){
+		let self = this;
+		let rm = function( edges ){
 			edges.splice( edges.indexOf( self ), 1 );
 		};
-		for( var i=0, l = this.faces.length; i<l; i++){
+		for( let i=0, l = this.faces.length; i<l; i++){
 			rm( this.faces[i].edges );
 		}
 		rm( this.a.edges );
@@ -9838,10 +9838,10 @@ var Line3D = require('../Line3D');
 },{"../../internals":98,"../Line3D":53}],92:[function(require,module,exports){
 
 
-	var TriangleMesh, WETriangleMesh, Terrain, SurfaceMeshBuilder;
+	let TriangleMesh, WETriangleMesh, Terrain, SurfaceMeshBuilder;
 
-    var precision = 1000000;
-    var format = function( n ){
+    let precision = 1000000;
+    let format = function( n ){
         return Math.floor(n*precision) / precision;
     };
 	//private: way of generating object keys for point map in meshes
@@ -9857,7 +9857,7 @@ var Line3D = require('../Line3D');
 
 	//#TriangleMesh
 	(function(){
-		var	internals = require('../../internals'),
+		let	internals = require('../../internals'),
 			mathUtils = require('../../math/mathUtils'),
 			Matrix4x4 = require('../Matrix4x4'),
 			Face = require('./Face'),
@@ -9901,7 +9901,7 @@ var Line3D = require('../Line3D');
              */
 			addFace: function(a,b,c,n,uvA,uvB,uvC){
 				//can be 3 args, 4 args, 6 args, or 7 args
-				//if it was 6 swap vars around,
+				//if it was 6 swap lets around,
 				if( arguments.length == 6 ){
 					uvC = uvB;
 					uvB = uvA;
@@ -9909,22 +9909,22 @@ var Line3D = require('../Line3D');
 					n = undefined;
 				}
 				//7 param method
-				var va = this.__checkVertex(a);
-				var vb = this.__checkVertex(b);
-				var vc = this.__checkVertex(c);
+				let va = this.__checkVertex(a);
+				let vb = this.__checkVertex(b);
+				let vc = this.__checkVertex(c);
 
 				if(va.id === vb.id || va.id === vc.id || vb.id === vc.id){
 					//console.log("ignoring invalid face: "+a + ", " +b+ ", "+c);
 				} else {
 					if(n != null ){
-						var nc = va.sub(vc).crossSelf(va.sub(vb));
+						let nc = va.sub(vc).crossSelf(va.sub(vb));
 						if(n.dot(nc)<0){
-							var t = va;
+							let t = va;
 							va = vb;
 							vb = t;
 						}
 					}
-					var f = new Face(va,vb,vc,uvA,uvB,uvC);
+					let f = new Face(va,vb,vc,uvA,uvB,uvC);
 					this.faces.push(f);
 				}
 				return this;
@@ -9936,9 +9936,9 @@ var Line3D = require('../Line3D');
              * @returns itself
              */
 			addMesh: function(m){
-				var l = m.getFaces().length;
-				for(var i=0;i<l;i++){
-					var f = m.getFaces()[i];
+				let l = m.getFaces().length;
+				for(let i=0;i<l;i++){
+					let f = m.getFaces()[i];
 					this.addFace(f.a,f.b,f.c);
 				}
 				return this;
@@ -9946,10 +9946,10 @@ var Line3D = require('../Line3D');
 
 			center: function(origin){
 				this.computeCentroid();
-				var delta = (origin != null) ? origin.sub(this.centroid) : this.centroid.getInverted();
-				var l = this.vertices.length;
-				for(var i=0;i<l;i++){
-					var v = this.vertices[i];
+				let delta = (origin != null) ? origin.sub(this.centroid) : this.centroid.getInverted();
+				let l = this.vertices.length;
+				for(let i=0;i<l;i++){
+					let v = this.vertices[i];
 					v.addSelf(delta);
 				}
 
@@ -9957,7 +9957,7 @@ var Line3D = require('../Line3D');
 			},
 
 			__checkVertex: function(v){
-				var vertex = this.vertexMap.get(v);
+				let vertex = this.vertexMap.get(v);
 				if(!vertex){
 					vertex = this._createVertex(v,this.uniqueVertexID++);
 					this.vertexMap.put( vertex, vertex );
@@ -9975,29 +9975,29 @@ var Line3D = require('../Line3D');
 
 			computeCentroid: function(){
 				this.centroid.clear();
-				var l = this.vertices.length;
-				for(var i=0;i<l;i++){
+				let l = this.vertices.length;
+				for(let i=0;i<l;i++){
 					this.centroid.addSelf(this.vertices[i]);
 				}
 				return this.centroid.scaleSelf(1.0/this.vertexMap.size()).copy();
 			},
 
 			computeFaceNormals: function(){
-				var l = this.faces.length;
-				for(var i=0;i<l;i++){
+				let l = this.faces.length;
+				for(let i=0;i<l;i++){
 					this.faces[i].computeNormal();
 				}
 			},
 
 			computeVertexNormals: function(){
-				var l = this.vertices.length,
+				let l = this.vertices.length,
 					i = 0;
 				for(i=0;i<l;i++){
 					this.vertices[i].clearNormal();
 				}
 				l = this.faces.length;
 				for(i=0;i<l;i++){
-					var f = this.faces[i];
+					let f = this.faces[i];
 					f.a.addFaceNormal(f.normal);
 					f.b.addFaceNormal(f.normal);
 					f.c.addFaceNormal(f.normal);
@@ -10010,27 +10010,27 @@ var Line3D = require('../Line3D');
 			},
 
 			copy: function(){
-				var m = new TriangleMesh(this.name+"-copy",this.vertexMap.size(),this.faces.length);
-				var l = this.faces.length;
-				for(var i=0;i<l;i++){
-					var f = this.faces[i];
+				let m = new TriangleMesh(this.name+"-copy",this.vertexMap.size(),this.faces.length);
+				let l = this.faces.length;
+				for(let i=0;i<l;i++){
+					let f = this.faces[i];
 					m.addFace(f.a,f.b,f.c,f.normal,f.uvA,f.uvB,f.uvC);
 				}
 				return m;
 			},
 
 			_createVertex: function(vec3D,id){
-				var vertex = new Vertex( vec3D, id );
+				let vertex = new Vertex( vec3D, id );
 				return vertex;
 			},
 
 			faceOutwards: function(){
 				this.computeCentroid();
-				var l = this.faces.length;
-				for(var i=0;i<l;i++){
-					var f = this.faces[i];
-					var n = f.getCentroid().sub(this.centroid);
-					var dot = n.dot(f.normal);
+				let l = this.faces.length;
+				for(let i=0;i<l;i++){
+					let f = this.faces[i];
+					let n = f.getCentroid().sub(this.centroid);
+					let dot = n.dot(f.normal);
 					if(dot <0) {
 						f.flipVertexOrder();
 					}
@@ -10039,11 +10039,11 @@ var Line3D = require('../Line3D');
 			},
 
 			flipVertexOrder: function(){
-				var l = this.faces.length,
+				let l = this.faces.length,
                     tuv;
-				for(var i=0;i<l;i++){
-					var f = this.faces[i];
-					var t = f.a;
+				for(let i=0;i<l;i++){
+					let f = this.faces[i];
+					let t = f.a;
 					f.a = f.b;
 					f.b = t;
                     if( f.uvA ){
@@ -10063,14 +10063,14 @@ var Line3D = require('../Line3D');
 			},
 
 			getBoundingBox: function( ){
-				var AABB = require('../AABB');
-				var self = this;
-				var minBounds = Vec3D.MAX_VALUE.copy();
-				var maxBounds = Vec3D.MIN_VALUE.copy();
-				var l = self.vertices.length;
+				let AABB = require('../AABB');
+				let self = this;
+				let minBounds = Vec3D.MAX_VALUE.copy();
+				let maxBounds = Vec3D.MIN_VALUE.copy();
+				let l = self.vertices.length;
 
-				for(var i=0;i<l;i++){
-					var v = self.vertices[i];
+				for(let i=0;i<l;i++){
+					let v = self.vertices[i];
 					minBounds.minSelf(v);
 					maxBounds.maxSelf(v);
 				}
@@ -10079,25 +10079,25 @@ var Line3D = require('../Line3D');
 			},
 
 			getBoundingSphere:function(){
-				var Sphere = require('../Sphere');
-				var radius = 0;
+				let Sphere = require('../Sphere');
+				let radius = 0;
 				this.computeCentroid();
-				var l = this.vertices.length;
-				for(var i=0;i<l;i++){
-					var v = this.vertices[i];
+				let l = this.vertices.length;
+				for(let i=0;i<l;i++){
+					let v = this.vertices[i];
 					radius = mathUtils.max(radius,v.distanceToSquared(this.centroid));
 				}
-				var sph = new Sphere(this.centroid,Math.sqrt(radius));
+				let sph = new Sphere(this.centroid,Math.sqrt(radius));
 				return sph;
 			},
 
 			getClosestVertexToPoint: function(p){
-				var closest,
+				let closest,
 					minDist = Number.MAX_VALUE,
 					l = this.vertices.length;
-				for(var i=0;i<l;i++){
-					var v = this.vertices[i];
-					var d = v.distanceToSquared(p);
+				for(let i=0;i<l;i++){
+					let v = this.vertices[i];
+					let d = v.distanceToSquared(p);
 					if(d<minDist){
 						closest = v;
 						minDist = d;
@@ -10126,7 +10126,7 @@ var Line3D = require('../Line3D');
 					offset = 0;
 					stride = TriangleMesh.DEFAULT_STRIDE;
 				} else if(arguments.length == 1 && typeof(arguments[0]) == 'object'){ //options object
-					var opts = arguments[0];
+					let opts = arguments[0];
 					normals = opts.normals;
 					offset = opts.offset;
 					stride = opts.stride;
@@ -10135,10 +10135,10 @@ var Line3D = require('../Line3D');
 				if (normals === undefined) {
 					normals = [];
 				}
-				var i = offset;
-				var l = this.faces.length;
-				for (var j=0;j<l;j++) {
-					var f = this.faces[j];
+				let i = offset;
+				let l = this.faces.length;
+				for (let j=0;j<l;j++) {
+					let f = this.faces[j];
 					normals[i] = f.normal.x;
 					normals[i + 1] = f.normal.y;
 					normals[i + 2] = f.normal.z;
@@ -10174,10 +10174,10 @@ var Line3D = require('../Line3D');
 			 */
 			getFacesAsArray: function(faceList) {
 				faceList = faceList || [];
-				var i = 0;
-				var l = this.faces.length;
-				for (var j=0;j<l;j++) {
-					var f = this.faces[j];
+				let i = 0;
+				let l = this.faces.length;
+				for (let j=0;j<l;j++) {
+					let f = this.faces[j];
 					faceList[i++] = f.a.id;
 					faceList[i++] = f.b.id;
 					faceList[i++] = f.c.id;
@@ -10250,10 +10250,10 @@ var Line3D = require('../Line3D');
 				if (verts === undefined) {
 					verts = [];
 				}
-				var i = 0,//offset
+				let i = 0,//offset
 					l = this.faces.length;
-				for (var j=0;j<l;++j) {
-					var f = this.faces[j];
+				for (let j=0;j<l;++j) {
+					let f = this.faces[j];
 					verts[i] = f.a.x;
 					verts[i + 1] = f.a.y;
 					verts[i + 2] = f.a.z;
@@ -10309,10 +10309,10 @@ var Line3D = require('../Line3D');
              */
 			getUniqueVerticesAsArray: function(array) {
 				array = array || [];
-				var i = 0;
-				var l = this.vertices.length;
-				for (var j=0;j<l;j++) {
-					var v = this.vertices[j];
+				let i = 0;
+				let l = this.vertices.length;
+				for (let j=0;j<l;j++) {
+					let v = this.vertices[j];
 					array[i++] = v.x;
 					array[i++] = v.y;
 					array[i++] = v.z;
@@ -10327,9 +10327,9 @@ var Line3D = require('../Line3D');
              */
             getUniqueVertexNormalsAsArray: function(array){
                 array = array || [];
-                var n = 0;
+                let n = 0;
                 for(i=0; i<this.vertices.length; i++){
-                    var v = this.vertices[i];
+                    let v = this.vertices[i];
                     array[n++] = v.normal.x;
                     array[n++] = v.normal.y;
                     array[n++] = v.normal.z;
@@ -10346,9 +10346,9 @@ var Line3D = require('../Line3D');
              */
             getUVsAsArray: function(array){
                 array = array || [];
-                var i = 0;
+                let i = 0;
                 for(f=0; f<this.faces.length; f++){
-                    var face = this.faces[f];
+                    let face = this.faces[f];
                     array[i++] = face.uvA ? face.uvA.x : 0;
                     array[i++] = face.uvA ? face.uvA.y : 0;
                     array[i++] = face.uvB ? face.uvB.x : 0;
@@ -10361,8 +10361,8 @@ var Line3D = require('../Line3D');
             },
 
 			getVertexAtPoint: function(v) {
-				var index;
-				for(var i=0;i<this.vertices.length;i++){
+				let index;
+				for(let i=0;i<this.vertices.length;i++){
 					if(this.vertices[i].equals(v)){
 						index = i;
 					}
@@ -10371,11 +10371,11 @@ var Line3D = require('../Line3D');
 			},
 			//my own method to help
 			getVertexIndex: function(vec) {
-				var matchedVertex = -1;
-				var l = this.vertices.length;
-				for(var i=0;i<l;i++)
+				let matchedVertex = -1;
+				let l = this.vertices.length;
+				for(let i=0;i<l;i++)
 				{
-					var vert = this.vertices[i];
+					let vert = this.vertices[i];
 					if(vert.equals(vec))
 					{
 						matchedVertex =i;
@@ -10386,10 +10386,10 @@ var Line3D = require('../Line3D');
 			},
 
 			getVertexForID: function(id) {
-				var vertex,
+				let vertex,
 					l = this.vertices.length;
-				for (var i=0;i<l;i++) {
-					var v = this.vertices[i];
+				for (let i=0;i<l;i++) {
+					let v = this.vertices[i];
 					if (v.id == id) {
 						vertex = v;
 						break;
@@ -10420,10 +10420,10 @@ var Line3D = require('../Line3D');
 				if (normals === undefined) {
 					normals = [];
 				}
-				var i = offset;
-				var l = this.faces.length;
-				for (var j=0;j<l;j++) {
-					var f = this.faces[j];
+				let i = offset;
+				let l = this.faces.length;
+				for (let j=0;j<l;j++) {
+					let f = this.faces[j];
 					normals[i] = f.a.normal.x;
 					normals[i + 1] = f.a.normal.y;
 					normals[i + 2] = f.a.normal.z;
@@ -10475,10 +10475,10 @@ var Line3D = require('../Line3D');
 			},
 
 			intersectsRay: function(ray) {
-				var tri = this.intersector.getTriangle();
-				var l = this.faces.length;
-				var f;
-				for (var i =0;i<l;i++) {
+				let tri = this.intersector.getTriangle();
+				let l = this.faces.length;
+				let f;
+				for (let i =0;i<l;i++) {
 					f = this.faces[i];
 					tri.a = f.a;
 					tri.b = f.b;
@@ -10491,11 +10491,11 @@ var Line3D = require('../Line3D');
 			},
 
 			perforateFace: function(f, size) {
-				var centroid = f.getCentroid();
-				var d = 1 - size;
-				var a2 = f.a.interpolateTo(centroid, d);
-				var b2 = f.b.interpolateTo(centroid, d);
-				var c2 = f.c.interpolateTo(centroid, d);
+				let centroid = f.getCentroid();
+				let d = 1 - size;
+				let a2 = f.a.interpolateTo(centroid, d);
+				let b2 = f.b.interpolateTo(centroid, d);
+				let c2 = f.c.interpolateTo(centroid, d);
 				this.removeFace(f);
 				this.addFace(f.a, b2, a2);
 				this.addFace(f.a, f.b, b2);
@@ -10521,9 +10521,9 @@ var Line3D = require('../Line3D');
 			},
 
 			removeFace: function(f) {
-				var index = -1;
-				var l = this.faces.length;
-				for(var i=0;i<l;i++){
+				let index = -1;
+				let l = this.faces.length;
+				for(let i=0;i<l;i++){
 					if(this.faces[i] == f){
 						index = i;
 						break;
@@ -10555,11 +10555,11 @@ var Line3D = require('../Line3D');
 				if( saveNormals === undefined){
 					saveNormals = true;
 				}
-				var vOffset = obj.getCurrVertexOffset() + 1,
+				let vOffset = obj.getCurrVertexOffset() + 1,
 					nOffset = obj.getCurrNormalOffset() + 1;
 				obj.newObject( this.name );
 				//vertices
-				var v = 0, f = 0,
+				let v = 0, f = 0,
 					vlen = this.vertices.length,
 					flen = this.faces.length,
 					face;
@@ -10617,9 +10617,9 @@ var Line3D = require('../Line3D');
 				if(updateNormals === undefined){
 					updateNormals = true;
 				}
-				var l = this.vertices.length;
-				for(var i=0;i<l;i++){
-					var v = this.vertices[i];
+				let l = this.vertices.length;
+				for(let i=0;i<l;i++){
+					let v = this.vertices[i];
 					v.set(mat.applyTo(v));
 				}
 				if(updateNormals){
@@ -10638,7 +10638,7 @@ var Line3D = require('../Line3D');
 			},
 
 			updateVertex: function(origVec3D,newPos) {
-				var vertex = this.vertexMap.get( origVec3D );
+				let vertex = this.vertexMap.get( origVec3D );
 				if (vertex !== undefined ) {
 					this.vertexMap.remove( vertex );
 					vertex.set( newPos );
@@ -10652,16 +10652,16 @@ var Line3D = require('../Line3D');
 	//define WETriangleMesh
 	(function( TriangleMesh ){
 		//dependenecies
-		var internals = require('../../internals');
-		var Line3D = require('../Line3D');
-		var Vec3D = require('../Vec3D');
-		var WEVertex = require('./Vertex').WEVertex;
-		var WEFace = require('./Face').WEFace;
-		var WingedEdge = require('./WingedEdge');
-		var MidpointSubdivision = require('./subdiv/MidpointSubdivision');
+		let internals = require('../../internals');
+		let Line3D = require('../Line3D');
+		let Vec3D = require('../Vec3D');
+		let WEVertex = require('./Vertex').WEVertex;
+		let WEFace = require('./Face').WEFace;
+		let WingedEdge = require('./WingedEdge');
+		let MidpointSubdivision = require('./subdiv/MidpointSubdivision');
 
 		//locals
-		var proto;
+		let proto;
 		//constructor
 		WETriangleMesh = function( name ){
 			name = name || "untitled";
@@ -10683,7 +10683,7 @@ var Line3D = require('../Line3D');
 				norm = undefined;
 			}
 
-			var va = this.__checkVertex(a),
+			let va = this.__checkVertex(a),
 				vb = this.__checkVertex(b),
 				vc = this.__checkVertex(c),
 				nc, t, f;
@@ -10721,8 +10721,8 @@ var Line3D = require('../Line3D');
 		};
 
 		proto.copy = function(){
-			var m = new WETriangleMesh( this.name+"-copy" );
-			var i, l, f;
+			let m = new WETriangleMesh( this.name+"-copy" );
+			let i, l, f;
 			l = this.faces.length;
 			for(i=0; i<l; i++){
 				f = this.faces[i];
@@ -10732,7 +10732,7 @@ var Line3D = require('../Line3D');
 		};
 
 		proto._createVertex = function( vec3D, id ){
-			var vertex = new WEVertex( vec3D, id );
+			let vertex = new WEVertex( vec3D, id );
 			return vertex;
 		};
 		//TODO: numEdges currently not hooked up
@@ -10753,10 +10753,10 @@ var Line3D = require('../Line3D');
 			//if vertices have moved / transformed a new vertexMap and edgeMap must be made
 			//in order to have updated string keys of new positions
 			//newVertexDictionary[{String}] = {Vertex}
-			var newVertexMap = new internals.LinkedMap( vertexKeyGenerator );
-			var newEdgeMap = new internals.LinkedMap( edgeKeyGenerator );
+			let newVertexMap = new internals.LinkedMap( vertexKeyGenerator );
+			let newEdgeMap = new internals.LinkedMap( edgeKeyGenerator );
 
-            var i = 0,
+            let i = 0,
                 arr = this.vertexMap.getArray();
             for(i=0; i<arr.length; i++){
 				newVertexMap.put( arr[i], arr[i] );
@@ -10775,7 +10775,7 @@ var Line3D = require('../Line3D');
 
 		proto.removeEdge = function( edge ){
 			edge.remove();
-			var v = edge.a;
+			let v = edge.a;
 			if( v.edges.length === 0 ){
 				this.vertexMap.remove( v );
 			}
@@ -10783,10 +10783,10 @@ var Line3D = require('../Line3D');
 			if( v.edges.length === 0 ){
 				this.vertexMap.remove( v );
 			}
-            for(var i=0; i<edge.faces.length; i++){
+            for(let i=0; i<edge.faces.length; i++){
                 this.removeFace(edge.faces[i]);
             }
-			var removed = this.edgeMap.remove( this.__edgeCheck.set( edge.a, edge.b ) );
+			let removed = this.edgeMap.remove( this.__edgeCheck.set( edge.a, edge.b ) );
             if(!removed){
                 this.edgeMap.remove( this.__edgeCheck.set(edge.b, edge.a) );
             }
@@ -10796,13 +10796,13 @@ var Line3D = require('../Line3D');
 		};
 
 		proto.removeFace = function( face ){
-			var i = this.faces.indexOf( face );
+			let i = this.faces.indexOf( face );
 			if( i > -1 ){
 				this.faces.splice( i, 1 );
 			}
 
             i = 0;
-            var edge;
+            let edge;
 
             for(i=0; i<face.edges.length; i++){
                 edge = face.edges[i];
@@ -10817,7 +10817,7 @@ var Line3D = require('../Line3D');
 		//TODO UNIT TEST .splice
 		proto.removeUnusedVertices = function(){
 			internals.each( this.vertices, function( vertex, i ){
-				var isUsed = false;
+				let isUsed = false;
 				internals.each( this.faces, function( f ){
 					if( f.a == vertex || f.b == vertex || f.c == vertex ){
 						isUsed = true;
@@ -10848,7 +10848,7 @@ var Line3D = require('../Line3D');
 		//@param {Vec3D | SubdivisionStrategy} b or strategy if edge supplied
 		//@param {SubdivisionStrategy} [subDiv] or undefined
 		proto.splitEdge = function( a, b, subDiv ){
-			var edge, mid;
+			let edge, mid;
 			if( arguments.length === 3 ){
 				edge = this.edgeMap.get( this.__edgeCheck.set(a, b) );
 
@@ -10871,7 +10871,7 @@ var Line3D = require('../Line3D');
 		//@param {WingedEdge} edge,
 		//@param {Vec3D[]} midPoints
 		proto.splitFace = function( face, edge, midPoints ){
-			var p, i, ec, prev, num, mid;
+			let p, i, ec, prev, num, mid;
 			for(i=0; i<3; i++){
 				ec = face.edges[i];
 				if( !ec.equals(edge) ){
@@ -10911,9 +10911,9 @@ var Line3D = require('../Line3D');
 		proto.subdivideEdges = function( origEdges, subDiv, minLength ){
 			origEdges.sort( subDiv.getEdgeOrdering() );
 			minLength *= minLength;
-			var i=0, l = origEdges.length;
+			let i=0, l = origEdges.length;
 			for(i=0; i<l; i++){
-				var e = origEdges[i];
+				let e = origEdges[i];
 				if( this.edges.indexOf( e ) > -1 ) {
 					if( e.getLengthSquared() >= minLength ) {
 						this.splitEdge( e, subDiv );
@@ -10923,7 +10923,7 @@ var Line3D = require('../Line3D');
 		};
 
 		proto.subdivideFaceEdges = function( faces, subDiv, minLength ){
-			var fedges = [], i,j, f, e, fl, el;
+			let fedges = [], i,j, f, e, fl, el;
 			fl = this.faces.length;
 			for(i=0; i<fl; i++){
 				f = this.faces[i];
@@ -10953,7 +10953,7 @@ var Line3D = require('../Line3D');
 			if( updateNormals === undefined || updateNormals === null ){
 				updateNormals = true;
 			}
-			for(var i=0, l = this.vertices.length; i<l; i++){
+			for(let i=0, l = this.vertices.length; i<l; i++){
 				matrix.applyToSelf( this.vertices[i] );
 			}
 			this.rebuildIndex();
@@ -10967,7 +10967,7 @@ var Line3D = require('../Line3D');
 			//dictionary key is va.toString() + vb.toString()
 			//because Line3D toString would be different than WingedEdge toString()
 			this.__edgeCheck.set( va, vb );
-			var e = this.edgeMap.get( this.__edgeCheck );
+			let e = this.edgeMap.get( this.__edgeCheck );
             if(!e){
                 //edge could be as b->a or a->b
                 this.__edgeCheck.set(vb, va);
@@ -10988,7 +10988,7 @@ var Line3D = require('../Line3D');
 
 	//Terrain
 	(function( TriangleMesh ){
-		var internals = require('../../internals'),
+		let internals = require('../../internals'),
 			mathUtils = require('../../math/mathUtils'),
 			Interpolation2D = require('../../math/Interpolation2D'),
 			Ray3D = require('../Ray3D'),
@@ -11013,7 +11013,7 @@ var Line3D = require('../Line3D');
 			}
 			this.setScale( scale );
 			this.elevation = [];
-			var i = 0,
+			let i = 0,
 				len = width * depth;
 			for(i=0; i<len; i++){
 				this.elevation[i] = 0;
@@ -11021,11 +11021,11 @@ var Line3D = require('../Line3D');
 
 			this.__elevationLength = this.width * this._depth;
 			this.vertices = [];
-			var offset = new Vec3D(parseInt(this.width / 2,10), 0, parseInt(this._depth / 2,10)),
+			let offset = new Vec3D(parseInt(this.width / 2,10), 0, parseInt(this._depth / 2,10)),
 				scaleXZ = this.getScale().to3DXZ();
 			i=0;
-			for(var z = 0; z < this._depth; z++){
-				for(var x = 0; x < this.width; x++){
+			for(let z = 0; z < this._depth; z++){
+				for(let x = 0; x < this.width; x++){
 					this.vertices[i++] = new Vec3D(x,0,z).subSelf(offset).scaleSelf(scaleXZ);
 				}
 			}
@@ -11059,7 +11059,7 @@ var Line3D = require('../Line3D');
 			* @return {Number} interpolated elevation
 			*/
 			getHeightAtPoint: function(x,z){
-				var xx = x / this._scale.x + this.width * 0.5,
+				let xx = x / this._scale.x + this.width * 0.5,
 					zz = z / this._scale.y + this._depth * 0.5,
 					y = 0,
 					flxx = ~~x,
@@ -11067,10 +11067,10 @@ var Line3D = require('../Line3D');
 
 				if(xx >= 0 & xx < this.width && zz >= 0 && zz < this._depth){
 
-					var x2 = ~~Math.min(xx + 1, this.width - 1),
+					let x2 = ~~Math.min(xx + 1, this.width - 1),
 						z2 = ~~Math.min(zz + 1, this._depth - 1);
 
-					var	a = this.getHeightAtCell(flxx, flzz),
+					let	a = this.getHeightAtCell(flxx, flzz),
 						b = this.getHeightAtCell(x2, flzz),
 						c = this.getHeightAtCell(flxx, z2),
 						d = this.getHeightAtCell(x2, z2);
@@ -11087,7 +11087,7 @@ var Line3D = require('../Line3D');
 			* @return {Number} array index
 			*/
 			_getIndex: function(x,z){
-				var idx = z * this.width + x;
+				let idx = z * this.width + x;
 				if(idx < 0 || idx > this.__elevationLength){
 					throw new Error("the given terrain cell is invalid: "+x+ ";"+z);
 				}
@@ -11119,11 +11119,11 @@ var Line3D = require('../Line3D');
 			* @return {IsectData3D} intersection data parcel
 			*/
 			intersectAtPoint: function(x,z){
-				var xx = x / this._scale.x + this.width * 0.5,
+				let xx = x / this._scale.x + this.width * 0.5,
 					zz = z / this._scale.y + this._depth * 0.5,
 					isec = new IsectData3D();
 				if(xx >= 0 && xx < this.width && zz >= 0 && zz < this._depth){
-					var x2 = ~~Math.min(xx + 1, this.width - 1),
+					let x2 = ~~Math.min(xx + 1, this.width - 1),
 						z2 = ~~Math.min(zz + 1, this._depth - 1),
 						flxx = ~~xx,
 						flzz = ~~zz,
@@ -11152,7 +11152,7 @@ var Line3D = require('../Line3D');
 			*/
 			setElevation: function(elevation){
 				if(this.__elevationLength == elevation.length){
-					for(var i = 0, len = elevation.length; i<len; i++){
+					for(let i = 0, len = elevation.length; i<len; i++){
 						this.vertices[i].y = this.elevation[i] = elevation[i];
 					}
 				} else {
@@ -11168,7 +11168,7 @@ var Line3D = require('../Line3D');
 			* @return itself
 			*/
 			setHeightAtCell: function(x,z,h){
-				var index = this._getIndex(x,z);
+				let index = this._getIndex(x,z);
 				this.elevation[index] = h;
 				this.vertices[index].y = h;
 				return this;
@@ -11180,7 +11180,7 @@ var Line3D = require('../Line3D');
 				this._scale = scale;
 			},
 			toMesh: function(){
-				var opts = {
+				let opts = {
 					mesh: undefined,
 					minX: 0,
 					minZ: 0,
@@ -11188,13 +11188,13 @@ var Line3D = require('../Line3D');
 					maxZ: this._depth
 				};
 
-				var v = this.vertices,
+				let v = this.vertices,
 					w = this.width,
 					d = this._depth;
 
 				if(arguments.length == 1 && typeof arguments[0] == 'object'){
 					//options object
-					var args = arguments[0];
+					let args = arguments[0];
 					opts.mesh = args.mesh || new TriangleMesh("terrain");
 					opts.minX = args.minX || opts.minX;
 					opts.minZ = args.minZ || opts.minZ;
@@ -11217,8 +11217,8 @@ var Line3D = require('../Line3D');
 				opts.minZ++;
 
 
-				for(var z = opts.minZ, idx = opts.minX * w; z < opts.maxZ; z++, idx += w){
-					for(var x = opts.minX; x < opts.maxX; x++){
+				for(let z = opts.minZ, idx = opts.minX * w; z < opts.maxZ; z++, idx += w){
+					for(let x = opts.minX; x < opts.maxX; x++){
 						opts.mesh.addFace(v[idx - w + x - 1], v[idx - w + x], v[idx + x - 1]);
 						opts.mesh.addFace(v[idx - w + x], v[idx + x], v[idx + x - 1]);
 					}
@@ -11232,7 +11232,7 @@ var Line3D = require('../Line3D');
 
 	//SurfaceMeshBuilder
 	(function( TriangleMesh ){
-		var Vec3D = require('../Vec3D'),
+		let Vec3D = require('../Vec3D'),
 			Vec2D = require('../Vec2D');
 
 		/**
@@ -11255,7 +11255,7 @@ var Line3D = require('../Line3D');
 					4 - TriangleMesh mesh, Number resolution, Number size, boolean isClosed
 			*/
 			createMesh: function() {
-				var opts = {
+				let opts = {
 					mesh: undefined,
 					resolution: 0,
 					size: 1,
@@ -11263,7 +11263,7 @@ var Line3D = require('../Line3D');
 				};
 				if(arguments.length == 1){
 					if(typeof arguments[0] == 'object'){ //options object
-						var arg = arguments[0];
+						let arg = arguments[0];
 						//if a mesh was provided as an option, use it, otherwise make one
 						opts.mesh = arg.mesh;
 						opts.resolution = arg.res || arg.resoultion || 0;
@@ -11284,12 +11284,12 @@ var Line3D = require('../Line3D');
 						opts.isClosed = arguments[3];
 					}
 				}
-				var mesh = opts.mesh;
+				let mesh = opts.mesh;
 				if(mesh === undefined || mesh === null){
 					mesh = new TriangleMesh();
 				}
 
-				var a = new Vec3D(),
+				let a = new Vec3D(),
 					b = new Vec3D(),
 					pa = new Vec3D(),
 					pb = new Vec3D(),
@@ -11307,12 +11307,12 @@ var Line3D = require('../Line3D');
 					auv = new Vec2D(),
 					buv = new Vec2D();
 
-				for (var p = 0; p < phiRes; p++) {
-					var phi = p * phiRange * ires;
-					var phiNext = (p + 1) * phiRange * ires;
-					for (var t = 0; t <= thetaRes; t++) {
-						var theta = t * thetaRange * ires;
-						var func = this.func;
+				for (let p = 0; p < phiRes; p++) {
+					let phi = p * phiRange * ires;
+					let phiNext = (p + 1) * phiRange * ires;
+					for (let t = 0; t <= thetaRes; t++) {
+						let theta = t * thetaRange * ires;
+						let func = this.func;
 						a =	func.computeVertexFor(a, phiNext, theta).scaleSelf(opts.size);
 						auv.set( t * tres, 1 - (p + 1) * pres);
 						b = func.computeVertexFor(b, phi, theta).scaleSelf(opts.size);
@@ -11363,22 +11363,22 @@ var Line3D = require('../Line3D');
 
 },{"../../internals":98,"../../math/Interpolation2D":118,"../../math/mathUtils":125,"../AABB":42,"../IsectData3D":51,"../Line3D":53,"../Matrix4x4":55,"../Quaternion":58,"../Ray3D":60,"../Sphere":63,"../Triangle3D":68,"../TriangleIntersector":69,"../Vec2D":70,"../Vec3D":71,"../vectors":96,"./Face":79,"./Vertex":88,"./WingedEdge":91,"./subdiv/MidpointSubdivision":94}],93:[function(require,module,exports){
 
-	var EdgeLengthComparator = function(){};
+	let EdgeLengthComparator = function(){};
 	EdgeLengthComparator.prototype.compare = function( edge1, edge2 ){
 		return -parseInt( edge1.getLengthSquared()-edge2.getLengthSquared(), 10);
 	};
 	module.exports = EdgeLengthComparator;
 
 },{}],94:[function(require,module,exports){
-var internals = require('../../../internals');
-var SubdivisionStrategy = require('./SubdivisionStrategy');
+let internals = require('../../../internals');
+let SubdivisionStrategy = require('./SubdivisionStrategy');
 
-	var MidpointSubdivison = function(){
+	let MidpointSubdivison = function(){
 		SubdivisionStrategy.call(this);
 	};
 	internals.extend( MidpointSubdivison, SubdivisionStrategy );
 	MidpointSubdivison.prototype.computeSplitPoints = function( edge ){
-		var mid = [];
+		let mid = [];
 		mid.push( edge.getMidPoint() );
 		return mid;
 	};
@@ -11386,9 +11386,9 @@ var SubdivisionStrategy = require('./SubdivisionStrategy');
 	module.exports = MidpointSubdivison;
 
 },{"../../../internals":98,"./SubdivisionStrategy":95}],95:[function(require,module,exports){
-var EdgeLengthComparator = require('./EdgeLengthComparator');
+let EdgeLengthComparator = require('./EdgeLengthComparator');
 	
-	var SubdivisionStrategy, proto;
+	let SubdivisionStrategy, proto;
 	SubdivisionStrategy = function(){
 		this._order = SubdivisionStrategy.DEFAULT_ORDERING;
 	};
@@ -11408,15 +11408,15 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 },{"./EdgeLengthComparator":93}],96:[function(require,module,exports){
 
 
-	var mathUtils = require('../math/mathUtils');
-	var has = require('../internals/has'),
+	let mathUtils = require('../math/mathUtils');
+	let has = require('../internals/has'),
 		is = require('../internals/is');
 
-	var hasXY = has.XY;
-	var isRect = is.Rect;
+	let hasXY = has.XY;
+	let isRect = is.Rect;
 
 	//modules defined within
-	var Vec2D, Vec3D;
+	let Vec2D, Vec3D;
 
 	/**
 	@class a two-dimensional vector class
@@ -11445,9 +11445,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 	};
 
 	//private,
-	var _getXY = (function(){
+	let _getXY = (function(){
 		//create a temp object to avoid creating garbage-collectable objects
-		var temp = { x: 0, y: 0 };
+		let temp = { x: 0, y: 0 };
 		return function getXY(a,b) {
 			if( a && typeof a.x === 'number' && typeof a.y === 'number' ){
 				return a;
@@ -11473,7 +11473,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		add: function(a, b) {
-			var v  = new Vec2D(a,b);
+			let v  = new Vec2D(a,b);
 			v.x += this.x;
 			v.y += this.y;
 			return v;
@@ -11489,7 +11489,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		addSelf: function(a,b) {
-			var v = _getXY(a,b);
+			let v = _getXY(a,b);
 			this.x += v.x;
 			this.y += v.y;
 			return this;
@@ -11499,7 +11499,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 			if(faceNormalize === undefined){
 				return Math.acos(this.dot(v));
 			}
-			var theta = (faceNormalize) ? this.getNormalized().dot(v.getNormalized()) : this.dot(v);
+			let theta = (faceNormalize) ? this.getNormalized().dot(v.getNormalized()) : this.dot(v);
 			return Math.acos(mathUtils.clipNormalized(theta));
 		},
 
@@ -11552,8 +11552,8 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 
 		distanceTo: function(v) {
 			if (v !== undefined) {
-				var dx = this.x - v.x;
-				var dy = this.y - v.y;
+				let dx = this.x - v.x;
+				let dy = this.y - v.y;
 				return Math.sqrt(dx * dx + dy * dy);
 			} else {
 				return NaN;
@@ -11562,8 +11562,8 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 
 		distanceToSquared: function(v) {
 			if (v !== undefined) {
-				var dx = this.x - v.x;
-				var dy = this.y - v.y;
+				let dx = this.x - v.x;
+				let dy = this.y - v.y;
 				return dx * dx + dy * dy;
 			} else {
 				return NaN;
@@ -11718,7 +11718,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		isInCircle: function(sO,sR) {
-			var d = this.sub(sO).magSquared();
+			let d = this.sub(sO).magSquared();
 			return (d <= sR * sR);
 		},
 
@@ -11733,11 +11733,11 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		isInTriangle: function(a,b,c) {
-			var v1 = this.sub(a).normalize();
-			var v2 = this.sub(b).normalize();
-			var v3 = this.sub(c).normalize();
+			let v1 = this.sub(a).normalize();
+			let v2 = this.sub(b).normalize();
+			let v3 = this.sub(c).normalize();
 
-			var total_angles = Math.acos(v1.dot(v2));
+			let total_angles = Math.acos(v1.dot(v2));
 			total_angles += Math.acos(v2.dot(v3));
 			total_angles += Math.acos(v3.dot(v1));
 
@@ -11745,9 +11745,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		isMajorAxis: function(tol) {
-			var ax = Math.abs(this.x);
-			var ay = Math.abs(this.y);
-			var itol = 1 - tol;
+			let ax = Math.abs(this.x);
+			let ay = Math.abs(this.y);
+			let itol = 1 - tol;
 			if (ax > itol) {
 				return (ay < tol);
 			} else if (ay > itol) {
@@ -11771,7 +11771,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		jitter: function(a,b) {
-			var v = _getXY(a,b);
+			let v = _getXY(a,b);
 			this.x += mathUtils.normalizedRandom() * v.x;
 			this.y += mathUtils.normalizedRandom() * v.y;
 			return this;
@@ -11818,7 +11818,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		normalize: function() {
-			var mag = this.x * this.x + this.y * this.y;
+			let mag = this.x * this.x + this.y * this.y;
 			if (mag > 0) {
 				mag = 1.0 / Math.sqrt(mag);
 				this.x *= mag;
@@ -11835,7 +11835,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		normalizeTo: function(len) {
-			var mag = Math.sqrt(this.x * this.x + this.y * this.y);
+			let mag = Math.sqrt(this.x * this.x + this.y * this.y);
 			if (mag > 0) {
 				mag = len / mag;
 				this.x *= mag;
@@ -11845,14 +11845,14 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		perpendicular: function() {
-			var t = this.x;
+			let t = this.x;
 			this.x = -this.y;
 			this.y = t;
 			return this;
 		},
 
 		positiveHeading: function() {
-			var dist = Math.sqrt(this.x * this.x + this.y * this.y);
+			let dist = Math.sqrt(this.x * this.x + this.y * this.y);
 			if (this.y >= 0){
 				return Math.acos(this.x / dist);
 			}
@@ -11876,9 +11876,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		rotate: function(theta) {
-			var co = Math.cos(theta);
-			var si = Math.sin(theta);
-			var xx = co * this.x - si * this.y;
+			let co = Math.cos(theta);
+			let si = Math.sin(theta);
+			let xx = co * this.x - si * this.y;
 			this.y = si * this.x + co * this.y;
 			this.x = xx;
 			return this;
@@ -11901,19 +11901,19 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		scale: function(a, b) {
-			var v = _getXY(a,b);
+			let v = _getXY(a,b);
 			return new Vec2D(this.x * v.x, this.y * v.y);
 		},
 
 		scaleSelf: function(a,b) {
-			var v = _getXY(a,b);
+			let v = _getXY(a,b);
 			this.x *= v.x;
 			this.y *= v.y;
 			return this;
 		},
 
 		set: function(a,b){
-			var v = _getXY(a,b);
+			let v = _getXY(a,b);
 			this.x = v.x;
 			this.y = v.y;
 			return this;
@@ -11946,7 +11946,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		sub: function(a,b){
-			var v = _getXY(a,b);
+			let v = _getXY(a,b);
 			return new Vec2D(this.x -v.x,this.y - v.y);
 		},
 
@@ -11960,17 +11960,17 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		subSelf: function(a,b) {
-			var v = _getXY(a,b);
+			let v = _getXY(a,b);
 			this.x -= v.x;
 			this.y -= v.y;
 			return this;
 		},
 
 		tangentNormalOfEllipse: function(eO,eR) {
-			var p = this.sub(eO);
+			let p = this.sub(eO);
 
-			var xr2 = eR.x * eR.x;
-			var yr2 = eR.y * eR.y;
+			let xr2 = eR.x * eR.x;
+			let yr2 = eR.y * eR.y;
 
 			return new Vec2D(p.x / xr2, p.y / yr2).normalize();
 		},
@@ -11983,21 +11983,21 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		toCartesian: function() {
-			var xx = (this.x * Math.cos(this.y));
+			let xx = (this.x * Math.cos(this.y));
 			this.y = (this.x * Math.sin(this.y));
 			this.x = xx;
 			return this;
 		},
 
 		toPolar: function() {
-			var r = Math.sqrt(this.x * this.x + this.y * this.y);
+			let r = Math.sqrt(this.x * this.x + this.y * this.y);
 			this.y = Math.atan2(this.y, this.x);
 			this.x = r;
 			return this;
 		},
 
 		toString: function() {
-			var s = "{x:"+this.x+", y:"+this.y+"}";
+			let s = "{x:"+this.x+", y:"+this.y+"}";
 			return s;
 		}
 
@@ -12005,9 +12005,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 
 	//these requires are in the functions because of a circular dependency
 	Vec2D.prototype.bisect = function(b) {
-		var diff = this.sub(b);
-		var sum = this.add(b);
-		var dot = diff.dot(sum);
+		let diff = this.sub(b);
+		let sum = this.add(b);
+		let dot = diff.dot(sum);
 		return new Vec3D(diff.x, diff.y, -dot / 2);
 	};
 
@@ -12040,7 +12040,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 	};
 
 	Vec2D.randomVector = function(rnd){
-		var v = new Vec2D(Math.random()*2 - 1, Math.random() * 2 - 1);
+		let v = new Vec2D(Math.random()*2 - 1, Math.random() * 2 - 1);
 		return v.normalize();
 	};
 
@@ -12108,7 +12108,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		angleBetween: function(vec, faceNormalizeBool){
-			var theta;
+			let theta;
 			if(faceNormalizeBool){
 				theta = this.getNormalized().dot(vec.getNormalized());
 			} else {
@@ -12139,7 +12139,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		constrain: function(box_or_min, max){
-			var min;
+			let min;
 			if( is.AABB( box_or_min ) ){
 				max = box_or_min.getMax();
 				min = box_or_min.getMin();
@@ -12161,9 +12161,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		crossInto: function(vec, result){
-			var vx = vec.x;
-			var vy = vec.y;
-			var vz = vec.z;
+			let vx = vec.x;
+			let vy = vec.y;
+			let vz = vec.z;
 			result.x = this.y * vz - vy * this.z;
 			result.y = this.z * vx-vz * this.x;
 			result.z = this.x * vy - vx * this.y;
@@ -12180,8 +12180,8 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		crossSelf: function(vec){
-			var cx = this.y * vec.z - vec.y * this.z;
-			var cy = this.z * vec.x - vec.z * this.x;
+			let cx = this.y * vec.z - vec.y * this.z;
+			let cy = this.z * vec.x - vec.z * this.x;
 			this.z = this.x * vec.y - vec.x * this.y;
 			this.y = cy;
 			this.x = cx;
@@ -12190,9 +12190,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 
 		distanceTo: function(vec){
 			if(vec !== undefined){
-				var dx = this.x - vec.x;
-				var dy = this.y - vec.y;
-				var dz = this.z - vec.z;
+				let dx = this.x - vec.x;
+				let dy = this.y - vec.y;
+				let dz = this.z - vec.z;
 				return Math.sqrt(dx * dx + dy * dy + dz * dz);
 			}
 			return NaN;
@@ -12200,9 +12200,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 
 		distanceToSquared: function(vec){
 			if(vec !== undefined){
-				var dx = this.x - vec.x;
-				var dy = this.y - vec.y;
-				var dz = this.z - vec.z;
+				let dx = this.x - vec.x;
+				let dy = this.y - vec.y;
+				let dz = this.z - vec.z;
 				return dx * dx + dy*dy + dz*dz;
 			}
 			return NaN;
@@ -12378,7 +12378,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 
 		isInAABB: function(box_or_origin, boxExtent){
 			if(boxExtent) {
-				var w = boxExtent.x;
+				let w = boxExtent.x;
 				if(this.x < box_or_origin.x - w || this.x > box_or_origin.x + w){
 					return false;
 				}
@@ -12391,7 +12391,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 					return false;
 				}
 			} else {
-				var min = box_or_origin.getMin(),
+				let min = box_or_origin.getMin(),
 					max = box_or_origin.getMax();
 				if (this.x < min.x || this.x > max.x) {
 					return false;
@@ -12407,10 +12407,10 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		isMajorAxis: function(tol){
-			var ax = mathUtils.abs(this.x);
-			var ay = mathUtils.abs(this.y);
-			var az = mathUtils.abs(this.z);
-			var itol = 1 - tol;
+			let ax = mathUtils.abs(this.x);
+			let ay = mathUtils.abs(this.y);
+			let az = mathUtils.abs(this.z);
+			let itol = 1 - tol;
 			if (ax > itol) {
 				if (ay < tol) {
 					return (az < tol);
@@ -12490,7 +12490,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		normalize: function(){
-			var mag = Math.sqrt(this.x*this.x + this.y * this.y + this.z * this.z);
+			let mag = Math.sqrt(this.x*this.x + this.y * this.y + this.z * this.z);
 			if(mag > 0) {
 				mag = 1.0 / mag;
 				this.x *= mag;
@@ -12501,7 +12501,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		normalizeTo: function(length){
-			var mag = Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z);
+			let mag = Math.sqrt(this.x*this.x+this.y*this.y+this.z*this.z);
 			if(mag>0){
 				mag = length / mag;
 				this.x *= mag;
@@ -12532,7 +12532,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		rotateAroundAxis: function(vec_axis,theta){
-			var ax = vec_axis.x,
+			let ax = vec_axis.x,
 				ay = vec_axis.y,
 				az = vec_axis.z,
 				ux = ax * this.x,
@@ -12546,9 +12546,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 				wz = az * this.z,
 				si = Math.sin(theta),
 				co = Math.cos(theta);
-			var xx = (ax * (ux + vy + wz) + (this.x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz) * si);
-			var yy = (ay * (ux + vy + wz) + (this.y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz) * si);
-			var zz = (az * (ux + vy + wz) + (this.z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy) * si);
+			let xx = (ax * (ux + vy + wz) + (this.x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz) * si);
+			let yy = (ay * (ux + vy + wz) + (this.y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz) * si);
+			let zz = (az * (ux + vy + wz) + (this.z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy) * si);
 			this.x = xx;
 			this.y = yy;
 			this.z = zz;
@@ -12563,9 +12563,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		rotateX: function(theta){
-			var co = Math.cos(theta);
-			var si = Math.sin(theta);
-			var zz = co *this.z - si * this.y;
+			let co = Math.cos(theta);
+			let si = Math.sin(theta);
+			let zz = co *this.z - si * this.y;
 			this.y = si * this.z + co * this.y;
 			this.z = zz;
 			return this;
@@ -12579,9 +12579,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		rotateY:function(theta) {
-			var co = Math.cos(theta);
-			var si = Math.sin(theta);
-			var xx = co * this.x - si * this.z;
+			let co = Math.cos(theta);
+			let si = Math.sin(theta);
+			let xx = co * this.x - si * this.z;
 			this.z = si * this.x + co * this.z;
 			this.x = xx;
 			return this;
@@ -12596,9 +12596,9 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		 * @return itself
 		 */
 		rotateZ:function(theta) {
-			var co = Math.cos(theta);
-			var si = Math.sin(theta);
-			var xx = co * this.x - si * this.y;
+			let co = Math.cos(theta);
+			let si = Math.sin(theta);
+			let xx = co * this.x - si * this.y;
 			this.y = si * this.x + co * this.y;
 			this.x = xx;
 			return this;
@@ -12680,8 +12680,8 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		shuffle:function(nIterations){
-			var t;
-			for(var i=0;i<nIterations;i++) {
+			let t;
+			for(let i=0;i<nIterations;i++) {
 				switch(Math.floor(Math.random()*3)){
 					case 0:
 					t = this.x;
@@ -12760,16 +12760,16 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		toArray4:function(w){
-			var ta = this.toArray();
+			let ta = this.toArray();
 			ta[3] = w;
 			return ta;
 		},
 
 		toCartesian: function(){
-			var a = (this.x * Math.cos(this.z));
-			var xx = (a * Math.cos(this.y));
-			var yy = (this.x * Math.sin(this.z));
-			var zz = (a * Math.sin(this.y));
+			let a = (this.x * Math.cos(this.z));
+			let xx = (a * Math.cos(this.y));
+			let yy = (this.x * Math.sin(this.z));
+			let zz = (a * Math.sin(this.y));
 			this.x = xx;
 			this.y = yy;
 			this.z = zz;
@@ -12777,10 +12777,10 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 		},
 
 		toSpherical: function(){
-			var xx = Math.abs(this.x) <= mathUtils.EPS ? mathUtils.EPS : this.x;
-			var zz = this.z;
+			let xx = Math.abs(this.x) <= mathUtils.EPS ? mathUtils.EPS : this.x;
+			let zz = this.z;
 
-			var radius = Math.sqrt((xx * xx) + (this.y * this.y) + (zz * zz));
+			let radius = Math.sqrt((xx * xx) + (this.y * this.y) + (zz * zz));
 			this.z = Math.asin(this.y / radius);
 			this.y = Math.atan(zz / xx) + (xx < 0.0 ? Math.PI : 0);
 			this.x = radius;
@@ -12884,7 +12884,7 @@ var EdgeLengthComparator = require('./EdgeLengthComparator');
 	 */
 
 	Vec3D.randomVector = function() {
-		var v = new Vec3D(Math.random()*2 - 1, Math.random() * 2 -1, Math.random()* 2 - 1);
+		let v = new Vec3D(Math.random()*2 - 1, Math.random() * 2 -1, Math.random()* 2 - 1);
 		return v.normalize();
 	};
 	Vec3D.ZERO = new Vec3D(0,0,0);
@@ -12966,9 +12966,9 @@ exports.removeItemFrom = require('./internals/removeItemFrom');
 
 
 },{"./internals/Iterator":99,"./internals/LinkedMap":100,"./internals/bind":101,"./internals/each":102,"./internals/extend":103,"./internals/filter":104,"./internals/has":105,"./internals/is":106,"./internals/keys":107,"./internals/mixin":108,"./internals/numberComparator":109,"./internals/removeItemFrom":110,"./internals/values":111}],99:[function(require,module,exports){
-var is = require('./is');
+let is = require('./is');
 	//imitate the basic functionality of a Java Iterator
-    var ArrayIterator = function(collection){
+    let ArrayIterator = function(collection){
         this.__it = collection.slice(0);
     };
     ArrayIterator.prototype = {
@@ -12979,10 +12979,10 @@ var is = require('./is');
             return this.__it.shift();
         }
     };
-    var ObjectIterator = function(object){
+    let ObjectIterator = function(object){
         this.__obj = {};
         this.__keys = [];
-        for(var prop in object){
+        for(let prop in object){
             this.__obj[prop] = object[prop];
             this.__keys.push(prop);
         }
@@ -12993,12 +12993,12 @@ var is = require('./is');
             return this.__it.hasNext();
         },
         next: function(){
-            var key = this.__it.next();
+            let key = this.__it.next();
             return this.__obj[key];
         }
     };
 
-    var Iterator = function(collection){
+    let Iterator = function(collection){
         if(is.array(collection)){
             return new ArrayIterator(collection);
         }
@@ -13009,9 +13009,9 @@ var is = require('./is');
 
 
 },{"./is":106}],100:[function(require,module,exports){
-var each = require('./each');
+let each = require('./each');
     // {Function} keyGeneratorFunction - key to use to return the identifier
-    var LinkedMap = function( keyGeneratorFunction ){
+    let LinkedMap = function( keyGeneratorFunction ){
         this.__list = [];
         this.__map = {};
         if( typeof keyGeneratorFunction === 'function' ){
@@ -13026,7 +13026,7 @@ var each = require('./each');
             each(this.__map, fn);
         },
         get: function( id_or_val ){
-            var result = this.__map[id_or_val];
+            let result = this.__map[id_or_val];
 
             if( result === undefined ){
                 id_or_val = this.generateKey( id_or_val );
@@ -13039,8 +13039,8 @@ var each = require('./each');
             return this.__list;
         },
         has: function( id_or_val ){
-            var self = this;
-            var _has = function( id ){
+            let self = this;
+            let _has = function( id ){
                 return ( self.__map[ id ] !== undefined );
             };
             if( _has( id_or_val ) ){
@@ -13060,7 +13060,7 @@ var each = require('./each');
         },
         remove: function( val ){
             val = this.get( val );
-            var id = this.generateKey(val);
+            let id = this.generateKey(val);
             delete this.__map[id];
             return this.__list.splice( this.__list.indexOf(val), 1)[0];
         },
@@ -13078,19 +13078,19 @@ var each = require('./each');
 },{"./each":102}],101:[function(require,module,exports){
 
     //bind a function to a scope
-    var ctor = {};
+    let ctor = {};
     module.exports = function(func, context) {
-        var args, bound;
-        var FP = Function.prototype;
-        var slice = Array.prototype.slice;
+        let args, bound;
+        let FP = Function.prototype;
+        let slice = Array.prototype.slice;
         if (func.bind === FP.bind && FP.bind) return FP.bind.apply(func, slice.call(arguments, 1));
         args = slice.call(arguments, 2);
         return bound = function() {
             if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
             ctor.prototype = func.prototype;
-            var self = new ctor();
+            let self = new ctor();
             ctor.prototype = null;
-            var result = func.apply(self, args.concat(slice.call(arguments)));
+            let result = func.apply(self, args.concat(slice.call(arguments)));
             if (Object(result) === result) return result;
             return self;
         };
@@ -13102,17 +13102,17 @@ var each = require('./each');
     //from Underscore.js
     //(c) 2009-2012 Jeremy Ashkenas, DocumentCloud Inc.
     //basic forEach, use native implementation is available
-    var breaker = {};
+    let breaker = {};
     module.exports = function(obj, iterator, context) {
         if (obj == null) return;
         if (Array.prototype.forEach && obj.forEach === Array.prototype.forEach) {
             obj.forEach(iterator, context);
         } else if (obj.length === +obj.length) {
-            for (var i = 0, l = obj.length; i < l; i++) {
+            for (let i = 0, l = obj.length; i < l; i++) {
                 if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
             }
         } else {
-            for (var key in obj) {
+            for (let key in obj) {
                 if (hasOwnProperty.call(obj, key)) {
                     if (iterator.call(context, obj[key], key, obj) === breaker) return;
                 }
@@ -13138,7 +13138,7 @@ var each = require('./each');
 },{}],104:[function(require,module,exports){
 
     module.exports = function(obj, iterator, context) {
-        var results = [];
+        let results = [];
         if (obj == null) return results;
         if (Array.prototype.filter && obj.filter === Array.prototype.filter) return obj.filter(iterator, context);
         exports.each(obj, function(value, index, list) {
@@ -13151,11 +13151,11 @@ var each = require('./each');
 },{}],105:[function(require,module,exports){
 
 
-    var all = function(subject,properties){
+    let all = function(subject,properties){
         if(subject === undefined || typeof subject != 'object'){
             return false;
         }
-        var i = 0,
+        let i = 0,
             len = properties.length,
             prop;
         for(i = 0; i < len; i++){
@@ -13182,9 +13182,9 @@ var each = require('./each');
 
 
 },{}],106:[function(require,module,exports){
-var has = require('./has');
+let has = require('./has');
 
-    var apply = function(properties){
+    let apply = function(properties){
         return function( o ){
             return has.all(o, properties);
         };
@@ -13233,14 +13233,14 @@ var has = require('./has');
 
     module.exports = Object.keys || function(obj) {
         if (obj !== Object(obj)) throw new TypeError('Invalid object');
-        var keys = [];
-        for (var key in obj) if (exports.has(obj, key)) keys.push(key);
+        let keys = [];
+        for (let key in obj) if (exports.has(obj, key)) keys.push(key);
         return keys;
     };
 
 
 },{}],108:[function(require,module,exports){
-var each = require('./each');
+let each = require('./each');
     //basic mixin function, copy over object properties to provided object
     module.exports = function(destination,source){
         each(source,function(val,key){
@@ -13262,7 +13262,7 @@ var each = require('./each');
 },{}],110:[function(require,module,exports){
 
     module.exports = function(item,array){
-        var index = array.indexOf(item);
+        let index = array.indexOf(item);
         if(index > -1){
             return array.splice(index,1);
         }
@@ -13271,10 +13271,10 @@ var each = require('./each');
 
 
 },{}],111:[function(require,module,exports){
-var has = require('./has');
+let has = require('./has');
     module.exports = function(obj) {
-        var values = [];
-        for (var key in obj) if (has.property(obj, key)) values.push(obj[key]);
+        let values = [];
+        for (let key in obj) if (has.property(obj, key)) values.push(obj[key]);
         return values;
     };
 
@@ -13325,23 +13325,23 @@ module.exports.waves = require('./math/waves');
     * <code>BezierInterpolation b=new BezierInterpolation(1f/3,-1f/3);</code>
     * </p>
     */
-    var BezierInterpolation = function(h1,h2) {
+    let BezierInterpolation = function(h1,h2) {
         this.c1 = h1;
         this.c2 = h2;
     };
 
     BezierInterpolation.interpolate = function( a, b, t, c1, c2 ){
-        var tSquared = t * t;
-        var invT = 1.0 - t;
-        var invTSquared = invT * invT;
+        let tSquared = t * t;
+        let invT = 1.0 - t;
+        let invTSquared = invT * invT;
         return (a * invTSquared * invT) + (3 * (c1 * (b - a) + a) * t * invTSquared) + (3 * (c2 * (b - a) + b) * tSquared * invT) + (b * tSquared * t);
     };
 
     BezierInterpolation.prototype = {
         interpolate: function(a,b,t) {
-            var tSquared = t * t;
-            var invT = 1.0 - t;
-            var invTSquared = invT * invT;
+            let tSquared = t * t;
+            let invT = 1.0 - t;
+            let invTSquared = invT * invT;
             return (a * invTSquared * invT) + (3 * (this.c1 * (b - a) + a) * t * invTSquared) + (3 * (this.c2 * (b - a) + b) * tSquared * invT) + (b * tSquared * t);
         },
 
@@ -13371,7 +13371,7 @@ module.exports.waves = require('./math/waves');
     * @param isFlipped
     *            true, if slope is inverted
     */
-    var CircularInterpolation = function(isFlipped) {
+    let CircularInterpolation = function(isFlipped) {
         if(isFlipped === undefined){
             this.isFlipped = false;
         }
@@ -13410,7 +13410,7 @@ module.exports.waves = require('./math/waves');
     * i = b+(a-b)*(0.5+0.5*cos(f*PI))
     * @member toxi
     */
-    var	CosineInterpolation = function(){};
+    let	CosineInterpolation = function(){};
 
     CosineInterpolation.interpolate = function(a, b, f) {
         return b + (a - b) * (0.5 + 0.5 * Math.cos(f * Math.PI));
@@ -13423,7 +13423,7 @@ module.exports.waves = require('./math/waves');
 
 
 },{}],116:[function(require,module,exports){
-var LinearInterpolation = require('./LinearInterpolation');
+let LinearInterpolation = require('./LinearInterpolation');
     /**
     * @class Delivers a number of decimated/stepped values for a given interval. E.g. by
     * using 5 steps the interpolation factor is decimated to: 0, 20, 40, 60, 80 and
@@ -13431,7 +13431,7 @@ var LinearInterpolation = require('./LinearInterpolation');
     * {@link InterpolateStrategy} can be specified via the constructor.
     * @member toxi
     */
-    var	DecimatedInterpolation = function(steps,strategy) {
+    let	DecimatedInterpolation = function(steps,strategy) {
         if(steps === undefined){
             throw new Error("steps was not passed to constructor");
         }
@@ -13441,7 +13441,7 @@ var LinearInterpolation = require('./LinearInterpolation');
 
     DecimatedInterpolation.prototype = {
         interpolate: function(a,b,f) {
-            var fd = Math.floor(f * this.numSteps) /  this.numSteps;
+            let fd = Math.floor(f * this.numSteps) /  this.numSteps;
             return this.strategy.interpolate(a, b, fd);
         }
     };
@@ -13461,7 +13461,7 @@ var LinearInterpolation = require('./LinearInterpolation');
     * </ul>
     * @member toxi
     */
-    var	ExponentialInterpolation = function(exp) {
+    let	ExponentialInterpolation = function(exp) {
         this.exponent = (exp === undefined) ? 2 : exp;
     };
 
@@ -13479,14 +13479,14 @@ var LinearInterpolation = require('./LinearInterpolation');
 
 
 },{}],118:[function(require,module,exports){
-var internals = require('../internals');
+let internals = require('../internals');
 
     /**
     * @class Implementations of 2D interpolation functions (currently only bilinear).
     * @member toxi
     * @static
     */
-    var Interpolation2D = {};
+    let Interpolation2D = {};
     /**
     * @param {Number} x
     *            x coord of point to filter (or Vec2D p)
@@ -13511,7 +13511,7 @@ var internals = require('../internals');
     * @return {Number} interpolated value
     */
     Interpolation2D.bilinear = function(_x, _y, _x1,_y1, _x2, _y2, _tl, _tr, _bl, _br) {
-        var x,y,x1,y1,x2,y2,tl,tr,bl,br;
+        let x,y,x1,y1,x2,y2,tl,tr,bl,br;
         if( internals.has.XY( _x ) ) //if the first 3 params are passed in as Vec2Ds
         {
             x = _x.x;
@@ -13539,11 +13539,11 @@ var internals = require('../internals');
             bl = _bl;
             br = _br;
         }
-        var denom = 1.0 / ((x2 - x1) * (y2 - y1));
-        var dx1 = (x - x1) * denom;
-        var dx2 = (x2 - x) * denom;
-        var dy1 = y - y1;
-        var dy2 = y2 - y;
+        let denom = 1.0 / ((x2 - x1) * (y2 - y1));
+        let dx1 = (x - x1) * denom;
+        let dx2 = (x2 - x) * denom;
+        let dy1 = y - y1;
+        let dy2 = y2 - y;
         return (tl * dx2 * dy2 + tr * dx1 * dy2 + bl * dx2 * dy1 + br* dx1 * dy1);
     };
 
@@ -13558,8 +13558,8 @@ var internals = require('../internals');
     * i = a + ( b - a ) * f
     * @member toxi
     */
-    var	LinearInterpolation = function(){};
-    var interpolate = function(a, b, f) {
+    let	LinearInterpolation = function(){};
+    let interpolate = function(a, b, f) {
         return a + (b - a) * f;
     };
 
@@ -13574,11 +13574,11 @@ var internals = require('../internals');
 },{}],120:[function(require,module,exports){
 
 
-var mathUtils = require('./mathUtils'),
+let mathUtils = require('./mathUtils'),
     LinearInterpolation = require('./LinearInterpolation');
 
 
-var _Range = function(min,max){
+let _Range = function(min,max){
 	this.min = min;
 	this.max = max;
 };
@@ -13602,9 +13602,9 @@ _Range.prototype.toString = function(){
  * @param {Number} minOut
  * @param {Number} maxOut
  */ 
-var ScaleMap = function(minIn, maxIn, minOut, maxOut) {
+let ScaleMap = function(minIn, maxIn, minOut, maxOut) {
 	if(arguments.length == 1 && arguments[0].input !== undefined && arguments[0].output !== undefined){ //opts object
-		var arg = arguments[0];
+		let arg = arguments[0];
 		minOut = arg.output.min;
 		maxOut = arg.output.max;
         maxIn = arg.input.max;
@@ -13626,7 +13626,7 @@ ScaleMap.prototype = {
      * @return mapped value
      */
    getClippedValueFor: function(val) {
-        var t = mathUtils.clipNormalized( ((val - this._in.min) / this._interval));
+        let t = mathUtils.clipNormalized( ((val - this._in.min) / this._interval));
         return this.mapFunction.interpolate(0, this.mapRange, t) + this._out.min;
     },
 
@@ -13661,7 +13661,7 @@ ScaleMap.prototype = {
      * @return mapped value
      */
     getMappedValueFor: function(val) {
-        var t = ((val - this._in.min) / this._interval);
+        let t = ((val - this._in.min) / this._interval);
         return this.mapFunction.interpolate(0,  this.mapRange, t) + this._out.min;
     },
 
@@ -13727,14 +13727,14 @@ module.exports = ScaleMap;
     * @class Initializes the s-curve with default sharpness = 2
     * @member toxi
     */
-    var	SigmoidInterpolation = function(s) {
+    let	SigmoidInterpolation = function(s) {
         if(s === undefined){
             s = 2.0;
         }
         this.setSharpness(s);
     };
 
-    var interpolate = function( a, b, f, sharpness ){
+    let interpolate = function( a, b, f, sharpness ){
         f = (f * 2 - 1) * sharpness;
         f = (1.0 / (1.0 + Math.exp(-f)));
         return a + (b - a) * f;
@@ -13762,17 +13762,17 @@ module.exports = ScaleMap;
 
 
 },{}],122:[function(require,module,exports){
-var mathUtils = require('./mathUtils');
+let mathUtils = require('./mathUtils');
 
 
     /**
-    * @class Lookup table for fast sine & cosine computations. Tables with varying
+    * @class Lookup table for fast sine & cosine computations. Tables with letying
     * precisions can be created to which input angles will be rounded to. The
     * sin/cos methods can be used with both positive and negative input angles as
     * with the normal Math.sin()/Math.cos() versions.
     * @member toxi
     */
-    var SinCosLUT = function(precision) {
+    let SinCosLUT = function(precision) {
         if(!precision){
             precision = SinCosLUT.DEFAULT_PRECISION;
         }
@@ -13782,7 +13782,7 @@ var mathUtils = require('./mathUtils');
         this.deg2rad = (Math.PI / 180.0) * this.precision;
         this.rad2deg = (180.0 / Math.PI) / this.precision;
         this.sinLUT = [];
-        for(var i=0;i< this.period;i++){
+        for(let i=0;i< this.period;i++){
             this.sinLUT[i] = Math.sin(i*this.deg2rad);
         }
     };
@@ -13850,11 +13850,11 @@ var mathUtils = require('./mathUtils');
     * factors &lt; threshold and the max value for all others.
     * @member toxi
     */
-    var	ThresholdInterpolation = function(threshold) {
+    let	ThresholdInterpolation = function(threshold) {
         this.threshold = threshold;
     };
 
-    var interpolate = function(a, b, f, threshold) {
+    let interpolate = function(a, b, f, threshold) {
         return f < threshold ? a : b;
     };
 
@@ -13871,8 +13871,8 @@ var mathUtils = require('./mathUtils');
 
 
 },{}],124:[function(require,module,exports){
-var mathUtils = require('./mathUtils');
-var CircularInterpolation = require('./CircularInterpolation');
+let mathUtils = require('./mathUtils');
+let CircularInterpolation = require('./CircularInterpolation');
 
 
     /**
@@ -13881,7 +13881,7 @@ var CircularInterpolation = require('./CircularInterpolation');
     * have a look at the provided ScaleMapDataViz and ZoomLens examples.
     * @member toxi
     */
-    var	ZoomLensInterpolation = function(lensPos, lensStrength) {
+    let	ZoomLensInterpolation = function(lensPos, lensStrength) {
         this.leftImpl = new CircularInterpolation();
         this.rightImpl = new CircularInterpolation();
         this.lensPos = lensPos || 0.5;
@@ -13893,7 +13893,7 @@ var CircularInterpolation = require('./CircularInterpolation');
 
     ZoomLensInterpolation.prototype = {
         interpolate: function(min,max,t) {
-            var val = min + (max - min) * t;
+            let val = min + (max - min) * t;
             if (t < this.lensPos) {
                 val += (this.leftImpl.interpolate(min, min + (max - min) * this.lensPos, t/ this.lensPos) - val)* this.absStrength;
             } else {
@@ -13926,7 +13926,7 @@ var CircularInterpolation = require('./CircularInterpolation');
     * @member toxi
     * @description math utilities
     */
-    var MathUtils = {};
+    let MathUtils = {};
     MathUtils.SQRT2 = Math.sqrt(2);
     MathUtils.SQRT3 = Math.sqrt(3);
     MathUtils.LOG2 = Math.log(2);
@@ -13970,7 +13970,7 @@ var CircularInterpolation = require('./CircularInterpolation');
     * @return power^2 value
     */
     MathUtils.ceilPowerOf2 = function(x) {
-        var pow2 = 1;
+        let pow2 = 1;
         while (pow2 < x) {
             pow2 <<= 1;
         }
@@ -14038,7 +14038,7 @@ var CircularInterpolation = require('./CircularInterpolation');
     */
 
     MathUtils.floor = function(x) {
-        var y = ~~(x);
+        let y = ~~(x);
         if (x < 0 && x != y) {
             y--;
         }
@@ -14144,7 +14144,7 @@ module.exports = {
 },{"./noise/PerlinNoise":127,"./noise/simplexNoise":128}],127:[function(require,module,exports){
 
 
-var SinCosLUT = require('../SinCosLUT'),
+let SinCosLUT = require('../SinCosLUT'),
     hasTypedArrays = require('../../internals/has').typedArrays();
 
 /*
@@ -14191,7 +14191,7 @@ Using David Bau's seedrandom.js for PerlinNoise#noiseSeed functionality
  * @param {number=} startdenom
  * @api private
  */
- var internalMath = {};
+ let internalMath = {};
  internalMath.pow = Math.pow; //used by seed generator
  internalMath.random = Math.random; //start with the default random generator
 (function (pool, math, width, chunks, significance, overflow, startdenom) {
@@ -14202,8 +14202,8 @@ Using David Bau's seedrandom.js for PerlinNoise#noiseSeed functionality
 	This is the seedrandom function described above.
 */
 math['seedrandom'] = function seedrandom(seed, use_entropy) {
-	var key = [];
-	var arc4;
+	let key = [];
+	let arc4;
 
 	// Flatten the seed string or build one from local entropy if needed.
 	seed = mixkey(flatten(
@@ -14223,9 +14223,9 @@ math['seedrandom'] = function seedrandom(seed, use_entropy) {
 	// randomness in every bit of the mantissa of the IEEE 754 value.
 
 	math['random'] = function random() {  // Closure to return a random double:
-		var n = arc4.g(chunks);             // Start with a numerator n < 2 ^ 48
-		var d = startdenom;                 //   and denominator d = 2 ^ 48.
-		var x = 0;                          //   and no 'extra last byte'.
+		let n = arc4.g(chunks);             // Start with a numerator n < 2 ^ 48
+		let d = startdenom;                 //   and denominator d = 2 ^ 48.
+		let x = 0;                          //   and no 'extra last byte'.
 		while (n < significance) {          // Fill up all significant digits by
 			n = (n + x) * width;              //   shifting numerator and
 			d *= width;                       //   denominator and generating a
@@ -14245,8 +14245,8 @@ math['seedrandom'] = function seedrandom(seed, use_entropy) {
 
 /** @constructor */
 function ARC4(key) {
-	var t, u, me = this, keylen = key.length;
-	var i = 0, j = me.i = me.j = me.m = 0;
+	let t, u, me = this, keylen = key.length;
+	let i = 0, j = me.i = me.j = me.m = 0;
 	me.S = [];
 	me.c = [];
 
@@ -14265,12 +14265,12 @@ function ARC4(key) {
 
 	// The "g" method returns the next (count) outputs as one number.
 	me.g = function getnext(count) {
-		var s = me.S;
-		var i = lowbits(me.i + 1); var t = s[i];
-		var j = lowbits(me.j + t); var u = s[j];
+		let s = me.S;
+		let i = lowbits(me.i + 1); let t = s[i];
+		let j = lowbits(me.j + t); let u = s[j];
 		s[i] = u;
 		s[j] = t;
-		var r = s[lowbits(t + u)];
+		let r = s[lowbits(t + u)];
 		while (--count) {
 			i = lowbits(i + 1); t = s[i];
 			j = lowbits(j + t); u = s[j];
@@ -14364,15 +14364,15 @@ mixkey(math.random(), pool);
 		implementation by the german demo group farbrausch
 		as used in their demo "art": http://www.farb-rausch.de/fr010src.zip
 	*/
-	var PERLIN_YWRAPB = 4,
+	let PERLIN_YWRAPB = 4,
 		PERLIN_YWRAP = 1 << PERLIN_YWRAPB,
 		PERLIN_ZWRAPB = 8,
 		PERLIN_ZWRAP = 1 << PERLIN_ZWRAPB,
 		PERLIN_SIZE = 4095,
 		PERLIN_MIN_AMPLITUDE = 0.001;
 	/** @api private */
-	var	_noise_fsc = function(self, i){
-		var index = ((i + 0.5) * self._perlin_PI) % self._perlin_TWOPI;
+	let	_noise_fsc = function(self, i){
+		let index = ((i + 0.5) * self._perlin_PI) % self._perlin_TWOPI;
 		return 0.5 * (1.0 - self._perlin_cosTable[index]);
 	};
 
@@ -14380,7 +14380,7 @@ mixkey(math.random(), pool);
 	 * @module toxi/math/noise/PerlinNoise
 	 * @api public
 	 */
-	var	PerlinNoise = function(){
+	let	PerlinNoise = function(){
 		this._perlin_octaves = 4; // default to medium smooth
 		this._perlin_amp_falloff = 0.5; // 50% reduction/octave
         this._sinCosLUT = SinCosLUT.getDefaultInstance();
@@ -14395,14 +14395,14 @@ mixkey(math.random(), pool);
 		@param [z=0] z is optional
 		*/
 		noise: function(x,y,z){
-			var i = 0;
+			let i = 0;
 			x = x || 0;
 			y = y || 0;
 			z = z || 0;
 
 			if(!this._perlin){
                 this._perlin = hasTypedArrays ? new Float32Array( PERLIN_SIZE ) : [];
-				var length = PERLIN_SIZE - 1;
+				let length = PERLIN_SIZE - 1;
 				for(i = 0;i < PERLIN_SIZE + 1; i++){
 					this._perlin[i] = internalMath.random();
 				}
@@ -14422,7 +14422,7 @@ mixkey(math.random(), pool);
 				z = -z;
 			}
 
-			var xi = x,
+			let xi = x,
 				yi = y,
 				zi = z,
 				xf = (x - xi),
@@ -14514,8 +14514,8 @@ mixkey(math.random(), pool);
 },{"../../internals/has":105,"../SinCosLUT":122}],128:[function(require,module,exports){
 
 
-var each = require('../../internals/each');
-var has = require('../../internals/has');
+let each = require('../../internals/each');
+let has = require('../../internals/has');
 
 
 /**
@@ -14528,14 +14528,14 @@ var has = require('../../internals/has');
  * @author Kyle Phillips (kyle at haptic-data dot com)
 */
 
-var _SQRT3 = Math.sqrt(3.0),
+let _SQRT3 = Math.sqrt(3.0),
 	_SQRT5 = Math.sqrt(5.0);
 
 /**
  * Skewing and unskewing factors for 2D, 3D and 4D, some of them
  * pre-multiplied.
  */
-var	_F2 = 0.5 * (_SQRT3 - 1.0),
+let	_F2 = 0.5 * (_SQRT3 - 1.0),
 	_G2 = (3.0 - _SQRT3) / 6.0,
 	_G22 = _G2 * 2.0 - 1,
 
@@ -14553,7 +14553,7 @@ var	_F2 = 0.5 * (_SQRT3 - 1.0),
 * Gradient vectors for 3D (pointing to mid points of all edges of a unit
 * cube)
 */
-var	_grad3 = [
+let	_grad3 = [
     [1, 1, 0 ],
     [ -1, 1, 0 ],
     [ 1, -1, 0 ],
@@ -14573,7 +14573,7 @@ var	_grad3 = [
 * Gradient vectors for 4D (pointing to mid points of all edges of a unit 4D
 * hypercube)
 */
-var	_grad4 = [
+let	_grad4 = [
     [ 0, 1, 1, 1 ],
     [ 0, 1, 1, -1 ],
     [ 0, 1, -1, 1 ],
@@ -14611,7 +14611,7 @@ var	_grad4 = [
 	/**
 	 * Permutation table
 	 */
-var	_p = [
+let	_p = [
     151, 160, 137, 91, 90, 15, 131, 13, 201,
     95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37,
     240, 21, 10, 23, 190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62,
@@ -14636,9 +14636,9 @@ var	_p = [
 	 * To remove the need for index wrapping, double the permutation table
 	 * length
 	 */
-var	_perm = (function(){
-		var _per = has.typedArrays() ? new Int32Array(0x200) : [];
-		for (var i = 0; i < 0x200; i++) {
+let	_perm = (function(){
+		let _per = has.typedArrays() ? new Int32Array(0x200) : [];
+		for (let i = 0; i < 0x200; i++) {
 			_per[i] = _p[i & 0xff];
 		}
 		return _per;
@@ -14649,7 +14649,7 @@ var	_perm = (function(){
 	 * A lookup table to traverse the simplex around a given point in 4D.
 	 * Details can be found where this table is used, in the 4D noise method.
 	 */
-var	_simplex = [
+let	_simplex = [
 		[ 0, 1, 2, 3 ], [ 0, 1, 3, 2 ],
 		[ 0, 0, 0, 0 ], [ 0, 2, 3, 1 ], [ 0, 0, 0, 0 ], [ 0, 0, 0, 0 ],
 		[ 0, 0, 0, 0 ], [ 1, 2, 3, 0 ], [ 0, 2, 1, 3 ], [ 0, 0, 0, 0 ],
@@ -14672,8 +14672,8 @@ var	_simplex = [
 //if this environment supports typed arrays
 //convert our arrays over for massive perf gain!
 if( has.typedArrays() ){
-    var makeEachTypedArray = function(arr){
-        var _g = [];
+    let makeEachTypedArray = function(arr){
+        let _g = [];
         each( arr, function(g){
             _g.push( new Int32Array(g) );
         });
@@ -14701,8 +14701,8 @@ if( has.typedArrays() ){
 	* @return {Number} dot product
 	* @api private
 	*/
-var	_dot = function(g, x, y, z, w) {
-		var n = g[0] * x + g[1] * y;
+let	_dot = function(g, x, y, z, w) {
+		let n = g[0] * x + g[1] * y;
 		if(z){
 			n += g[2] * z;
 			if(w){
@@ -14718,7 +14718,7 @@ var	_dot = function(g, x, y, z, w) {
 	* @return {Number}
 	* @api private
 	*/
-var	_fastfloor = function(x) {
+let	_fastfloor = function(x) {
 		return (x >= 0) ? Math.floor(x) : Math.floor(x - 1);
 	};
 
@@ -14727,7 +14727,7 @@ var	_fastfloor = function(x) {
 	 * @module toxi/math/noise/simplexNoise
 	 * @api public
 	 */
-var	SimplexNoise = { //SimplexNoise only consists of static methods
+let	SimplexNoise = { //SimplexNoise only consists of static methods
 	/**
 	* Computes 4D Simplex Noise.
 	* @param {Number} [x] coordinate
@@ -14738,14 +14738,14 @@ var	SimplexNoise = { //SimplexNoise only consists of static methods
 	*/
 	noise: function(x, y, z, w) {
 		//Noise contributions from five corners, we may use as few as 3 of them (depending on arguments)
-		var numArgs = arguments.length,
+		let numArgs = arguments.length,
 			n0 = 0,
 			n1 = 0,
 			n2 = 0,
 			n3 = 0,
 			n4 = 0;
 			//skew the input space to determin which simplex cell we're in
-		var	s = (function(){
+		let	s = (function(){
 				switch(numArgs){
 					case 2:
 					return (x + y) * _F2; //Hairy factor for 2d
@@ -14762,7 +14762,7 @@ var	SimplexNoise = { //SimplexNoise only consists of static methods
 			k = (z !== undefined) ? _fastfloor(z + s) : undefined,
 			l = (w !== undefined) ? _fastfloor(w + s) : undefined;
 			//unskew
-		var	t = (function(){
+		let	t = (function(){
 				switch(numArgs){
 					case 2:
 					return (i + j) * _G2;
@@ -14781,7 +14781,7 @@ var	SimplexNoise = { //SimplexNoise only consists of static methods
 			if(numArgs == 2){
 				//for the 2d case, the simplex shape is an equilateral triangle.
 				return (function(){
-					var i1, j1, //offsets for scond (middle) corner of simplex (i,j)
+					let i1, j1, //offsets for scond (middle) corner of simplex (i,j)
 						x1, y1,
 						x2, y2,
 						ii,
@@ -14818,7 +14818,7 @@ var	SimplexNoise = { //SimplexNoise only consists of static methods
 						n0 = t0 * t0 * _dot(_grad3[gi0], x0, y0); // (x,y) of grad3 used for
 						// 2D gradient
 					}
-					var t1 = 0.5 - x1 * x1 - y1 * y1;
+					let t1 = 0.5 - x1 * x1 - y1 * y1;
 					if (t1 > 0) {
 						t1 *= t1;
 						gi1 = _perm[ii + i1 + _perm[jj + j1]] % 12;
@@ -14837,7 +14837,7 @@ var	SimplexNoise = { //SimplexNoise only consists of static methods
 			} else if(numArgs == 3){
 				//for the 3d case, the simplex shape is a slightly irregular tetrahedron
 				return (function(){
-					var i1, j1, k1, // Offsets for second corner of simplex in (i,j,k)
+					let i1, j1, k1, // Offsets for second corner of simplex in (i,j,k)
 						// coords
 						i2, j2, k2, // Offsets for third corner of simplex in (i,j,k) coords
 						x1,y1,z1,
@@ -14965,7 +14965,7 @@ var	SimplexNoise = { //SimplexNoise only consists of static methods
 				// pair of the four coordinates, and the results are used to add up
 				// binary bits for an integer index.
 				return (function(){
-					var i1,j1,k1,l1, // The integer offsets for the second simplex corner
+					let i1,j1,k1,l1, // The integer offsets for the second simplex corner
 						i2,j2,k2,l2, // The integer offsets for the third simplex corner
 						i3,j3,k3,l3, // The integer offsets for the fourth simplex corner
 						// simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some
@@ -14976,7 +14976,7 @@ var	SimplexNoise = { //SimplexNoise only consists of static methods
 						// array is at the position of the largest coordinate.
 						sc = _simplex[
 							(function(){
-								var c = 0;
+								let c = 0;
 								if (x0 > y0) {
 									c = 0x20;
 								}
@@ -15126,14 +15126,14 @@ module.exports = {
 },{"./waves/AMFMSineWave":130,"./waves/AbstractWave":131,"./waves/ConstantWave":132,"./waves/FMHarmonicSquareWave":133,"./waves/FMSawtoothWave":134,"./waves/FMSineWave":135,"./waves/FMSquareWave":136,"./waves/FMTriangleWave":137,"./waves/SineWave":138,"./waves/WaveState":139}],130:[function(require,module,exports){
 
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	AbstractWave = require('./AbstractWave');
 
 /**
  * @module toxi/math/waves/AMFMSineWave
  * @augments toxi/math/waves/AbstractWave
  */
-var	AMFMSineWave = function(a,b,c,d,e){
+let	AMFMSineWave = function(a,b,c,d,e){
 	if(typeof c == "number"){
 		AbstractWave.call(this,a,b,1,c);
 		this.amod = d;
@@ -15196,8 +15196,8 @@ module.exports = AMFMSineWave;
 },{"../../internals":98,"./AbstractWave":131}],131:[function(require,module,exports){
 
 
-var WaveState = require('./WaveState');
-var defaultNumberTo = function( i, num ){
+let WaveState = require('./WaveState');
+let defaultNumberTo = function( i, num ){
     return typeof i === 'number' ? i : num;
 };
 
@@ -15209,7 +15209,7 @@ var defaultNumberTo = function( i, num ){
  * conversion methods to & from Hertz ({@link #hertzToRadians(float, float)})
  * are included in this base class.
  */
-var AbstractWave = function( phase, freq, amp, offset ){
+let AbstractWave = function( phase, freq, amp, offset ){
     if( typeof arguments[0] === 'object' && !freq && !amp && !offset ){
         //options object
         offset = phase.offset;
@@ -15252,7 +15252,7 @@ AbstractWave.prototype = {
 			console.log("no wave states on stack");
             return;
         }
-        var s = this.stateStack.pop();
+        let s = this.stateStack.pop();
         this.phase = s.phase;
         this.frequency = s.frequency;
         this.amp = s.amp;
@@ -15318,13 +15318,13 @@ module.exports = AbstractWave;
 
 },{"./WaveState":139}],132:[function(require,module,exports){
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	AbstractWave = require('./AbstractWave');
 /**
  * @module toxi/math/waves/ConstantWave
  * @augments toxi/math/waves/AbstractWave
  */
-var	ConstantWave = function(value) {
+let	ConstantWave = function(value) {
 	 AbstractWave.apply(this);
 	 this.value = value;
 };
@@ -15345,7 +15345,7 @@ module.exports = ConstantWave;
 },{"../../internals":98,"./AbstractWave":131}],133:[function(require,module,exports){
 
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	AbstractWave = require('./AbstractWave');
 
 /**
@@ -15363,7 +15363,7 @@ var extend = require('../../internals').extend,
  * </p>
  * @augments toxi/math/waves/AbstractWave
  */
-var	FMHarmonicSquareWave = function(a,b,c,d,e) {
+let	FMHarmonicSquareWave = function(a,b,c,d,e) {
 	this.maxHarmonics = 3;
 	if(typeof c == "number"){
 		if(e === undefined){
@@ -15409,7 +15409,7 @@ FMHarmonicSquareWave.prototype.reset = function() {
  */
 FMHarmonicSquareWave.prototype.update = function() {
     this.value = 0;
-    for (var i = 1; i <= this.maxHarmonics; i += 2) {
+    for (let i = 1; i <= this.maxHarmonics; i += 2) {
         this.value += 1.0 / i *  Math.sin(i * this.phase);
     }
     this.value *= this.amp;
@@ -15423,7 +15423,7 @@ module.exports = FMHarmonicSquareWave;
 
 },{"../../internals":98,"./AbstractWave":131}],134:[function(require,module,exports){
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	AbstractWave = require('./AbstractWave');
 
 
@@ -15431,7 +15431,7 @@ var extend = require('../../internals').extend,
  * @module toxi/math/waves/FMSawtoothWave
  * @augments toxi/math/waves/AbstractWave
  */
-var	FMSawtoothWave = function(a,b,c,d,e){
+let	FMSawtoothWave = function(a,b,c,d,e){
 	if(typeof c == "number") {
 		AbstractWave.call(this,a,b,c,d);
 		this.fmod = e;
@@ -15478,14 +15478,14 @@ module.exports = FMSawtoothWave;
 },{"../../internals":98,"./AbstractWave":131}],135:[function(require,module,exports){
 
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	AbstractWave = require('./AbstractWave');
 
 /**
  * @module toxi/math/waves/FMSineWave
  * @augments toxi/math/waves/AbstractWave
  */
-var	FMSineWave = function(a,b,c,d,e){
+let	FMSineWave = function(a,b,c,d,e){
 	if(typeof(c) == "number"){
 		AbstractWave.call(this,a,b,c,d);
 		this.fmod = e;
@@ -15528,7 +15528,7 @@ module.exports = FMSineWave;
 },{"../../internals":98,"./AbstractWave":131}],136:[function(require,module,exports){
 
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	AbstractWave = require('./AbstractWave'),
 	ConstantWave = require('./ConstantWave');
 
@@ -15536,7 +15536,7 @@ var extend = require('../../internals').extend,
  * @module toxi/math/waves/FMSquareWave
  * @augments toxi/math/waves/AbstractWave
  */
-var	FMSquareWave = function(a,b,c,d,e)
+let	FMSquareWave = function(a,b,c,d,e)
 {
 	if(typeof c == "number"){
 		if(e === undefined){
@@ -15584,7 +15584,7 @@ module.exports = FMSquareWave;
 },{"../../internals":98,"./AbstractWave":131,"./ConstantWave":132}],137:[function(require,module,exports){
 
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	mathUtils = require('../mathUtils'),
 	AbstractWave = require('./AbstractWave'),
 	ConstantWave = require('./ConstantWave');
@@ -15593,7 +15593,7 @@ var extend = require('../../internals').extend,
  * @module toxi/math/waves/FMTriangleWave
  * @augments toxi/math/waves/AbstractWave
  */
-var	FMTriangleWave = function(a,b,c,d,e){
+let	FMTriangleWave = function(a,b,c,d,e){
 	if(typeof c == "number"){
 		if(e !== undefined){
 			AbstractWave.call(this,a,b,c,d);
@@ -15639,7 +15639,7 @@ module.exports = FMTriangleWave;
 },{"../../internals":98,"../mathUtils":125,"./AbstractWave":131,"./ConstantWave":132}],138:[function(require,module,exports){
 
 
-var extend = require('../../internals').extend,
+let extend = require('../../internals').extend,
 	AbstractWave = require('./AbstractWave');
 
 /**
@@ -15652,7 +15652,7 @@ var extend = require('../../internals').extend,
  * @param {Number} [amp] amplitude
  * @param {Number} [offset] offset
  */
-var	SineWave = function(phase,freq,amp,offset) {
+let	SineWave = function(phase,freq,amp,offset) {
     AbstractWave.call(this, phase, freq, amp, offset);
 };
 
@@ -15676,7 +15676,7 @@ module.exports = SineWave;
 /**
  * @module toxi/math/waves/WaveState
  */
-var	WaveState = function(phase,frequency,amp,offset){
+let	WaveState = function(phase,frequency,amp,offset){
 	this.phase = phase;
 	this.frequency = frequency;
 	this.amp = amp;
@@ -15706,11 +15706,11 @@ module.exports.constraints = require('./physics2d/constraints');
 },{"./physics2d/ParticlePath2D":141,"./physics2d/ParticleString2D":142,"./physics2d/PullBackString2D":143,"./physics2d/VerletConstrainedSpring2D":144,"./physics2d/VerletMinDistanceSpring2D":145,"./physics2d/VerletParticle2D":146,"./physics2d/VerletPhysics2D":147,"./physics2d/VerletSpring2D":148,"./physics2d/behaviors":149,"./physics2d/constraints":153}],141:[function(require,module,exports){
 
 
-    var internals = require('../internals'),
+    let internals = require('../internals'),
         Spline2D = require('../geom/Spline2D'),
         VerletParticle2D = require('./VerletParticle2D');
 
-    var	ParticlePath2D = function(points){
+    let	ParticlePath2D = function(points){
         Spline2D.call(this,points);
         this.particles = [];
     };
@@ -15721,11 +15721,11 @@ module.exports.constraints = require('./physics2d/constraints');
     ParticlePath2D.prototype.createParticles = function(physics,subDiv,step,mass){
         this.particles = [];
         this.computeVertices(subDiv);
-        var i = 0;
-        var dv = this.getDecimatedVertices(step,true);
+        let i = 0;
+        let dv = this.getDecimatedVertices(step,true);
         for(i = 0; i < dv.length; i++){
-            var v = dv[i];
-            var p = new VerletParticle2D(v,mass);
+            let v = dv[i];
+            let p = new VerletParticle2D(v,mass);
             this.particles.push(p);
             physics.addParticle(p);
         }
@@ -15738,7 +15738,7 @@ module.exports.constraints = require('./physics2d/constraints');
 },{"../geom/Spline2D":64,"../internals":98,"./VerletParticle2D":146}],142:[function(require,module,exports){
 
 
-var VerletParticle2D = require('./VerletParticle2D'),
+let VerletParticle2D = require('./VerletParticle2D'),
 	VerletSpring2D = require('./VerletSpring2D');
 
 /**
@@ -15757,8 +15757,8 @@ method.
   6 - VerletPhysics2D physic, Vec2D pos, Vec2D step, Number num, Number mass, Number strength
   */
   
-var	ParticleString2D = function(){
-	var opts = {
+let	ParticleString2D = function(){
+	let opts = {
 		physics: undefined,
 		plist: undefined,
 		pos: undefined,
@@ -15771,8 +15771,8 @@ var	ParticleString2D = function(){
 	if(arguments.length === 0){
 		throw new Error("Incorrect Parameters");
 	} else if(arguments.length == 1){ //options object
-		var arg = arguments[0];
-		for(var prop in arg){
+		let arg = arguments[0];
+		for(let prop in arg){
 			opts[prop] = arg[prop];
 		}
 	} else {
@@ -15799,7 +15799,7 @@ var	ParticleString2D = function(){
 	this.physics = opts.physics;
 	this.links = [];
 	
-	var prev,
+	let prev,
 		p,
 		s,
 		strength,
@@ -15807,7 +15807,7 @@ var	ParticleString2D = function(){
 	
 	
 	if(is6ParamConstructor){
-		var pos = opts.pos.copy(),
+		let pos = opts.pos.copy(),
 			step = opts.step,
 			mass = opts.mass,
 			len = step.magnitude();
@@ -15845,7 +15845,7 @@ var	ParticleString2D = function(){
  }; 
 ParticleString2D.prototype = {
 	clear: function(){
-		for(var i = 0, len = this.links.length; i < len; i++){
+		for(let i = 0, len = this.links.length; i < len; i++){
 			this.physics.removeSpringElements(this.links[i]);
 		}
 		this.particles = [];
@@ -15874,7 +15874,7 @@ module.exports = ParticleString2D;
 },{"./VerletParticle2D":146,"./VerletSpring2D":148}],143:[function(require,module,exports){
 
 
-var internals = require('../internals'),
+let internals = require('../internals'),
 	VerletSpring2D = require('./VerletSpring2D');
 
 /**
@@ -15884,7 +15884,7 @@ var internals = require('../internals'),
 * behaviour is the opposite to the {@link VerletMinDistanceSpring2D}.
 */
  
- var PullBackString2D = function(a,b,strength){
+ let PullBackString2D = function(a,b,strength){
 	VerletSpring2D.apply(this,[a,b,0,strength]);
 	a.lock();
 	this.setRestLength(0.5);
@@ -15903,10 +15903,10 @@ var internals = require('../internals'),
 },{"../internals":98,"./VerletSpring2D":148}],144:[function(require,module,exports){
 
 
-var internals = require('../internals'),
+let internals = require('../internals'),
     VerletSpring2D = require('./VerletSpring2D');
 
-var VerletConstrainedSpring2D = function(particleA, particleB, len, str, limit){
+let VerletConstrainedSpring2D = function(particleA, particleB, len, str, limit){
 	VerletSpring2D.call(this,particleA,particleB,len,str);
 	this.limit = (limit === undefined) ? Number.MAX_VALUE : limit;
 };
@@ -15914,10 +15914,10 @@ var VerletConstrainedSpring2D = function(particleA, particleB, len, str, limit){
 internals.extend(VerletConstrainedSpring2D,VerletSpring2D);
 
 VerletConstrainedSpring2D.update = function(applyConstraints){
-	var delta = this.b.sub(this.a);
+	let delta = this.b.sub(this.a);
     // add minute offset to avoid div-by-zero errors
-    var dist = delta.magnitude() + VerletSpring2D.EPS;
-    var normDistStrength = (dist - this.restLength) / (dist * (this.a.invWeight + this.b.invWeight))* this.strength;
+    let dist = delta.magnitude() + VerletSpring2D.EPS;
+    let normDistStrength = (dist - this.restLength) / (dist * (this.a.invWeight + this.b.invWeight))* this.strength;
     if (!this.a.isLocked && !this.isALocked) {
         this.a.addSelf(delta.scale(normDistStrength * this.a.invWeight).limit(this.limit));
         if (applyConstraints) {
@@ -15938,10 +15938,10 @@ module.exports = VerletConstrainedSpring2D;
 },{"../internals":98,"./VerletSpring2D":148}],145:[function(require,module,exports){
 
 
-var internals = require('../internals'),
+let internals = require('../internals'),
 	VerletSpring2D = require('./VerletSpring2D');
 
-var	VerletMinDistanceSpring2D = function(particleA,particleB,len,str){
+let	VerletMinDistanceSpring2D = function(particleA,particleB,len,str){
 	VerletSpring2D.call(this,particleA,particleB,len,str);
 	this.setRestLength(len);
 };
@@ -15960,10 +15960,10 @@ module.exports = VerletMinDistanceSpring2D;
 },{"../internals":98,"./VerletSpring2D":148}],146:[function(require,module,exports){
 
 
-var internals = require('../internals'),
+let internals = require('../internals'),
 	Vec2D = require('../geom/Vec2D');
 
-var	VerletParticle2D = function(x,y,w){
+let	VerletParticle2D = function(x,y,w){
 	this.force = new Vec2D();
 	if( internals.has.XY( x ) ){
 		if( internals.is.VerletParticle2D( x ) ){
@@ -16026,7 +16026,7 @@ VerletParticle2D.prototype.addVelocity = function(v){
 
 VerletParticle2D.prototype.applyBehaviors = function(){
 	if(this.behaviors !== undefined){
-		var i = 0, len = this.behaviors.length;
+		let i = 0, len = this.behaviors.length;
 		for(i = 0;i<len;i++){
 			this.behaviors[i].applyBehavior(this);
 		}
@@ -16035,7 +16035,7 @@ VerletParticle2D.prototype.applyBehaviors = function(){
 
 VerletParticle2D.prototype.applyConstraints = function(){
 	if(this.constraints !== undefined){
-		var i = 0, len = this.constraints.length;
+		let i = 0, len = this.constraints.length;
 		for(i =0;i<len;i++){
 			this.constraints[i].applyConstraint(this);
 		}
@@ -16133,19 +16133,19 @@ module.exports = VerletParticle2D;
 },{"../geom/Vec2D":70,"../internals":98}],147:[function(require,module,exports){
 
 
-    var internals = require('../internals'),
+    let internals = require('../internals'),
         GravityBehavior = require('./behaviors/GravityBehavior'),
         Rect = require('../geom/Rect'),
         Vec2D = require('../geom/Vec2D'),
         id = 0;
 
-    var VerletPhysics2D = function(gravity, numIterations, drag, timeStep) {
-        var opts = {
+    let VerletPhysics2D = function(gravity, numIterations, drag, timeStep) {
+        let opts = {
             numIterations: 50,
             drag: 0,
             timeStep: 1
         };
-        var a;
+        let a;
         if( arguments.length == 1 && (arguments[0].gravity || arguments[0].numIterations || arguments[0].timeStep || arguments[0].drag) ){ //options object literal
             a = arguments[0];
             opts.gravity = a.gravity;
@@ -16177,13 +16177,13 @@ module.exports = VerletParticle2D;
     };
 
     VerletPhysics2D.addConstraintToAll = function(c, list){
-        for(var i=0;i<list.length;i++){
+        for(let i=0;i<list.length;i++){
             list[i].addConstraint(c);
         }
     };
 
     VerletPhysics2D.removeConstraintFromAll = function(c,list){
-        for(var i=0;i<list.length;i++){
+        for(let i=0;i<list.length;i++){
             list[i].removeConstraint(c);
         }
     };
@@ -16214,7 +16214,7 @@ module.exports = VerletParticle2D;
         },
 
         constrainToBounds: function(){ //protected
-            var p,
+            let p,
                 i = 0,
                 len = this.particles.length;
             for(i=0; i<len; i++){
@@ -16232,9 +16232,9 @@ module.exports = VerletParticle2D;
         },
 
         getCurrentBounds: function(){
-            var min = new Vec2D(Number.MAX_VALUE, Number.MAX_VALUE);
-            var max = new Vec2D(Number.MIN_VALUE, Number.MIN_VALUE);
-            var i = 0,
+            let min = new Vec2D(Number.MAX_VALUE, Number.MAX_VALUE);
+            let max = new Vec2D(Number.MIN_VALUE, Number.MIN_VALUE);
+            let i = 0,
                 pLen = this.particles.length,
                 p;
             for(; i<pLen; i++){
@@ -16254,10 +16254,10 @@ module.exports = VerletParticle2D;
         },
 
         getSpring: function(a,b){
-            var i = 0,
+            let i = 0,
                 sLen = this.springs.length;
             for(; i<sLen; i++){
-                var s = this.springs[i];
+                let s = this.springs[i];
                 if((s.a === a && s.b === b) || (s.a === b && s.b === b)){
                     return s;
                 }
@@ -16302,7 +16302,7 @@ module.exports = VerletParticle2D;
 
         setTimeStep: function(timeStep){
             this.timeStep = timeStep;
-            var i =0, l = this.behaviors.length;
+            let i =0, l = this.behaviors.length;
             for(; i<l; i++){
                 this.behaviors[i].configure(timeStep);
             }
@@ -16321,7 +16321,7 @@ module.exports = VerletParticle2D;
         },
 
         updateParticles: function(){
-            var i = 0,
+            let i = 0,
                 j = 0,
                 bLen = this.behaviors.length,
                 pLen = this.particles.length,
@@ -16341,7 +16341,7 @@ module.exports = VerletParticle2D;
         },
 
         updateSprings: function(){
-            var i = this.numIterations,
+            let i = this.numIterations,
                 sLen = this.springs.length,
                 j = 0;
             for(; i > 0; i--){
@@ -16357,7 +16357,7 @@ module.exports = VerletParticle2D;
 
 },{"../geom/Rect":62,"../geom/Vec2D":70,"../internals":98,"./behaviors/GravityBehavior":152}],148:[function(require,module,exports){
 
-var	VerletSpring2D = function(a,b,len,str){
+let	VerletSpring2D = function(a,b,len,str){
 	this.a = a;
 	this.b = b;
 	this.restLength = len;
@@ -16397,10 +16397,10 @@ VerletSpring2D.prototype = {
 	},
 	
 	update: function(applyConstraints){ //protected
-		var delta = this.b.sub(this.a);
+		let delta = this.b.sub(this.a);
 		//add minute offset to avoid div-by-zero errors
-		var dist = delta.magnitude() + VerletSpring2D.EPS;
-		var normDistStrength = (dist - this.restLength) / (dist * (this.a.invWeight + this.b.invWeight)) * this.strength;
+		let dist = delta.magnitude() + VerletSpring2D.EPS;
+		let normDistStrength = (dist - this.restLength) / (dist * (this.a.invWeight + this.b.invWeight)) * this.strength;
 		if(!this.a.isLocked && !this.isALocked){
 			this.a.addSelf(
 				delta.scale(normDistStrength * this.a.invWeight)
@@ -16424,9 +16424,9 @@ module.exports = VerletSpring2D;
 
 
 },{}],149:[function(require,module,exports){
-var AttractionBehavior = require('./behaviors/AttractionBehavior');
-var ConstantForceBehavior = require('./behaviors/ConstantForceBehavior');
-var GravityBehavior = require('./behaviors/GravityBehavior');
+let AttractionBehavior = require('./behaviors/AttractionBehavior');
+let ConstantForceBehavior = require('./behaviors/ConstantForceBehavior');
+let GravityBehavior = require('./behaviors/GravityBehavior');
     exports.AttractionBehavior = AttractionBehavior;
     exports.ConstantForceBehavior = ConstantForceBehavior;
     exports.GravityBehavior = GravityBehavior;
@@ -16434,7 +16434,7 @@ var GravityBehavior = require('./behaviors/GravityBehavior');
 
 },{"./behaviors/AttractionBehavior":150,"./behaviors/ConstantForceBehavior":151,"./behaviors/GravityBehavior":152}],150:[function(require,module,exports){
 
-    var AttractionBehavior = function(attractor,radius,strength,jitter){
+    let AttractionBehavior = function(attractor,radius,strength,jitter){
         if(arguments.length < 3){
             throw new Error("Constructor received incorrect Parameters");
         }
@@ -16446,10 +16446,10 @@ var GravityBehavior = require('./behaviors/GravityBehavior');
 
     AttractionBehavior.prototype = {
         applyBehavior: function(p){ //apply() is reserved, so this is now applyBehavior
-            var delta = this.attractor.sub(p);
-            var dist = delta.magSquared();
+            let delta = this.attractor.sub(p);
+            let dist = delta.magSquared();
             if(dist < this.radiusSquared){
-                var f = delta.normalizeTo((1.0 - dist / this.radiusSquared)).jitter(this.jitter).scaleSelf(this.attrStrength);
+                let f = delta.normalizeTo((1.0 - dist / this.radiusSquared)).jitter(this.jitter).scaleSelf(this.attrStrength);
                 p.addForce(f);
             }
         },
@@ -16501,9 +16501,9 @@ var GravityBehavior = require('./behaviors/GravityBehavior');
 },{}],151:[function(require,module,exports){
 
 
-    var Vec2D = require('../../geom/Vec2D');
+    let Vec2D = require('../../geom/Vec2D');
 
-    var	ConstantForceBehavior = function(force){
+    let	ConstantForceBehavior = function(force){
         this.force = force;
         this.scaledForce = new Vec2D();
         this.timeStep = 0;
@@ -16539,10 +16539,10 @@ var GravityBehavior = require('./behaviors/GravityBehavior');
 },{"../../geom/Vec2D":70}],152:[function(require,module,exports){
 
 
-    var internals = require('../../internals'),
+    let internals = require('../../internals'),
         ConstantForceBehavior = require('./ConstantForceBehavior');
 
-    var	GravityBehavior = function(gravityVec){
+    let	GravityBehavior = function(gravityVec){
         ConstantForceBehavior.call(this,gravityVec);
     };
 
@@ -16557,12 +16557,12 @@ var GravityBehavior = require('./behaviors/GravityBehavior');
 
 
 },{"../../internals":98,"./ConstantForceBehavior":151}],153:[function(require,module,exports){
-var AngularConstraint = require('./constraints/AngularConstraint');
-var AxisConstraint = require('./constraints/AxisConstraint');
-var CircularConstraint = require('./constraints/CircularConstraint');
-var MaxConstraint = require('./constraints/MaxConstraint');
-var MinConstraint = require('./constraints/MinConstraint');
-var RectConstraint = require('./constraints/RectConstraint');
+let AngularConstraint = require('./constraints/AngularConstraint');
+let AxisConstraint = require('./constraints/AxisConstraint');
+let CircularConstraint = require('./constraints/CircularConstraint');
+let MaxConstraint = require('./constraints/MaxConstraint');
+let MinConstraint = require('./constraints/MinConstraint');
+let RectConstraint = require('./constraints/RectConstraint');
     /** @module toxi/physics2d/constraints */
 	exports.AngularConstraint = AngularConstraint;
 	exports.AxisConstraint = AxisConstraint;
@@ -16575,14 +16575,14 @@ var RectConstraint = require('./constraints/RectConstraint');
 },{"./constraints/AngularConstraint":154,"./constraints/AxisConstraint":155,"./constraints/CircularConstraint":156,"./constraints/MaxConstraint":157,"./constraints/MinConstraint":158,"./constraints/RectConstraint":159}],154:[function(require,module,exports){
 
 
-    var Vec2D = require('../../geom/Vec2D');
+    let Vec2D = require('../../geom/Vec2D');
 
     //either Vec2D + angle
     /**
      * @param {Vec2D | Number} vector | angle
      * @param {Number} [theta]
      */
-    var	AngularConstraint = function(theta_p,theta){
+    let	AngularConstraint = function(theta_p,theta){
         if(arguments.length > 1){
             this.theta = theta;
             this.rootPos = new Vec2D(theta_p);
@@ -16595,8 +16595,8 @@ var RectConstraint = require('./constraints/RectConstraint');
 
 
     AngularConstraint.prototype.applyConstraint = function(p){
-        var delta = p.sub(this.rootPos);
-        var heading = Math.floor(delta.heading() / this.theta) * this.theta;
+        let delta = p.sub(this.rootPos);
+        let heading = Math.floor(delta.heading() / this.theta) * this.theta;
         p.set(this.rootPos.add(Vec2D.fromTheta(heading).scaleSelf(delta.magnitude())));
     };
 
@@ -16608,7 +16608,7 @@ var RectConstraint = require('./constraints/RectConstraint');
 /**
  * Constrains a particle's movement by locking a given axis to a fixed value.
  */
-var	AxisConstraint = function(axis,constraintAmount){
+let	AxisConstraint = function(axis,constraintAmount){
 	this.axis = axis;
 	this.constraint = constraintAmount;
 };
@@ -16622,9 +16622,9 @@ module.exports = AxisConstraint;
 
 },{}],156:[function(require,module,exports){
 
-	var Circle = require('../../geom/Circle');
+	let Circle = require('../../geom/Circle');
 	
-	var	CircularConstraint = function(a,b){
+	let	CircularConstraint = function(a,b){
 		if(arguments.length == 1){
 			this.circle = a;
 		} else {
@@ -16643,7 +16643,7 @@ module.exports = AxisConstraint;
 
 },{"../../geom/Circle":45}],157:[function(require,module,exports){
 
-var	MaxConstraint = function(axis,threshold){
+let	MaxConstraint = function(axis,threshold){
 	this.axis = axis;
 	this.threshold = threshold;	
 };
@@ -16659,7 +16659,7 @@ module.exports = MaxConstraint;
 
 },{}],158:[function(require,module,exports){
 
-var	MinConstraint = function(axis,threshold){
+let	MinConstraint = function(axis,threshold){
 	this.axis = axis;
 	this.threshold = threshold;
 };
@@ -16676,12 +16676,12 @@ module.exports = MinConstraint;
 },{}],159:[function(require,module,exports){
 
 
-    var Vec2D = require('../../geom/Vec2D'),
+    let Vec2D = require('../../geom/Vec2D'),
         has = require('../../internals/has'),
         Ray2D = require('../../geom/Ray2D'),
         Rect = require('../../geom/Rect');
 
-    var	RectConstraint = function(a,b){
+    let	RectConstraint = function(a,b){
         if(arguments.length == 1){
             if(typeof a.copy === 'function' ){
                 //if passed in as a toxi.geom.Rect
@@ -16731,11 +16731,11 @@ module.exports = {
 },{"./processing/ToxiclibsSupport":161}],161:[function(require,module,exports){
 
 
-var Matrix4x4 = require('../geom/Matrix4x4'),
+let Matrix4x4 = require('../geom/Matrix4x4'),
 	Vec3D = require('../geom/Vec3D'),
 	TriangleMesh = require('../geom/mesh/TriangleMesh');
 
-var	ToxiclibsSupport = function(processing,optional_gfx){
+let	ToxiclibsSupport = function(processing,optional_gfx){
 	if(typeof Processing === 'undefined'){
 		throw new Error("Processing.js has not been loaded");
 	}
@@ -16753,7 +16753,7 @@ var	ToxiclibsSupport = function(processing,optional_gfx){
 
 ToxiclibsSupport.prototype = {
 	box: function(aabb,smooth){
-		var mesh = aabb.toMesh();
+		let mesh = aabb.toMesh();
 		if(smooth === undefined){
 			smooth = false;
 		}
@@ -16768,7 +16768,7 @@ ToxiclibsSupport.prototype = {
 	},
 	
 	cone: function(){
-		var cone = arguments[0],
+		let cone = arguments[0],
 			res = 6,
 			thetaOffset = 0,
 			topClosed = true,
@@ -16784,7 +16784,7 @@ ToxiclibsSupport.prototype = {
 			smooth = arguments[2];
 		}
 		
-		var mesh = cone.toMesh({
+		let mesh = cone.toMesh({
 			mesh: new TriangleMesh(),
 			steps: res,
 			thetaOffset: thetaOffset,
@@ -16803,7 +16803,7 @@ ToxiclibsSupport.prototype = {
 		if(arguments.length == 1){
 			this.mesh(cyl.toMesh(),false,0);
 		} else {
-			var mesh = cyl.toMesh(res,0);
+			let mesh = cyl.toMesh(res,0);
 			if(smooth === undefined){
 				smooth = false;
 			}
@@ -16819,7 +16819,7 @@ ToxiclibsSupport.prototype = {
 	such as ellipseMode. So I am allowing it as an optional propery
 	*/
 	ellipse: function(e,ellipseMode){
-		var r = e.getRadii();
+		let r = e.getRadii();
 		if(ellipseMode === undefined){
 			ellipseMode = this.app.CENTER;
 		}
@@ -16837,10 +16837,10 @@ ToxiclibsSupport.prototype = {
 	},
 	
 	line: function(){
-		var a,
+		let a,
 			b;
 		if(arguments.length == 1){
-			var line = arguments[0];
+			let line = arguments[0];
 			a = line.a;
 			b = line.b;
 		} else {
@@ -16855,14 +16855,14 @@ ToxiclibsSupport.prototype = {
 	},
 	
 	lineStrip2D: function(points){
-		//var isFilled = this.fill; //TODO <-- verify how this works!
+		//let isFilled = this.fill; //TODO <-- verify how this works!
 		//this.gfx.fill = false;
 		this.processVertices2D(points,this.app.POLYGON,false);
 		//this.gfx.fill = isFilled;
 	},
 	
 	lineStrip3D: function(points){
-		//var isFilled = this.gfx.fill;
+		//let isFilled = this.gfx.fill;
 		//this.gfx.fill = false;
 		this.processVertices3D(points,this.app.POLYGON,false);
 		//this.gfx.fill = isFilled;
@@ -16877,11 +16877,11 @@ ToxiclibsSupport.prototype = {
 		}
 		
 		this.gfx.beginShape(this.app.TRIANGLES);
-		var i= 0,
+		let i= 0,
 			len = mesh.faces.length;
 		if(smooth){
 			for(i=0;i<len;i++){
-				var f = mesh.faces[i];
+				let f = mesh.faces[i];
 				this.gfx.normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
 				this.gfx.vertex(f.a.x,f.a.y,f.a.z);
 				this.gfx.normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
@@ -16890,8 +16890,8 @@ ToxiclibsSupport.prototype = {
 				this.gfx.vertex(f.c.x,f.c.y,f.c.z);
 			}
 		} else {
-			for(var i=0;i<len;i++){
-				var f = mesh.faces[i];
+			for(let i=0;i<len;i++){
+				let f = mesh.faces[i];
 				this.gfx.normal(f.normal.x,f.normal.y,f.normal.z);
 				this.gfx.vertex(f.a.x,f.a.y,f.a.z);
 				this.gfx.vertex(f.b.x,f.b.y,f.b.z);
@@ -16900,25 +16900,25 @@ ToxiclibsSupport.prototype = {
 		}
 		this.gfx.endShape();
 		if(normalLength > 0){
-			var strokeCol = 0;
-			var isStroked = this.gfx.stroke;  //TODO <-- verify this works!
+			let strokeCol = 0;
+			let isStroked = this.gfx.stroke;  //TODO <-- verify this works!
 			if(isStroked){
 				strokeCol = this.gfx.strokeColor;
 			}
 			len = mesh.vertices.length;
 			if(smooth){
 				for(i=0;i<len;i++){
-					var v = mesh.vertices[i],
+					let v = mesh.vertices[i],
 						w = v.add(v.normal.scale(normalLength));
 						n = v.normal.scale(127);
 					this.gfx.stroke(n.x + 128, n.y + 128, n.z + 128);
 					this.gfx.line(v.x,v.y,v.z,w.x,w.y,w.z);
 				}
 			} else {
-				var third = 1 / 3;
+				let third = 1 / 3;
 				len = mesh.faces.length;
 				for(i=0;i<len;i++){
-					var f = mesh.faces[i],
+					let f = mesh.faces[i],
 						c = f.a.add(f.b).addSelf(f.c).scaleSelf(third),
 						d = c.add(f.normal.scale(normalLength)),
 						n = f.normal.scale(127);
@@ -16936,11 +16936,11 @@ ToxiclibsSupport.prototype = {
 	
 	meshNormalMapped: function(mesh,vertexNormals,normalLength){
 		this.gfx.beginShape(this.app.TRIANGLES);
-		var i =0,
+		let i =0,
 			len = mesh.faces.length;
 		if(vertexNormals){
 			for(i=0;i<len;i++){
-				var f = mesh.faces[i],
+				let f = mesh.faces[i],
 					n = this._normalMap.applyTo(f.a.normal);
 				this.gfx.fill(n.x,n.y,n.z);
 				this.gfx.normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
@@ -16956,7 +16956,7 @@ ToxiclibsSupport.prototype = {
 			}
 		} else {
 			for(i = 0;i<len;i++){
-				var f = mesh.faces[i];
+				let f = mesh.faces[i];
 				this.gfx.normal(f.normal.x,f.normal.y,f.normal.z);
 				this.gfx.vertex(f.a.x,f.a.y,f.a.z);
 				this.gfx.vertex(f.b.x,f.b.y,f.b.z);
@@ -16968,7 +16968,7 @@ ToxiclibsSupport.prototype = {
 			if(vertexNormals){
 				len = mesh.vertices.length;
 				for(i=0;i<len;i++){
-					var v = mesh.vertices[i],
+					let v = mesh.vertices[i],
 						w = v.add(v.normal.scale(normalLength)),
 						n = v.normal.scale(127);
 					this.gfx.stroke(n.x+128,n.y+128,n.z+128);
@@ -16977,7 +16977,7 @@ ToxiclibsSupport.prototype = {
 			} else {
 				len = mesh.faces.length;
 				for(i=0;i<len;i++){
-					var f = mesh.faces[i],
+					let f = mesh.faces[i],
 						c = f.getCentroid(),
 						d = c.add(f.normal.scale(normalLength)),
 						n = f.normal.scale(127);
@@ -16989,7 +16989,7 @@ ToxiclibsSupport.prototype = {
 	},
 	
 	origin: function(){
-		var o = undefined, len = undefined;
+		let o = undefined, len = undefined;
 		if(arguments.length == 1){
 			len = arguments[0];
 			o = Vec3D.ZERO;
@@ -17048,13 +17048,13 @@ ToxiclibsSupport.prototype = {
 			iterator = new this.app.ObjectIterator( iterator );
 		}
 		this.gfx.beginShape(shapeID);
-		for(var v  = void(0); iterator.hasNext() && ((v  = iterator.next()) || true);){
+		for(let v  = void(0); iterator.hasNext() && ((v  = iterator.next()) || true);){
 			this.gfx.vertex(v.x,v.y);
 		}
-		/*var i=0,
+		/*let i=0,
 			len = points.length;
 		for(i=0;i<len;i++){
-			var v = points[i];
+			let v = points[i];
 			this.gfx.vertex(v.x,v.y);
 		}*/
 		if(closed){
@@ -17076,14 +17076,14 @@ ToxiclibsSupport.prototype = {
 			iterator = new this.app.ObjectIterator( iterator );
 		}
 		this.gfx.beginShape(shapeID);
-		for(var v  = void(0); iterator.hasNext() && ((v  = iterator.next()) || true);){
+		for(let v  = void(0); iterator.hasNext() && ((v  = iterator.next()) || true);){
 			this.gfx.vertex(v.x,v.y,v.z);
 		}
 
-		/*var i=0,
+		/*let i=0,
 			len = points.length;
 		for(i=0;i<len;i++){
-			var v = points[i];
+			let v = points[i];
 			this.gfx.vertex(v.x,v.y,v.z);
 		}*/
 		if(closed){
@@ -17094,7 +17094,7 @@ ToxiclibsSupport.prototype = {
 	},
 	
 	ray: function(ray, length){
-		var e = ray.getPointAtDistance(length);
+		let e = ray.getPointAtDistance(length);
 		if(ray.z === undefined){
 			this.gfx.line(ray.x,ray.y,e.x,e.y);
 		} else {
@@ -17117,7 +17117,7 @@ ToxiclibsSupport.prototype = {
 		} else if(rectMode === this.app.CENTER){
 			this.gfx.rect(r.x+r.widt*0.5,r.y+r.height*0.5,r.width,r.height);
 		} else if(rectMode === this.app.RADIUS){
-			var rw = r.width * 0.5,
+			let rw = r.width * 0.5,
 				rh = r.height *0.5;
 			this.gfx.rect(r.x+rw,r.y+rh,rw,rh);
 		}
@@ -17132,11 +17132,11 @@ ToxiclibsSupport.prototype = {
 	texturedMesh: function(mesh,tex,smooth){
 		this.gfx.beginShape(this.app.TRIANGLES);
 		this.gfx.texture(tex);
-		var i =0,
+		let i =0,
 			len = mesh.faces.length;
 		if(smooth){
 			for(i=0;i<len;i++){
-				var f = mesh.faces[i];
+				let f = mesh.faces[i];
 				if(f.uvA !== undefined && f.uvB !== undefined && f.uvC !== undefined){
 					this.gfx.normal(f.a.normal.x, f.a.normal.y, f.a.normal.z);
                 	this.gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);
@@ -17152,7 +17152,7 @@ ToxiclibsSupport.prototype = {
 			}
 		} else {
 			for(i=0;i<len;i++){
-				var f= mesh.faces[i];
+				let f= mesh.faces[i];
 				this.gfx.normal(f.normal.x,f.normal.y,f.normal.z);
 				if(f.uvA !== undefined && f.uvB !== undefined && f.uvC !== undefined){
 					this.gfx.vertex(f.a.x, f.a.y, f.a.z, f.uvA.x, f.uvA.y);
@@ -17171,7 +17171,7 @@ ToxiclibsSupport.prototype = {
 	//works for Triangle3D or Triangle2D
 	triangle: function(tri,isFullShape){
 
-		var isTriangle = function(){
+		let isTriangle = function(){
 			if(tri.a !== undefined && tri.b !== undefined && tri.c !== undefined){
 				return (tri.a.x !== undefined);
 			}
@@ -17188,7 +17188,7 @@ ToxiclibsSupport.prototype = {
 			this.gfx.beginShape(this.app.TRIANGLES);
 		}
 		if(isTriangle3D()){
-			var n = tri.computeNormal();
+			let n = tri.computeNormal();
 			this.gfx.normal(n.x,n.y,n.z);
 			this.gfx.vertex(tri.a.x, tri.a.y, tri.a.z);
 			this.gfx.vertex(tri.b.x, tri.b.y, tri.b.z);
@@ -17232,7 +17232,7 @@ module.exports = {
 },{"./datatypes/ArraySet":164,"./datatypes/FloatRange":165,"./datatypes/UndirectedGraph":166}],164:[function(require,module,exports){
 
 
-var internals = require('../../internals');
+let internals = require('../../internals');
 
 /**
  * ArraySet
@@ -17244,11 +17244,11 @@ var internals = require('../../internals');
  * @class
  * @member toxi
  */
-var ArraySet = function(collection){
+let ArraySet = function(collection){
 	Array.apply(this);
 	if(arguments.length >= 1){
-		for(var i=0,len = collection.length;i<len;i++){
-			var item = collection[i];
+		for(let i=0,len = collection.length;i<len;i++){
+			let item = collection[i];
 			if(this.indexOf(item) < 0){
 				this.push(item);
 			}
@@ -17268,8 +17268,8 @@ var ArraySet = function(collection){
 		return true;
 	},
 	addAll: function(collection){
-		var self = this;
-		for(var i=0,len = collection.length;i<len;i++){
+		let self = this;
+		for(let i=0,len = collection.length;i<len;i++){
 			this.push(collection[i]);
 		}
 
@@ -17284,8 +17284,8 @@ var ArraySet = function(collection){
 		return this.indexOf(item) >= 0;
 	},
 	containsAll: function(collection){
-		for(var i=0,len=collection.length;i<len;i++){
-			var val = collection[i];
+		for(let i=0,len=collection.length;i<len;i++){
+			let val = collection[i];
 			if(!this.contains(val)){
 				return false;
 			}
@@ -17293,7 +17293,7 @@ var ArraySet = function(collection){
 		return true;
 	},
 	containsAny: function(collection){
-		for(var i=0,len = collection.length;i<len;i++){
+		for(let i=0,len = collection.length;i<len;i++){
 			if(this.contains(collection[i])){
 				return true;
 			}
@@ -17313,7 +17313,7 @@ var ArraySet = function(collection){
 		return this.length < 1;
 	},
 	remove: function(o){
-		var i = this.indexOf(o);
+		let i = this.indexOf(o);
 		if(i >= 0){
 			this.splice(i,1);
 			return true;
@@ -17324,11 +17324,11 @@ var ArraySet = function(collection){
 		this.retainAll([]);
 	},
 	retainAll: function(collection){
-		var self = this,
+		let self = this,
 			changed = false;
 
-		for(var i=0;i<this.length;i++){
-			var val = this[i];
+		for(let i=0;i<this.length;i++){
+			let val = this[i];
 			if(collection.indexOf(val) < 0){
 				this.splice(i,1);
 				changed = true;
@@ -17342,7 +17342,7 @@ var ArraySet = function(collection){
 	},
 	toArray: function(arr){
 		arr = arr || [];
-		for(var i=0;i<this.length;i++){
+		for(let i=0;i<this.length;i++){
 			if(this.hasOwnProperty())
 			arr[i] = this[i];
 		}
@@ -17356,7 +17356,7 @@ module.exports = ArraySet;
 },{"../../internals":98}],165:[function(require,module,exports){
 
 
-var mathUtils = require('../../math/mathUtils');
+let mathUtils = require('../../math/mathUtils');
 
 /**
  * construct a new `FloatRange`
@@ -17365,12 +17365,12 @@ var mathUtils = require('../../math/mathUtils');
  * @param {Number} [max=1.0] the maximum in the range
  * @constructor
  */
-var FloatRange = function(min, max){
+let FloatRange = function(min, max){
 	min = min || 0.0;
 	max = typeof max === 'number' ? max : 1.0;
 	// swap if necessary
 	if(min > max){
-		var t= max;
+		let t= max;
 		max = min;
 		min = t;
 	}
@@ -17384,7 +17384,7 @@ FloatRange.prototype = {
 		return this.setCurrent(this.currValue + val);
 	},
 	copy: function(){
-		var range = new FloatRange(this.min,this.max);
+		let range = new FloatRange(this.min,this.max);
 		range.currValue = this.currValue;
 		return range;
 	},
@@ -17430,7 +17430,7 @@ FloatRange.prototype = {
 	}
 	*/
 	toArray: function(step){
-		var range = [],
+		let range = [],
 			v = this.min;
 		while(v < this.max){
 			range.push(v);
@@ -17449,14 +17449,14 @@ module.exports = FloatRange;
 },{"../../math/mathUtils":125}],166:[function(require,module,exports){
 
 
-var ArraySet = require('./ArraySet');
+let ArraySet = require('./ArraySet');
 
 
 //wrap connections in this before passing them out
 //this way the rest of the lib can treat it like a Java Collection
-/*var __NodeCollection = function(nodes){
-	var self = this;
-	for(var i=0,len = nodes.length;i<len;i++){
+/*let __NodeCollection = function(nodes){
+	let self = this;
+	for(let i=0,len = nodes.length;i<len;i++){
 		this[i] = nodes[i];
 	}
 };
@@ -17465,8 +17465,8 @@ __NodeCollection.prototype = {
 		return this[el] !== undefined;
 	},
 	size: function(){
-		var i = 0;
-		for(var prop in this){
+		let i = 0;
+		for(let prop in this){
 			if(this.hasOwnProperty(prop)){
 				i++;
 			}
@@ -17479,7 +17479,7 @@ __NodeCollection.prototype = {
 /**
  * @exports UndirectedGraph as toxi.UndirectedGraph
  */
-var UndirectedGraph = function(){
+let UndirectedGraph = function(){
 	this._nodeLinks = {};
 	this._nodeIDs = [];
 };
@@ -17523,18 +17523,18 @@ UndirectedGraph.prototype = {
 		return this._nodeIDs;
 	},
 	remove: function(node){
-		var connections = this._nodeLinks[node];
+		let connections = this._nodeLinks[node];
 		if(connections === undefined){
 			return;
 		}
 
-		for(var i = 0,len = connections.length;i<len;i++){
-			var neighbor = connections[i];
-			var	nodeI = neighbor.indexOf(node);
+		for(let i = 0,len = connections.length;i<len;i++){
+			let neighbor = connections[i];
+			let	nodeI = neighbor.indexOf(node);
 			neighbor.splice(nodeI,1);
 		}
 		delete this._nodeLinks[node];
-		var i = this._nodeIDs.indexOf(node);
+		let i = this._nodeIDs.indexOf(node);
 		this._nodeIDs.splice(node,1);
 	}
 };

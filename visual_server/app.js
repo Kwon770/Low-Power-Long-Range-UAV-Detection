@@ -1,8 +1,9 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var mqtt = require('mqtt');
+let express = require('express');
+let app = express();
+let server = require('http').createServer(app);
+let io = require('socket.io')(server);
+let mqtt = require('mqtt');
+let mqttInfo = require('./secret/mqtt-info.json');
 const { Observable, Subject, ReplaySubject, from, of, interval } = require('rxjs');
 const { map, take, filter, switchMap } = require('rxjs/operators');
 
@@ -19,8 +20,8 @@ io.on('connection', function(client) {
 
     client.on('mouse-click',
       function(index) {
-        var data = testdata[index % testdata.length];
-        var message = JSON.stringify(data);
+        let data = testdata[index % testdata.length];
+        let message = JSON.stringify(data);
         io.sockets.emit('mesh-data', message);
       }
     );
@@ -28,14 +29,14 @@ io.on('connection', function(client) {
 
 
 
-var options = {
+let options = {
   host: 'broker.hivemq.com',
   port: 1883,
-  username: 'lopode-mqtt-visual',
-  password: 'lopode-mqtt-visual-password'
+  username: mqttInfo.username,
+  password: mqttInfo.password'
 }
 
-var mqttClient  = mqtt.connect(options)
+let mqttClient  = mqtt.connect(options)
 
 mqttClient.on('connect', function () {
   mqttClient.subscribe('btt_mesh_gateway/data', function (err) {
@@ -53,7 +54,7 @@ mqttClient.on('message', function (topic, message) {
 })
 
 
-// var testdata = [
+// let testdata = [
 //   {"2": [{"n":1,"r":-44},{"n":255,"r":0},{"n":3,"r":-13}]},
 //   {"1": [{"n":255,"r":0},{"n":0,"r":0},{"n":2,"r":0}]},
 //   {"3": [{"n":2,"r":0},{"n":2,"r":-24},{"n":255,"r":0}]},
@@ -107,7 +108,7 @@ mqttClient.on('message', function (topic, message) {
 // ];
 //
 //
-// var source = interval(1000).pipe(map(i => JSON.stringify(testdata[i % testdata.length])))
+// let source = interval(1000).pipe(map(i => JSON.stringify(testdata[i % testdata.length])))
 //   .subscribe(message => {
 //     console.log(message);
 //     if (io.sockets) {
