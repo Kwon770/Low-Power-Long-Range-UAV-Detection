@@ -4,16 +4,17 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <PubSubClient.h>
+#include <MQTTInfo.h>
 
 // Default ESP buad rate
 #define BUAD_RATE 115200
 
 // MQTT info
-const char* MQTT_SERVER = "lopode-mqtt-server";
-int mqtt_port = 8883;
-const char* MQTT_USERNAME = "lopode-mqtt-username";
-const char* MQTT_PASSWORD = "lopode-mqtt-";
-const char* DATATOPIC = "mesh_gateway/data";
+const char* MQTT_SERVER = "broker.hivemq.com";
+int MQTT_PORT = 1883;
+const char* MQTT_USERNAME = MQTT_GROUND_USERNAME;
+const char* MQTT_PASSWORD = MQTT_GROUND_PASSWORD;
+const char* DATATOPIC = "btt_mesh_gateway/data";
 
 WiFiClient espClient; // Arduino-ESP32 WiFiSTA object
 PubSubClient mqtt_client(espClient); // MQTT client object
@@ -58,7 +59,7 @@ void setup()   {
 	Serial.println("[Connected]");
 
 	// Initialize MQTT server connection
-	mqtt_client.setServer(MQTT_SERVER, mqtt_port);
+	mqtt_client.setServer(MQTT_SERVER, MQTT_PORT);
 	mqtt_connect();
 }
 
