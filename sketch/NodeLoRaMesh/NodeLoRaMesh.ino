@@ -10,7 +10,7 @@ RHMesh *manager; // Class to manage message delivery and receipt, using the drvi
 
 uint8_t routes[NODES]; // full routing table for mesh
 int16_t rssi[NODES]; // signal strength of nodes
-char buf[MAX_MESSAGE_LEN]; // Message buffer
+char buf[MAX_MESSAGE_LEN]; // string buffer
 
 // Initalize or clear all objects and variables related with LoRa
 void initLoRaData() {
@@ -129,31 +129,30 @@ void updateRoutingTable() {
 // Element of array start with information of node 1
 // n = next node to go to destination (0: impossible to go)
 // r = rssi between here to destination
-void getRouteInfoString(char *_buf, size_t len) {
-	_buf[0] = '\0';
-	strcat(_buf, "[");
+void getRouteInfoJson() {
+	buf[0] = '\0';
+	strcat(buf, "[");
 	for(uint8_t node = 1 ; node <= NODES; node++) {
-		strcat(_buf, "{\"n\":");
-		sprintf(_buf + strlen(_buf), "%d", routes[node - 1]);
-		strcat(_buf, ",");
-		strcat(_buf, "\"r\":");
-		sprintf(_buf + strlen(_buf), "%d", rssi[node - 1]);
-		strcat(_buf, "}");
+		strcat(buf, "{\"n\":");
+		sprintf(buf + strlen(buf), "%d", routes[node - 1]);
+		strcat(buf, ",");
+		strcat(buf, "\"r\":");
+		sprintf(buf + strlen(buf), "%d", rssi[node - 1]);
+		strcat(buf, "}");
 		if (node < NODES) {
-			strcat(_buf, ",");
+			strcat(buf, ",");
 		}
 	}
-	strcat(_buf, "]");
+	strcat(buf, "]");
 }
 
-void propagateRouteInfo(char *buf) {
+void propagateRouteInfo() {
 	// Send the route info of current node to all other nodes
 	for (uint8_t dest = 1; dest <= NODES; dest++) {
 		if (dest == NODE_ID) continue; // self skip
 
-
 		//updateRoutingTable();
-		getRouteInfoString(buf, RH_MESH_MAX_MESSAGE_LEN);
+		getRouteInfoJson();
 
 		// Print transmit info
 		Serial.print(F("->"));
@@ -162,9 +161,12 @@ void propagateRouteInfo(char *buf) {
 		Serial.print(buf);
 
 		// Send route info 
-		uint8_t error = manager->sendtoWait((uint8_t *)buf, strlen(buf), dest);
+		uint8_t sendBuf[strlen(buf)];
+		memcpy(sendBuf, buf, strlen(buf));
+		uint8_t error = manager->sendtoWait((uint8_t *)sendBuf, sizeof(sendBuf), dest);
 		if (error != RH_ROUTER_ERROR_NONE) { // if transmit error is occured
-			Serial.print(F(" !! ")); // Print detail error
+						     // Print detail error
+			Serial.print(F(" !! ")); 
 			Serial.println(getErrorString(error));
 		} else {
 			Serial.println(F(" OK")); // if transmit is successful
@@ -172,7 +174,8 @@ void propagateRouteInfo(char *buf) {
 			// if there is intermediate node in route destination node
 			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
 			if (route->next_hop != 0) {
-				// Update rssi data by previous transmit info
+				// Update route data(next hop, rssi) by previous transmit info
+				routes[dest - 1] = route->next_hop;
 				rssi[route->next_hop - 1] = rf95w.lastRssi();
 			}
 		}
@@ -180,16 +183,16 @@ void propagateRouteInfo(char *buf) {
 
 		// Listen incoming messages
 		// Wait for a random length of time before next transmit during listening
-		//unsigned long nextTransmit = millis() + random(3000, 5000);
-		unsigned long nextTransmit = millis() + 10000;
+		unsigned long nextTransmit = millis() + random(3000, 5000);
 		while (nextTransmit > millis()) {
-			int waitTime = nextTransmit - millis();
-			uint8_t len = sizeof(buf); // transmit buffer size
-			uint8_t src; // transmit source node
 
 			// Listen incoming trasnmit for wait time
 			// Save data on buf and source node info
-			if (manager->recvfromAckTimeout((uint8_t *)buf, &len, waitTime, &src)) {
+			uint8_t rcvBuf[MAX_MESSAGE_LEN];
+			uint8_t len = sizeof(buf); // transmit buffer size
+			uint8_t src; // transmit source node
+			if (manager->recvfromAck((uint8_t *)rcvBuf, &len, &src)) {
+				memcpy(buf, rcvBuf, len);
 				buf[len] = '\0'; // null terminate string
 
 				// Print received transmit info
@@ -200,7 +203,8 @@ void propagateRouteInfo(char *buf) {
 				// if received trasnmit come from intermediate node
 				RHRouter::RoutingTableEntry *route = manager->getRouteTo(src);
 				if (route->next_hop != 0) { 
-					// Update rssi data by previous transmit info
+					// Update route data(next hop, rssi) by previous transmit info
+					routes[src - 1] = route->next_hop;
 					rssi[route->next_hop - 1] = rf95w.lastRssi();
 				}
 			}
@@ -212,5 +216,5 @@ void propagateRouteInfo(char *buf) {
 
 void loop() {
 	// Propagate route info to all other nodes
-	propagateRouteInfo(buf);
+	propagateRouteInfo();
 }

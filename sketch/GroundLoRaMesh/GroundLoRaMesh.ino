@@ -231,6 +231,7 @@ void publishRouteInfo(uint8_t nodeId) {
 	mqtt_client.publish(DATATOPIC, publishBuf);
 }
 
+
 void propagateRouteInfo() {
 	// Send the route info of current node to all other nodes
 	for (uint8_t dest = 1; dest <= NODES; dest++) {
@@ -259,7 +260,8 @@ void propagateRouteInfo() {
 			// if there is intermediate node in route destination node
 			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
 			if (route->next_hop != 0) {
-				// Update rssi data by previous transmit info
+				// Update route data(next hop, rssi) by previous transmit info
+				routes[dest - 1] = route->next_hop;
 				rssi[route->next_hop - 1] = rf95w.lastRssi();
 			}
 		}
@@ -289,19 +291,17 @@ void propagateRouteInfo() {
 
 				publishRouteInfo(src);
 
-
 				// if received trasnmit come from intermediate node
 				RHRouter::RoutingTableEntry *route = manager->getRouteTo(src);
 				if (route->next_hop != 0) { 
-					// Update rssi data by previous transmit info
+					// Update route data(next hop, rssi) by previous transmit info
+					routes[src - 1] = route->next_hop;
 					rssi[route->next_hop - 1] = rf95w.lastRssi();
 				}
 			}
 		}
 	}
 }
-
-
 
 void loop() {
 	// If MQTTT connection isn't done, keep trying and waiting
