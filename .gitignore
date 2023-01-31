@@ -1,7 +1,5 @@
-libraries/WiFiInfo/**
-libraries/WiFiInfo
-libraries/MQTTInfo/**
-libraries/MQTTInfo
+libraries/NetworkConfig/**
+libraries/NetworkConfig
 
 visual_server/secret/**
 visual_server/secret
