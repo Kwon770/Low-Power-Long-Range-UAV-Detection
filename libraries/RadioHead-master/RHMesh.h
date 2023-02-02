@@ -213,6 +213,13 @@ public:
     /// \return true if a valid message was copied to buf
     bool recvfromAckTimeout(uint8_t* buf, uint8_t* len,  uint16_t timeout, uint8_t* source = NULL, uint8_t* dest = NULL, uint8_t* id = NULL, uint8_t* flags = NULL);
 
+        /// Try to resolve a route for the given address. Blocks while discovering the route
+    /// which may take up to 4000 msec.
+    /// Virtual so subclasses can override.
+    /// \param [in] address The physical address to resolve
+    /// \return true if the address was resolved and added to the local routing table
+    bool doArp(uint8_t address);
+
 protected:
 
     /// Internal function that inspects messages being received and adjusts the routing table if necessary.
@@ -227,13 +234,6 @@ protected:
     /// \param [in] message Pointer to the RHRouter message to be sent.
     /// \param [in] messageLen Length of message in octets
     virtual uint8_t route(RoutedMessage* message, uint8_t messageLen);
-
-    /// Try to resolve a route for the given address. Blocks while discovering the route
-    /// which may take up to 4000 msec.
-    /// Virtual so subclasses can override.
-    /// \param [in] address The physical address to resolve
-    /// \return true if the address was resolved and added to the local routing table
-    virtual bool doArp(uint8_t address);
 
     /// Tests if the given address of length addresslen is indentical to the
     /// physical address of this node.
