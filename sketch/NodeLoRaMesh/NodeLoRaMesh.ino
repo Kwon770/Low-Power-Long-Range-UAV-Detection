@@ -8,6 +8,7 @@
 RH_RF95 rf95w(HELTEC_CS, HELTEC_DI0); // LoRa transceiver driver
 RHMesh *manager; // Class to manage message delivery and receipt, using the drvier declared above
 
+unsigned long propagateInterval = 0;
 uint8_t routes[NODES]; // full routing table for mesh
 int16_t rssi[NODES]; // signal strength of nodes
 char buf[MAX_MESSAGE_LEN]; // string buffer
@@ -23,12 +24,6 @@ void initLoRaData() {
 		}
 		rssi[node - 1] = 0;
 	}
-
-	// Clear route data
-	//manager->clearRoutingTable();
-	//for(uint8_t node = 1; node <= NODES; node++) {
-	//	manager->addRouteTo(node, 0);
-	//}
 }
 
 // Initalize and confiture all objects and variables related with LoRa
@@ -107,108 +102,65 @@ const __FlashStringHelper* getErrorString(uint8_t error) {
 	return F("UNKNOWN");
 }
 
-/*
-void updateRoutingTable() {
+void updateRouteInfo() {
 	// Update routing data toward all other nodes
 	for (uint8_t dest = 1; dest <= NODES; dest++) {
 		if (dest == NODE_ID) { // if destination is self
 			routes[dest - 1] = 255; // mark itself
+
 		} else {
+			manager->doArp(dest);
 			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
+			if (route == NULL) continue;
+
 			routes[dest - 1] = route->next_hop; // update route
+			rssi[dest - 1] = rf95w.lastRssi();
 
 			if (routes[dest - 1] == 0) { // if there is no route
 				rssi[dest - 1]= 0; // reset rssi
 			}
+
 		}
 	}
 }
-*/
 
-// Create the routing info by JSON string to each nodes, on buffer
-// Element of array start with information of node 1
-// n = next node to go to destination (0: impossible to go)
-// r = rssi between here to destination
-void getRouteInfoJson() {
+
+void generateRouteInfoStringInBuf() {
 	buf[0] = '\0';
-	strcat(buf, "[");
 	for(uint8_t node = 1 ; node <= NODES; node++) {
-		strcat(buf, "{\"n\":");
 		sprintf(buf + strlen(buf), "%d", routes[node - 1]);
 		strcat(buf, ",");
-		strcat(buf, "\"r\":");
 		sprintf(buf + strlen(buf), "%d", rssi[node - 1]);
-		strcat(buf, "}");
 		if (node < NODES) {
-			strcat(buf, ",");
+			strcat(buf, "/");
 		}
 	}
-	strcat(buf, "]");
 }
 
 void propagateRouteInfo() {
-	// Send the route info of current node to all other nodes
-	for (uint8_t dest = 1; dest <= NODES; dest++) {
-		if (dest == NODE_ID) continue; // self skip
-
-		//updateRoutingTable();
-		getRouteInfoJson();
+	while (millis() > propagateInterval) {
+		updateRouteInfo();
+		generateRouteInfoStringInBuf();
 
 		// Print transmit info
 		Serial.print(F("->"));
-		Serial.print(dest);
+		Serial.print(GROUND_ID);
 		Serial.print(F(" :"));
 		Serial.print(buf);
 
 		// Send route info 
-		uint8_t sendBuf[strlen(buf)];
-		memcpy(sendBuf, buf, strlen(buf));
-		uint8_t error = manager->sendtoWait((uint8_t *)sendBuf, sizeof(sendBuf), dest);
+		//uint8_t sendBuf[strlen(buf)];
+		//memcpy(sendBuf, buf, strlen(buf));
+		uint8_t error = manager->sendtoWait((uint8_t *)buf, sizeof(buf), GROUND_ID);
 		if (error != RH_ROUTER_ERROR_NONE) { // if transmit error is occured
 						     // Print detail error
 			Serial.print(F(" !! ")); 
 			Serial.println(getErrorString(error));
 		} else {
 			Serial.println(F(" OK")); // if transmit is successful
-
-			// if there is intermediate node in route destination node
-			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-			if (route->next_hop != 0) {
-				// Update route data(next hop, rssi) by previous transmit info
-				routes[dest - 1] = route->next_hop;
-				rssi[route->next_hop - 1] = rf95w.lastRssi();
-			}
 		}
 
-
-		// Listen incoming messages
-		// Wait for a random length of time before next transmit during listening
-		unsigned long nextTransmit = millis() + random(3000, 5000);
-		while (nextTransmit > millis()) {
-
-			// Listen incoming trasnmit for wait time
-			// Save data on buf and source node info
-			uint8_t rcvBuf[MAX_MESSAGE_LEN];
-			uint8_t len = sizeof(buf); // transmit buffer size
-			uint8_t src; // transmit source node
-			if (manager->recvfromAck((uint8_t *)rcvBuf, &len, &src)) {
-				memcpy(buf, rcvBuf, len);
-				buf[len] = '\0'; // null terminate string
-
-				// Print received transmit info
-				Serial.print(src);
-				Serial.print(F("-> :"));
-				Serial.println(buf);
-
-				// if received trasnmit come from intermediate node
-				RHRouter::RoutingTableEntry *route = manager->getRouteTo(src);
-				if (route->next_hop != 0) { 
-					// Update route data(next hop, rssi) by previous transmit info
-					routes[src - 1] = route->next_hop;
-					rssi[route->next_hop - 1] = rf95w.lastRssi();
-				}
-			}
-		}
+		propagateInterval = millis() + 3000;
 	}
 }
 

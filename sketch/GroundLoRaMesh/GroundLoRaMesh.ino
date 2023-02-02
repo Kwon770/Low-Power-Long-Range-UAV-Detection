@@ -26,6 +26,7 @@ PubSubClient mqtt_client(espClient); // MQTT client object
 RH_RF95 rf95w(HELTEC_CS, HELTEC_DI0); // LoRa transceiver driver
 RHMesh *manager; // Class to manage message delivery and receipt, using the drvier declared above
 
+unsigned long publishInterval = 0;
 uint8_t routes[NODES]; // full routing table for mesh
 int16_t rssi[NODES]; // signal strength of nodes
 char buf[MAX_MESSAGE_LEN]; // string buffer
@@ -53,7 +54,7 @@ void mqtt_connect() {
 	}
 }
 
-// Initalize or clear all objects and variables related with LoRa
+// Initalize objects and variables related to LoRa
 void initLoRaData() {
 	// Initalize node array data
 	for (uint8_t node = 1; node <= NODES; node++) {
@@ -64,14 +65,6 @@ void initLoRaData() {
 		}
 		rssi[node - 1] = 0;
 	}
-
-	/*
-	// Clear route data
-	manager->clearRoutingTable();
-	for(uint8_t node = 1; node <= NODES; node++) {
-	manager->addRouteTo(node, 0);
-	}
-	 */
 }
 
 // Initalize and confiture all objects and variables related with LoRa
@@ -155,151 +148,64 @@ const __FlashStringHelper* getErrorString(uint8_t error) {
 	return F("UNKNOWN");
 }
 
-/*
-   void updateRoutingTable() {
-// Update routing data toward all other nodes
-for (uint8_t dest = 1; dest <= NODES; dest++) {
-if (dest == GROUND_ID) { // if destination is self
-routes[dest - 1] = 255; // mark itself
-} else {
-RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-routes[dest - 1] = route->next_hop; // update route
 
-if (routes[dest - 1] == 0) { // if there is no route
-rssi[dest - 1]= 0; // reset rssi
-}
-}
-}
-}
- */
+void updateRouteInfo() {
+	// Update routing data toward all other nodes
+	for (uint8_t dest = 1; dest <= NODES; dest++) {
+		if (dest == GROUND_ID) { // if destination is self
+			routes[dest - 1] = 255; // mark itself
 
-// Create the routing info by JSON string to each nodes, on buffer
-// Element of array start with information of node 1
-// n = next node to go to destination (0: impossible to go)
-// r = rssi between here to destination
-void getRouteInfoJson() {
-	buf[0] = '\0';
-	strcat(buf, "[");
-	for(uint8_t node = 1 ; node <= NODES; node++) {
-		strcat(buf, "{\"n\":");
-		sprintf(buf + strlen(buf), "%d", routes[node - 1]);
-		strcat(buf, ",");
-		strcat(buf, "\"r\":");
-		sprintf(buf + strlen(buf), "%d", rssi[node - 1]);
-		strcat(buf, "}");
-		if (node < NODES) {
-			strcat(buf, ",");
+		} else {
+			manager->doArp(dest);
+			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
+			if (route == NULL) continue;
+
+			routes[dest - 1] = route->next_hop; // update route
+			rssi[dest - 1] = rf95w.lastRssi();
+
+			if (routes[dest - 1] == 0) { // if there is no route
+				rssi[dest - 1]= 0; // reset rssi
+			}
+
 		}
 	}
-	strcat(buf, "]");
 }
 
-// Publish route info on MQTT server and print it for debugging
-// !! You must not change anything in this function !!
-// !! Mesh visualizing server will be broken !!
-void publishRouteInfo(uint8_t nodeId) {
-	// Concatenate strings to format the route info for visualizing server
-	const char* str1 = "{\"";
-	char str2[4];
-	sprintf(str2, "%d", nodeId);
-	const char* str3 = "\": ";
-	const char* str4 = "}";
-	int totalLength = strlen(str1) + strlen(str2) + strlen(str3) + strlen(buf) + strlen(str4);
+void generateRouteInfoStringInBuf() {
+	buf[0] = '\0';
+	for(uint8_t node = 1 ; node <= NODES; node++) {
+		sprintf(buf + strlen(buf), "%d", routes[node - 1]);
+		strcat(buf, ",");
+		sprintf(buf + strlen(buf), "%d", rssi[node - 1]);
+		if (node < NODES) {
+			strcat(buf, "/");
+		}
+	}
+}
 
-	// Allocate char pointer for the formatted route info
-	char publishBuf[totalLength];
-
-	// Concatenate strings into allocated pointer
-	strcpy(publishBuf, str1);
-	strcat(publishBuf, str2);
-	strcat(publishBuf, str3);
-	strcat(publishBuf, buf);
-	strcat(publishBuf, str4);
-	/*
-	   strcpy(publishBuf, str1);
-	   strcpy(publishBuf + strlen(str1), str2);
-	   strcpy(publishBuf + strlen(str1) + strlen(str2), str3);
-	   strcpy(publishBuf + strlen(str1) + strlen(str2) + strlen(str3), route);
-	   strcpy(publishBuf + strlen(str1) + strlen(str2) + strlen(str3) + strlen(route), str4);
-	 */
+void publishRouteInfoInBuf(uint8_t nodeId) {
+	strcat(buf, "[");
+	sprintf(buf + strlen(buf), "%d", nodeId);
 
 	// Print route info in serial for debugging
 	Serial.print("[PUB] ");
-	Serial.println(publishBuf);
+	Serial.println(buf);
 
 	// Publish data on MQTT server by topic
-	mqtt_client.publish(DATATOPIC, publishBuf);
+	mqtt_client.publish(DATATOPIC, buf);
 }
 
+void listenIncomingRouteInfo() {
+	uint8_t len = sizeof(buf);
+	uint8_t src;
+	if (manager->recvfromAck((uint8_t *)buf, &len, &src)) {
+		Serial.print("[RECV] ");
+		Serial.print(src);
+		Serial.print("-> ");
+		Serial.println(buf);
 
-void propagateRouteInfo() {
-	// Send the route info of current node to all other nodes
-	for (uint8_t dest = 1; dest <= NODES; dest++) {
-		if (dest == GROUND_ID) continue; // self skip
-
-		//updateRoutingTable();
-		getRouteInfoJson();
-
-		// Print transmit info
-		Serial.print(F("[SEND] ->"));
-		Serial.print(dest);
-		Serial.print(F(" :"));
-		Serial.print(buf);
-
-		// Send route info 
-		uint8_t sendBuf[strlen(buf)];
-		memcpy(sendBuf, buf, strlen(buf));
-		uint8_t error = manager->sendtoWait((uint8_t *)sendBuf, sizeof(sendBuf), dest);
-		if (error != RH_ROUTER_ERROR_NONE) { // if transmit error is occured
-						     // Print detail error
-			Serial.print(F(" !! "));
-			Serial.println(getErrorString(error));
-		} else {
-			Serial.println(F(" OK")); // if transmit is successful
-
-			// if there is intermediate node in route destination node
-			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-			if (route->next_hop != 0) {
-				// Update route data(next hop, rssi) by previous transmit info
-				routes[dest - 1] = route->next_hop;
-				rssi[route->next_hop - 1] = rf95w.lastRssi();
-			}
-		}
-
-		publishRouteInfo(GROUND_ID);
-
-
-		// Listen incoming messages
-		// Wait for a random length of time before next transmit during listening
-		unsigned long nextTransmit = millis() + random(3000, 5000);
-		while (nextTransmit > millis()) {
-
-			// Listen incoming trasnmit for wait time
-			// Save data on buf and source node info
-			uint8_t rcvBuf[MAX_MESSAGE_LEN];
-			uint8_t len = sizeof(rcvBuf);
-			uint8_t src; // transmit source node
-			if (manager->recvfromAck((uint8_t *)rcvBuf, &len, &src)) {
-				memcpy(buf, rcvBuf, len);
-				buf[len] = '\0';
-
-				// Print received transmit info
-				Serial.print("[RECV] ");
-				Serial.print(src);
-				Serial.print(F("-> :"));
-				Serial.println(buf);
-
-				publishRouteInfo(src);
-
-				// if received trasnmit come from intermediate node
-				RHRouter::RoutingTableEntry *route = manager->getRouteTo(src);
-				if (route->next_hop != 0) { 
-					// Update route data(next hop, rssi) by previous transmit info
-					routes[src - 1] = route->next_hop;
-					rssi[route->next_hop - 1] = rf95w.lastRssi();
-				}
-			}
-		}
+		buf[len] = '\0';
+		publishRouteInfoInBuf(src);
 	}
 }
 
@@ -309,9 +215,14 @@ void loop() {
 		mqtt_connect();
 	}
 	mqtt_client.loop();
-
 	delay(50); // Give the ESP time to handle network.
 
-	// Propagate route info to all other nodes
-	propagateRouteInfo();
+	while (millis() > publishInterval) {
+		updateRouteInfo();
+		generateRouteInfoStringInBuf();
+		publishRouteInfoInBuf(1);
+
+		publishInterval = millis() + 3000;
+	}
+	listenIncomingRouteInfo();
 }
