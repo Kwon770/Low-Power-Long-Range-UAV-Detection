@@ -5,7 +5,7 @@
 #include <SPI.h>
 
 
-RH_RF95 rf95w(HELTEC_CS, HELTEC_DI0); // LoRa transceiver driver
+RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ); // LoRa transceiver driver
 RHMesh *manager; // Class to manage message delivery and receipt, using the drvier declared above
 
 unsigned long propagateInterval = 0;
@@ -32,7 +32,7 @@ void initLoRaDriver() {
 	Serial.print(F("initializing node : "));
 
 	// Configure SPI pin in the board
-	SPI.begin(HELTEC_SCK, HELTEC_MISO, HELTEC_MOSI, HELTEC_CS);
+	SPI.begin(FREENOVE_SCK, FREENOVE_MISO, FREENOVE_MOSI, FREENOVE_CS);
 
 	// Initalize RadioHead Mesh object
 	manager = new RHMesh(rf95w, NODE_ID);
@@ -67,21 +67,23 @@ void setup() {
 	Serial.begin(BUAD_RATE);
 	while (!Serial); // Wait for serial port to be available
 
+  // Use flash memory for string instead of RAM
 	Serial.print(F("[NODE "));
 	Serial.print(NODE_ID);
 	Serial.println(F("]"));
 
-	// Use flash memory for string instead of RAM
-	Serial.print(F("initializing node : "));
-
 	// Initialize LoRa network
 	initLoRaDriver();
 
-	// Print free memory
-	Serial.print(F("RAM = "));
-	Serial.println(ESP.getFreeHeap());
-	Serial.print("SRAM = ");
+  // Test debug log
+	Serial.print(F("getHeapSize() = "));
+	Serial.println(ESP.getHeapSize());
+	Serial.print("getPsramSize() = ");
 	Serial.println(ESP.getPsramSize());
+ Serial.print("getCycleCount() = ");
+ Serial.println(ESP.getCycleCount());
+ Serial.print("getCpuFreqMHz() = ");
+ Serial.println(ESP.getCpuFreqMHz());
 }
 
 
@@ -153,7 +155,7 @@ void propagateRouteInfo() {
 		//memcpy(sendBuf, buf, strlen(buf));
 		uint8_t error = manager->sendtoWait((uint8_t *)buf, sizeof(buf), GROUND_ID);
 		if (error != RH_ROUTER_ERROR_NONE) { // if transmit error is occured
-						     // Print detail error
+		  // Print detail error
 			Serial.print(F(" !! ")); 
 			Serial.println(getErrorString(error));
 		} else {

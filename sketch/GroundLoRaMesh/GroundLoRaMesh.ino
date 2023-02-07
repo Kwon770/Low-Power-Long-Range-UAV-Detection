@@ -23,7 +23,7 @@ const char* DATATOPIC = "btt_mesh_gateway/data";
 WiFiClient espClient; // Arduino-ESP32 WiFiSTA object
 PubSubClient mqtt_client(espClient); // MQTT client object
 
-RH_RF95 rf95w(HELTEC_CS, HELTEC_DI0); // LoRa transceiver driver
+RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ); // LoRa transceiver driver
 RHMesh *manager; // Class to manage message delivery and receipt, using the drvier declared above
 
 unsigned long publishInterval = 0;
@@ -73,7 +73,7 @@ void initLoRaDriver() {
 	Serial.print(F("initializing node : "));
 
 	// Configure SPI pin in the board
-	SPI.begin(HELTEC_SCK, HELTEC_MISO, HELTEC_MOSI, HELTEC_CS);
+	SPI.begin(FREENOVE_SCK, FREENOVE_MISO, FREENOVE_MOSI, FREENOVE_CS);
 
 	// Initalize RadioHead Mesh object
 	manager = new RHMesh(rf95w, GROUND_ID);
@@ -215,8 +215,8 @@ void loop() {
 		mqtt_connect();
 	}
 	mqtt_client.loop();
-	delay(50); // Give the ESP time to handle network.
-
+ 
+	// Handle mesh-network-visualize server
 	while (millis() > publishInterval) {
 		updateRouteInfo();
 		generateRouteInfoStringInBuf();
