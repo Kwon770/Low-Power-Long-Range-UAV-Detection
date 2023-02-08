@@ -1,5 +1,5 @@
-libraries/NetworkConfig/**
-libraries/NetworkConfig
+libraries/NetworkConfig/MQTTConfig.h
+libraries/NetworkConfig/WiFiConfig.h
 
 visual_server/secret/**
 visual_server/secret
