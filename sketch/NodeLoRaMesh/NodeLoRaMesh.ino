@@ -1,174 +1,281 @@
+// Hardware headers
+#include <SPI.h>
+#include <string.h>
+
+// Network headers
 #include <RHRouter.h>
 #include <RHMesh.h>
 #include <RH_RF95.h>
 #include <LoPoDeMesh.h>
-#include <SPI.h>
+
+// Log header
+#include <Preferences.h>
 
 
-RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ); // LoRa transceiver driver
-RHMesh *manager; // Class to manage message delivery and receipt, using the drvier declared above
+RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ);  // LoRa transceiver driver
+RHMesh *manager;                           // Mesh network instance
+char buf[MAX_MESSAGE_LEN];                 // String buffer for receiving
 
-unsigned long propagateInterval = 0;
-uint8_t routes[NODES]; // full routing table for mesh
-int16_t rssi[NODES]; // signal strength of nodes
-char buf[MAX_MESSAGE_LEN]; // string buffer
+uint8_t routes[NODES];  // Routing table (Debug data | Gateway data)
+int16_t rssi[NODES];    // RSSI table against all other nodes (Debug data | Gateway data)
 
-// Initalize or clear all objects and variables related with LoRa
+#define PROPAGATE_INTERVAL 3000   // Interval for propagating visualize route data
+unsigned long propagateTime = 0;  // previous propagate time
+
+#define LOG_NAMESPACE "log"        // log namespace name
+#define LOG_COUNT_KEY "log-count"  // log count key name
+#define LOG_INTERVAL 1000          // Interval for logging
+Preferences preferences;           // Log Instance
+uint32_t logCount = 0;             // log count
+unsigned long logTime = 0;         // previous log time
+
+
+// Initalize routes[] and rssi[]
 void initLoRaData() {
-	// Initalize node array data
-	for (uint8_t node = 1; node <= NODES; node++) {
-		if (node == NODE_ID) {
-			routes[node - 1] = 255;
-		} else {
-			routes[node - 1] = 0;
-		}
-		rssi[node - 1] = 0;
-	}
+  for (uint8_t node = 1; node <= NODES; node++) {
+    if (node == GROUND_ID) {
+      routes[node - 1] = 255;
+    } else {
+      routes[node - 1] = 0;
+    }
+    rssi[node - 1] = 0;
+  }
 }
 
 // Initalize and confiture all objects and variables related with LoRa
 void initLoRaDriver() {
-	// Initalize RHMesh
-	Serial.print(F("initializing node : "));
+  // Initalize RHMesh
+  Serial.print(F("Init node.. "));
 
-	// Configure SPI pin in the board
-	SPI.begin(FREENOVE_SCK, FREENOVE_MISO, FREENOVE_MOSI, FREENOVE_CS);
+  // Configure SPI pin in the board
+  SPI.begin(FREENOVE_SCK, FREENOVE_MISO, FREENOVE_MOSI, FREENOVE_CS);
 
-	// Initalize RadioHead Mesh object
-	manager = new RHMesh(rf95w, NODE_ID);
-	if (!manager->init()) {
-		Serial.println(F("!! init failed !!"));
-	} else {
-		Serial.println("done");
-	}
+  // Initalize RadioHead Mesh object
+  manager = new RHMesh(rf95w, NODE_ID);
+  if (!manager->init()) {
+    Serial.println(F("!! init failed !!"));
+  } else {
+    Serial.println("done");
+  }
 
-	// Configure LoRa driver
-	rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
-	rf95w.setFrequency(LORA_FREQUENCY);
-	rf95w.setCADTimeout(LORA_TIMEOUT);
+  // Configure LoRa driver
+  rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
+  rf95w.setFrequency(LORA_FREQUENCY);
+  rf95w.setCADTimeout(LORA_TIMEOUT);
 
-	RH_RF95::ModemConfig modemConfig = {
-		LORA_MODEM_1D,
-		LORA_MODEM_2E,
-		LORA_MODEM_26	
-	}; 
-	rf95w.setModemRegisters(&modemConfig);
-	if (!rf95w.setModemConfig(LORA_MODEM_CONFIG)) { // Recheck modem config
-		Serial.println(F("!! Modem config failed !!"));
-	}
-	Serial.println("RF95 Ready");
+  RH_RF95::ModemConfig modemConfig = {
+    LORA_MODEM_1D,
+    LORA_MODEM_2E,
+    LORA_MODEM_26
+  };  // Low data-rate, Slow-long modem
+  rf95w.setModemRegisters(&modemConfig);
+  if (!rf95w.setModemConfig(LORA_MODEM_CONFIG)) {  // Verify modem config
+    Serial.println(F("!! Modem config failed !!"));
+  }
+  Serial.println("RF95 Ready");
 
-	initLoRaData();
+  initLoRaData();
 }
 
+// Initalize logging feature
+void initLog() {
+  // Open namespace with Preferences instance
+  Serial.print(F("Logging."));
+  while (!preferences.begin(LOG_NAMESPACE, false)) {
+    Serial.print('.');
+    delay(500);
+  }
+  Serial.println(F(" Ready"));
+
+  // Get the number of log to use as key
+  logCount = preferences.getInt(LOG_COUNT_KEY);
+}
 
 void setup() {
-	randomSeed(analogRead(0));
-	Serial.begin(BUAD_RATE);
-	while (!Serial); // Wait for serial port to be available
+  randomSeed(analogRead(0));
+  Serial.begin(BUAD_RATE);
+  while (!Serial);  // Wait for serial port to be available
 
   // Use flash memory for string instead of RAM
-	Serial.print(F("[NODE "));
-	Serial.print(NODE_ID);
-	Serial.println(F("]"));
+  Serial.print(F("[NODE "));
+  Serial.print(NODE_ID);
+  Serial.println(F("]"));
 
-	// Initialize LoRa network
-	initLoRaDriver();
+  // Initialize LoRa network
+  initLoRaDriver();
 
-  // Test debug log
-	Serial.print(F("getHeapSize() = "));
-	Serial.println(ESP.getHeapSize());
-	Serial.print("getPsramSize() = ");
-	Serial.println(ESP.getPsramSize());
- Serial.print("getCycleCount() = ");
- Serial.println(ESP.getCycleCount());
- Serial.print("getCpuFreqMHz() = ");
- Serial.println(ESP.getCpuFreqMHz());
+  // * Execute to enable logging
+  initLog();
 }
 
 
+// [DEBUG SERIAL] //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Exchange error number to error string by flash string
-const __FlashStringHelper* getErrorString(uint8_t error) {
-	switch(error) {
-		case 1: return F("INVALID LENGTH");
-			break;
-		case 2: return F("NO ROUTE");
-			break;
-		case 3: return F("TIMEOUT");
-			break;
-		case 4: return F("NO REPLY");
-			break;
-		case 5: return F("UNABLE TO DELIVER");
-			break;
-	}
-	return F("UNKNOWN");
+const __FlashStringHelper *getErrorString(uint8_t error) {
+  switch (error) {
+    case 1:
+      return F("INVALID LENGTH");
+      break;
+    case 2:
+      return F("NO ROUTE");
+      break;
+    case 3:
+      return F("TIMEOUT");
+      break;
+    case 4:
+      return F("NO REPLY");
+      break;
+    case 5:
+      return F("UNABLE TO DELIVER");
+      break;
+  }
+  return F("UNKNOWN");
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Update routing info(route, rssi) toward all nodes
 void updateRouteInfo() {
-	// Update routing data toward all other nodes
-	for (uint8_t dest = 1; dest <= NODES; dest++) {
-		if (dest == NODE_ID) { // if destination is self
-			routes[dest - 1] = 255; // mark itself
+  for (uint8_t dest = 1; dest <= NODES; dest++) {
+    if (dest == NODE_ID) {     // if destination is self
+      routes[dest - 1] = 255;  // mark itself
 
-		} else {
-			manager->doArp(dest);
-			RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-			if (route == NULL) continue;
+    } else {
+      // Test network by RHMesh::doArp()
+      manager->doArp(dest);
+      RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
+      if (route == NULL) continue;
 
-			routes[dest - 1] = route->next_hop; // update route
-			rssi[dest - 1] = rf95w.lastRssi();
+      routes[dest - 1] = route->next_hop;  // Update route
+      rssi[dest - 1] = rf95w.lastRssi();   // Update rssi
 
-			if (routes[dest - 1] == 0) { // if there is no route
-				rssi[dest - 1]= 0; // reset rssi
-			}
-
-		}
-	}
+      if (routes[dest - 1] == 0) {  // if there is no route
+        rssi[dest - 1] = 0;         // reset rssi
+      }
+    }
+  }
 }
 
-
+// Generate route info as formatted string in buffer
 void generateRouteInfoStringInBuf() {
-	buf[0] = '\0';
-	for(uint8_t node = 1 ; node <= NODES; node++) {
-		sprintf(buf + strlen(buf), "%d", routes[node - 1]);
-		strcat(buf, ",");
-		sprintf(buf + strlen(buf), "%d", rssi[node - 1]);
-		if (node < NODES) {
-			strcat(buf, "/");
-		}
-	}
+  // Mark start of buffer by null for sprintf(), strcat()
+  buf[0] = '\0';
+
+  // Loop all nodes
+  for (uint8_t node = 1; node <= NODES; node++) {
+    sprintf(buf + strlen(buf), "%d", routes[node - 1]);
+    strcat(buf, ",");
+    sprintf(buf + strlen(buf), "%d", rssi[node - 1]);
+
+    // Node spliter
+    if (node < NODES) {
+      strcat(buf, "/");
+    }
+  }
 }
 
+// Propagate route info to ground node
 void propagateRouteInfo() {
-	while (millis() > propagateInterval) {
-		updateRouteInfo();
-		generateRouteInfoStringInBuf();
+  // Loop in every PROPAGATE_INTERVAL
+  if (millis() - propagateTime > PROPAGATE_INTERVAL) {
+    updateRouteInfo();
+    generateRouteInfoStringInBuf();
 
-		// Print transmit info
-		Serial.print(F("->"));
-		Serial.print(GROUND_ID);
-		Serial.print(F(" :"));
-		Serial.print(buf);
+    // [DEBUG SERIAL] //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Serial.print(F("->"));
+    Serial.print(GROUND_ID);
+    Serial.print(F(" :"));
+    Serial.print(buf);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		// Send route info 
-		//uint8_t sendBuf[strlen(buf)];
-		//memcpy(sendBuf, buf, strlen(buf));
-		uint8_t error = manager->sendtoWait((uint8_t *)buf, sizeof(buf), GROUND_ID);
-		if (error != RH_ROUTER_ERROR_NONE) { // if transmit error is occured
-		  // Print detail error
-			Serial.print(F(" !! ")); 
-			Serial.println(getErrorString(error));
-		} else {
-			Serial.println(F(" OK")); // if transmit is successful
-		}
+    // Send route info
+    uint8_t error = manager->sendtoWait((uint8_t *)buf, sizeof(buf), GROUND_ID);
+    // [DEBUG SERIAL] //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (error != RH_ROUTER_ERROR_NONE) {  // if transmit error is occured, print detail error
+      Serial.print(F(" !! "));
+      Serial.println(getErrorString(error));
+    } else { // if transmit is successful
+      Serial.println(F(" OK"));
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		propagateInterval = millis() + 3000;
-	}
+    // Update propagated time
+    propagateTime = millis();
+  }
 }
 
 
+// Log char pointer parameter in namespace
+void log(char *ptr) {
+  // Type casting 'logCount' from Int to Char pointer
+  char logCountCharPtr[5];
+  itoa(logCount, logCountCharPtr, 10);
+
+  // Save log (key=log count, value=parameter)
+  preferences.putString((const char *)logCountCharPtr, ptr);
+
+  // Update logCount
+  logCount++;
+  // Preferences.h can not overwrite, so after removing, save again
+  preferences.remove(LOG_COUNT_KEY);
+  preferences.putInt(LOG_COUNT_KEY, logCount);
+}
+
+// Log only current node network status (route, rssi)
+void runNetworkLogging() {
+  // Loop in every LOG_INTERVAL
+  if (millis() - logTime > LOG_INTERVAL) {
+    // Update route info and generate string abour ground node
+    updateRouteInfo();
+    generateRouteInfoStringInBuf();
+
+    // Log buffer
+    log((char *)buf);
+    // [DEBUG SERIAL] //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Serial.println(buf);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+    // Update logged time
+    logTime = millis();
+  }
+}
+
+// Log current node network status (route, rssi) and Propagate route info
+void runExperimentWithLog() {
+  // Loop in every LOG_INTERVAL
+  if (millis() - logTime > LOG_INTERVAL) {
+    // Update route info and generate string about ground node
+    updateRouteInfo();
+    generateRouteInfoStringInBuf();
+
+    // Write source at last of buffer and log buffer
+    log((char *)buf);
+    // [DEBUG SERIAL] //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Serial.println(buf);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Update logged time
+    logTime = millis();
+  }
+
+  // Propagate route info to all other nodes
+  propagateRouteInfo();
+
+  // Time TFML detection
+  unsigned long start = millis();
+  // detectUAVWithTFML();
+  unsigned long end = millis();
+
+  // Log time taken by TFML after type casting from Long to Char pointer 
+  char timeCharPtr[5];
+  sprintf(timeCharPtr, "%lu", end - start);
+  log((char *) timeCharPtr);
+}
 
 void loop() {
-	// Propagate route info to all other nodes
-	propagateRouteInfo();
+  // * Execute to enable network logging
+  // runNetworkLogging();
+
+  // * Execute to enable experiment with log
+  runExperimentWithLog();
 }
