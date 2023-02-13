@@ -5,3 +5,10 @@ visual_server/secret/**
 visual_server/secret
 visual_server/node_modules
 visual_server/build
+
+
+detection/models/*
+detection/labeled_dataset_02/*
+detection/labeled_dataset_01/*
+detection/no_labeled_uav_dataset/*
+detection/*png

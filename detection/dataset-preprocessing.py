@@ -15,29 +15,27 @@ FLAGS = ''
 FILE_SET_NUM = 400
 
 
-
 '''
 [Dataset, Annotation, xml file naming format]
     Dataset
     └─ train
         └─ image01.jpg
         └─ image01.jpg
-    └─ val
-        └─ image01.jpg
-        └─ image01.jpg
     └─ test
         └─ image01.jpg
         └─ image01.jpg
-
+    └─ val
+        └─ image01.jpg
+        └─ image01.jpg
 
     Annotations
     └─ train
         └─ image01.xml
         └─ image01.xml
-    └─ val
-        └─ image01.xml
-        └─ image01.xml
     └─ test
+        └─ image01.xml
+        └─ image01.xml
+    └─ val
         └─ image01.xml
         └─ image01.xml
 
@@ -130,14 +128,14 @@ def XmlToCSV(target_dim, src_dir, dst_dir):
 
 
     # iterate each annotatoin folders
-    for folder_name in os.listdir(path=src_dir):
+    for folder_name in sorted(os.listdir(path=src_dir)):
         print(f'folder_name={folder_name}')
         cur_folder_dir = os.path.join(src_dir, folder_name)
         # resized_dir = os.path.join(dst_dir, folder_name)
         prefix_resized_dir = os.path.join(dst_dir, folder_name)
         resized_dir = os.path.join(prefix_resized_dir, "annotation" + directory_id.__str__())
 
-        for xml_file_name in os.listdir(path=cur_folder_dir):
+        for xml_file_name in sorted(os.listdir(path=cur_folder_dir)):
 
 
             # read xml file and get data
@@ -241,10 +239,10 @@ def Resizing(src_dir, dst_dir):
     directory_id = 0
 
     # iterate each annotatoin folders
-    for folder_name in os.listdir(path=src_dir):
+    for folder_name in sorted(os.listdir(path=src_dir)):
         cur_folder_dir = path=os.path.join(src_dir, folder_name)
         resized_dir = os.path.join(dst_dir, folder_name, "data" + directory_id.__str__())
-        for file_name in os.listdir(cur_folder_dir):
+        for file_name in sorted(os.listdir(cur_folder_dir)):
             cur_file_dir = os.path.join(cur_folder_dir, file_name)
 
             # checking if it is a file
@@ -289,6 +287,7 @@ def split(df, group):
 
 
 def create_tf_example(group, path, label_map_dict):
+    print(f'path={path}')
     with tf.io.gfile.GFile(os.path.join(path, '{}'.format(group.filename)), 'rb') as fid:
         encoded_jpg = fid.read()
     encoded_jpg_io = io.BytesIO(encoded_jpg)
@@ -333,6 +332,7 @@ def create_tf_example(group, path, label_map_dict):
 def CSVToTFrecord(tfrecord_path, df_xml_to_csv, cur_datset_folder_dir, labels_path, idx):
     label_map = label_map_util.load_labelmap(labels_path)
     label_map_dict = label_map_util.get_label_map_dict(label_map)
+    print(label_map_dict)
 
     tfrecord_path = os.path.join(tfrecord_path, idx.__str__())
     print(f'tfrecord_path={tfrecord_path}')
@@ -396,12 +396,24 @@ if __name__ == '__main__':
     total_xml_df, xml_df_list = XmlToCSV(target_dim=target_dim, src_dir=src_annotation_dir, dst_dir=dst_resized_annotation_dir)
     print('END RESIZING ANNOTATION ...')
 
-    for idx, cur_dataset_folder in enumerate(os.listdir(dst_resized_dataset_dir)):
+
+    print('\n\n\n\n')
+    print('START CONVERTING TO TFRECROD ...')
+
+    print(os.listdir(dst_resized_dataset_dir))
+    # dst_resized_dataset_dir
+    # ordered by: test train val
+    for idx, cur_dataset_folder in enumerate(sorted(os.listdir(dst_resized_dataset_dir))):
         cur_dataset_folder_dir = os.path.join(dst_resized_dataset_dir, cur_dataset_folder)
 
         print(f'dst_resized_dataset_dir={dst_resized_dataset_dir}')
         print(f'cur_dataset_folder_dir={cur_dataset_folder_dir}')
+        print(f'cur_dataset_folder={cur_dataset_folder}')
 
-        for idx, cur_data_folder in enumerate(os.listdir(cur_dataset_folder_dir)):
+        print(f'cur_dataset_folder_dir={sorted(os.listdir(cur_dataset_folder_dir))}')
+        # orderd by sort
+        for idx, cur_data_folder in enumerate(sorted(os.listdir(cur_dataset_folder_dir))):
+            print(f'cur_data_folder={cur_data_folder}')
+
             CSVToTFrecord(dst_resized_annotation_dir, xml_df_list[idx],
                         os.path.join(cur_dataset_folder_dir, cur_data_folder), labels_path, idx)
