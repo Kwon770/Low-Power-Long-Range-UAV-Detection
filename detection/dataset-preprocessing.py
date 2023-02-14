@@ -106,7 +106,7 @@ convert annotated file (xml) to CSV file foramt
     [dataframe01, dataframe02, ...]
 
 '''
-def XmlToCSV(target_dim, src_dir, dst_dir):
+def XmlToCSV(target_dim, src_dir, dst_dir, src_dataset_dir):
     import xml.etree.ElementTree as ET
 
     if not(os.path.isdir(dst_dir)):
@@ -131,12 +131,14 @@ def XmlToCSV(target_dim, src_dir, dst_dir):
     for folder_name in sorted(os.listdir(path=src_dir)):
         print(f'folder_name={folder_name}')
         cur_folder_dir = os.path.join(src_dir, folder_name)
-        # resized_dir = os.path.join(dst_dir, folder_name)
+
         prefix_resized_dir = os.path.join(dst_dir, folder_name)
         resized_dir = os.path.join(prefix_resized_dir, "annotation" + directory_id.__str__())
 
-        for xml_file_name in sorted(os.listdir(path=cur_folder_dir)):
+        cur_file_list_of_dataset_folder = sorted(os.listdir(path=os.path.join(src_dataset_dir, folder_name)))
+        for idx, xml_file_name in enumerate(sorted(os.listdir(path=cur_folder_dir))):
 
+            # cur_data = os.path.splitext(cur_file_list_of_dataset_folder[idx])
 
             # read xml file and get data
             cur_file_dir = os.path.join(cur_folder_dir, xml_file_name)
@@ -145,7 +147,8 @@ def XmlToCSV(target_dim, src_dir, dst_dir):
 
             # bellow var is xml tag.
             root_tag = tree.getroot()
-            file_name = root_tag.find('filename').text
+            file_name = cur_file_list_of_dataset_folder[idx]
+            # file_name = root_tag.find('filename').text
             size_tag = root_tag.find('size')
             object_tag = root_tag.find('object')
 
@@ -165,6 +168,7 @@ def XmlToCSV(target_dim, src_dir, dst_dir):
 
             # (filename, width, height, class, xmin, ymin, xmax, ymax)
             element = (file_name, target_dim[1], target_dim[0], class_name,
+
                         # convert bounding box coordinates to speicifc size
                         int(bounding_box_tag[0].text) * scale_factor[1],
                         int(bounding_box_tag[1].text) * scale_factor[0],
@@ -334,7 +338,7 @@ def CSVToTFrecord(tfrecord_path, df_xml_to_csv, cur_datset_folder_dir, labels_pa
     label_map_dict = label_map_util.get_label_map_dict(label_map)
     print(label_map_dict)
 
-    tfrecord_path = os.path.join(tfrecord_path, idx.__str__())
+    tfrecord_path = os.path.join(tfrecord_path, "tfrecord" + idx.__str__())
     print(f'tfrecord_path={tfrecord_path}')
     tf_record_writer = tf.io.TFRecordWriter(tfrecord_path)
 
@@ -393,7 +397,10 @@ if __name__ == '__main__':
     print('END RESIZING DATASET ...')
 
     print('START RESIZING ANNOTATION ...')
-    total_xml_df, xml_df_list = XmlToCSV(target_dim=target_dim, src_dir=src_annotation_dir, dst_dir=dst_resized_annotation_dir)
+    total_xml_df, xml_df_list = XmlToCSV(target_dim=target_dim,
+                                        src_dir=src_annotation_dir,
+                                        dst_dir=dst_resized_annotation_dir,
+                                        src_dataset_dir=src_dataset_dir)
     print('END RESIZING ANNOTATION ...')
 
 
