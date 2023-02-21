@@ -50,6 +50,17 @@ void initLoRaDriver() {
   // Configure SPI pin in the board
   SPI.begin(FREENOVE_SCK, FREENOVE_MISO, FREENOVE_MOSI, FREENOVE_CS);
 
+  // Configure LoRa driver
+  rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
+  rf95w.setFrequency(LORA_FREQUENCY);
+  rf95w.setCADTimeout(LORA_TIMEOUT);
+
+  // Configure Model for configuring LoRa parameter
+  if (!rf95w.setModemConfig(LORA_MODEM_CONFIG)) {
+    Serial.println(F("!! Modem config failed !!"));
+  }
+  Serial.println("RF95 Ready");
+
   // Initalize RadioHead Mesh object
   manager = new RHMesh(rf95w, NODE_ID);
   if (!manager->init()) {
@@ -58,22 +69,7 @@ void initLoRaDriver() {
     Serial.println("done");
   }
 
-  // Configure LoRa driver
-  rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
-  rf95w.setFrequency(LORA_FREQUENCY);
-  rf95w.setCADTimeout(LORA_TIMEOUT);
-
-  RH_RF95::ModemConfig modemConfig = {
-    LORA_MODEM_1D,
-    LORA_MODEM_2E,
-    LORA_MODEM_26
-  };  // Low data-rate, Slow-long modem
-  rf95w.setModemRegisters(&modemConfig);
-  if (!rf95w.setModemConfig(LORA_MODEM_CONFIG)) {  // Verify modem config
-    Serial.println(F("!! Modem config failed !!"));
-  }
-  Serial.println("RF95 Ready");
-
+  manager->setTimeout(1500);
   initLoRaData();
 }
 
