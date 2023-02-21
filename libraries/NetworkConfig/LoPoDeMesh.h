@@ -9,10 +9,10 @@
 #define BUAD_RATE 115200
 
 // Node Config
-#define NODES 2
+#define NODES 3
 #define GROUND_ID 1
 #define NODE_ID 2
-#define MAX_MESSAGE_LEN 100 
+#define MAX_MESSAGE_LEN 60
 
 // LoRa transceiver config
 #define LORA_TX_POWER 20	// transmit power = 20
@@ -28,6 +28,7 @@
 #define LORA_MODEM_CONFIG RH_RF95::Bw125Cr48Sf4096
 
 // HELTEC WiFi LoRa V2
+/*
 #define HELTEC_SCK 5
 #define HELTEC_MISO 19
 #define HELTEC_MOSI 27
@@ -36,6 +37,7 @@
 #define HELTEC_ITQ 26
 #define HELTEC_DI1 35
 #define HELTEC_DI2 34
+*/
 
 // FREENOVE ESP32-WROVER CAM
 // Adafruit RFM95W

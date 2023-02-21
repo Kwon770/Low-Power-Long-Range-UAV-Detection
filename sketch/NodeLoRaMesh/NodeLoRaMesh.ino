@@ -20,7 +20,7 @@ uint8_t routes[NODES];  // Routing table (Debug data | Gateway data)
 int16_t rssi[NODES];    // RSSI table against all other nodes (Debug data | Gateway data)
 
 #define PROPAGATE_INTERVAL 3000   // Interval for propagating visualize route data
-unsigned long propagateTime = 0;  // previous propagate time
+unsigned long transmitTime = 0;  // previous transmit time
 
 #define LOG_NAMESPACE "log"        // log namespace name
 #define LOG_COUNT_KEY "log-count"  // log count key name
@@ -83,8 +83,10 @@ void initLog() {
   }
   Serial.println(F(" Ready"));
 
-  // Get the number of log to use as key
-  logCount = preferences.getInt(LOG_COUNT_KEY);
+  // Get the saved number of log to use as key, otherewise default 0
+  if (preferences.isKey(LOG_COUNT_KEY)) {
+    logCount = preferences.getInt(LOG_COUNT_KEY);
+  }
 }
 
 void setup() {
@@ -169,10 +171,10 @@ void generateRouteInfoStringInBuf() {
   }
 }
 
-// Propagate route info to ground node
-void propagateRouteInfo() {
+// Transmit route info to ground node
+void transmitRouteInfo() {
   // Loop in every PROPAGATE_INTERVAL
-  if (millis() - propagateTime > PROPAGATE_INTERVAL) {
+  if (millis() - transmitTime > PROPAGATE_INTERVAL) {
     updateRouteInfo();
     generateRouteInfoStringInBuf();
 
@@ -194,8 +196,8 @@ void propagateRouteInfo() {
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Update propagated time
-    propagateTime = millis();
+    // Update transmitd time
+    transmitTime = millis();
   }
 }
 
@@ -217,26 +219,26 @@ void log(char *ptr) {
 }
 
 // Log only current node network status (route, rssi)
-void runNetworkLogging() {
-  // Loop in every LOG_INTERVAL
-  if (millis() - logTime > LOG_INTERVAL) {
-    // Update route info and generate string abour ground node
-    updateRouteInfo();
-    generateRouteInfoStringInBuf();
+// void runNetworkLogging() {
+//   // Loop in every LOG_INTERVAL
+//   if (millis() - logTime > LOG_INTERVAL) {
+//     // Update route info and generate string abour ground node
+//     updateRouteInfo();
+//     generateRouteInfoStringInBuf();
 
-    // Log buffer
-    log((char *)buf);
-    // [DEBUG SERIAL] //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    Serial.println(buf);
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     // Log buffer
+//     log((char *)buf);
+//     // [DEBUG SERIAL] //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     Serial.println(buf);
+//     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 
-    // Update logged time
-    logTime = millis();
-  }
-}
+//     // Update logged time
+//     logTime = millis();
+//   }
+// }
 
-// Log current node network status (route, rssi) and Propagate route info
+// Log current node network status (route, rssi) and Transmit route info
 void runExperimentWithLog() {
   // Loop in every LOG_INTERVAL
   if (millis() - logTime > LOG_INTERVAL) {
@@ -254,18 +256,18 @@ void runExperimentWithLog() {
     logTime = millis();
   }
 
-  // Propagate route info to all other nodes
-  propagateRouteInfo();
+  // Transmit route info to all other nodes
+  transmitRouteInfo();
 
-  // Time TFML detection
-  unsigned long start = millis();
-  // detectUAVWithTFML();
-  unsigned long end = millis();
+  // // Time TFML detection
+  // unsigned long start = millis();
+  // // detectUAVWithTFML();
+  // unsigned long end = millis();
 
-  // Log time taken by TFML after type casting from Long to Char pointer 
-  char timeCharPtr[5];
-  sprintf(timeCharPtr, "%lu", end - start);
-  log((char *) timeCharPtr);
+  // // Log time taken by TFML after type casting from Long to Char pointer 
+  // char timeCharPtr[5];
+  // sprintf(timeCharPtr, "%lu", end - start);
+  // log((char *) timeCharPtr);
 }
 
 void loop() {
