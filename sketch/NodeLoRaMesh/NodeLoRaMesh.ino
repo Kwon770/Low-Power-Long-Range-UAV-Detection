@@ -12,7 +12,7 @@
 #include <Preferences.h>
 
 
-RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ);  // LoRa transceiver driver
+RH_RF95 rf95w(HELTEC_CS, HELTEC_ITQ);  // LoRa transceiver driver
 RHMesh *manager;                           // Mesh network instance
 char buf[MAX_MESSAGE_LEN];                 // String buffer for receiving
 
@@ -48,7 +48,15 @@ void initLoRaDriver() {
   Serial.print(F("Init node.. "));
 
   // Configure SPI pin in the board
-  SPI.begin(FREENOVE_SCK, FREENOVE_MISO, FREENOVE_MOSI, FREENOVE_CS);
+  SPI.begin(HELTEC_SCK, HELTEC_MISO, HELTEC_MOSI, HELTEC_CS);
+
+  // Initalize RadioHead Mesh object
+  manager = new RHMesh(rf95w, GROUND_ID);
+  if (!manager->init()) {
+    Serial.println(F("!! init failed !!"));
+  } else {
+    Serial.println("done");
+  }
 
   // Configure LoRa driver
   rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
@@ -61,15 +69,15 @@ void initLoRaDriver() {
   }
   Serial.println("RF95 Ready");
 
-  // Initalize RadioHead Mesh object
-  manager = new RHMesh(rf95w, NODE_ID);
-  if (!manager->init()) {
-    Serial.println(F("!! init failed !!"));
-  } else {
-    Serial.println("done");
-  }
+  // // Initalize RadioHead Mesh object
+  // manager = new RHMesh(rf95w, NODE_ID);
+  // if (!manager->init()) {
+  //   Serial.println(F("!! init failed !!"));
+  // } else {
+  //   Serial.println("done");
+  // }
 
-  manager->setTimeout(1500);
+  //manager->setTimeout(1500);
   initLoRaData();
 }
 
