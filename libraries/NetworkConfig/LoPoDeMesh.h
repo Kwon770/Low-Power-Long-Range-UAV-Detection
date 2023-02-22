@@ -25,10 +25,9 @@
 // Bw500Cr45Sf128	: Bw = 500 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Fast+short range.
 // Bw31_25Cr48Sf512	: Bw = 31.25 kHz, Cr = 4/8, Sf = 512chips/symbol, CRC on. Slow+long range.
 // Bw125Cr48Sf4096	: Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, low data rate, CRC on. Slow+long range.
-#define LORA_MODEM_CONFIG RH_RF95::Bw125Cr48Sf4096
+#define LORA_MODEM_CONFIG RH_RF95::Bw125Cr45Sf128
 
 // HELTEC WiFi LoRa V2
-/*
 #define HELTEC_SCK 5
 #define HELTEC_MISO 19
 #define HELTEC_MOSI 27
@@ -37,7 +36,6 @@
 #define HELTEC_ITQ 26
 #define HELTEC_DI1 35
 #define HELTEC_DI2 34
-*/
 
 // FREENOVE ESP32-WROVER CAM
 // Adafruit RFM95W
