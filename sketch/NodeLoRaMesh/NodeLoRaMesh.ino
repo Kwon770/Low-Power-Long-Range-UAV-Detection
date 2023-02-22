@@ -50,14 +50,6 @@ void initLoRaDriver() {
   // Configure SPI pin in the board
   SPI.begin(HELTEC_SCK, HELTEC_MISO, HELTEC_MOSI, HELTEC_CS);
 
-  // Initalize RadioHead Mesh object
-  manager = new RHMesh(rf95w, GROUND_ID);
-  if (!manager->init()) {
-    Serial.println(F("!! init failed !!"));
-  } else {
-    Serial.println("done");
-  }
-
   // Configure LoRa driver
   rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
   rf95w.setFrequency(LORA_FREQUENCY);
@@ -68,14 +60,15 @@ void initLoRaDriver() {
     Serial.println(F("!! Modem config failed !!"));
   }
   Serial.println("RF95 Ready");
+  
 
-  // // Initalize RadioHead Mesh object
-  // manager = new RHMesh(rf95w, NODE_ID);
-  // if (!manager->init()) {
-  //   Serial.println(F("!! init failed !!"));
-  // } else {
-  //   Serial.println("done");
-  // }
+  // Initalize RadioHead Mesh object
+  manager = new RHMesh(rf95w, NODE_ID);
+  if (!manager->init()) {
+    Serial.println(F("!! init failed !!"));
+  } else {
+    Serial.println("done");
+  }
 
   //manager->setTimeout(1500);
   initLoRaData();
