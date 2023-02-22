@@ -19,9 +19,9 @@
 #include <Preferences.h>
 
 
-RH_RF95 rf95w(HELTEC_CS, HELTEC_ITQ);  // LoRa transceiver driver
-RHMesh *manager;                           // Mesh network instance
-char buf[MAX_MESSAGE_LEN];                 // String buffer for receiving
+RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ);  // LoRa transceiver driver
+RHMesh *manager;                       // Mesh network instance
+char buf[MAX_MESSAGE_LEN];             // String buffer for receiving
 
 uint8_t routes[NODES];  // Routing table (Debug data | Gateway data)
 int16_t rssi[NODES];    // RSSI table against all other nodes (Debug data | Gateway data)
@@ -33,10 +33,9 @@ int16_t rssi[NODES];    // RSSI table against all other nodes (Debug data | Gate
 
 #define LOG_NAMESPACE "log"        // log namespace name
 #define LOG_COUNT_KEY "log-count"  // log count key name
-#define LOG_INTERVAL 1000          // Interval for logging
+#define LISTEN_INTERVAL 3000       // Interval for propagating visualize route data
 Preferences preferences;           // Log Instance
 uint32_t logCount = 0;             // log count
-unsigned long logTime = 0;         // previous log time
 
 
 // Initalize routes[] and rssi[]
@@ -57,17 +56,7 @@ void initLoRaDriver() {
   Serial.print(F("Init node.. "));
 
   // Configure SPI pin in the board
-  SPI.begin(HELTEC_SCK, HELTEC_MISO, HELTEC_MOSI, HELTEC_CS);
-
-  // Configure LoRa driver
-  rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
-  rf95w.setFrequency(LORA_FREQUENCY);
-  rf95w.setCADTimeout(LORA_TIMEOUT);
-    
-  // Configure Model for configuring LoRa parameter
-  if (!rf95w.setModemConfig(LORA_MODEM_CONFIG)) {
-    Serial.println(F("!! Modem config failed !!"));
-  }
+  SPI.begin(FREENOVE_SCK, FREENOVE_MISO, FREENOVE_MOSI, FREENOVE_CS);
 
   // Initalize RadioHead Mesh object
   manager = new RHMesh(rf95w, GROUND_ID);
@@ -76,8 +65,16 @@ void initLoRaDriver() {
   } else {
     Serial.println("done");
   }
+  
+  // Configure LoRa driver
+  rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
+  rf95w.setFrequency(LORA_FREQUENCY);
+  rf95w.setCADTimeout(LORA_TIMEOUT);
+  // Configure Model for configuring LoRa parameter
+  if (!rf95w.setModemConfig(LORA_MODEM_CONFIG)) {
+    Serial.println(F("!! Modem config failed !!"));
+  }
 
-  //manager->setTimeout(1500);
   Serial.println("RF95 Ready");
 
   initLoRaData();
@@ -137,7 +134,7 @@ void initLoRaDriver() {
 
   Related code
   @header   Preferences.h
-  @var      preferences, logCount, logTime
+  @var      preferences, logCount
 */
 void initLog() {
   // Open namespace with Preferences instance
@@ -194,23 +191,50 @@ const __FlashStringHelper *getErrorString(uint8_t error) {
   return F("UNKNOWN");
 }
 
-// Update routing info(route, rssi) toward all nodes
-void updateRouteInfo() {
-  for (uint8_t dest = 1; dest <= NODES; dest++) {
-    if (dest == GROUND_ID) {   // if destination is self
-      routes[dest - 1] = 255;  // mark itself
+// Propagate a signal to all other nodes to update routing
+void propagateSignal() {
+  for (uint8_t destination = 1; destination <= NODES; destination++) {
+    if (destination == GROUND_ID) {   // if destination is self
+      routes[destination - 1] = 255;  // mark itself
 
     } else {
-      // Test network by RHMesh::doArp()
-      manager->doArp(dest);
-      RHRouter::RoutingTableEntry *route = manager->getRouteTo(dest);
-      if (route == NULL) continue;
+      // Transmit a signal to destination
+      // Debug transmission
+      Serial.print("[SEND TO ");
+      Serial.print(destination);
+      Serial.print("] ");
 
-      routes[dest - 1] = route->next_hop;  // Update route
-      rssi[dest - 1] = rf95w.lastRssi();   // Update rssi
+      // Small piece of signal
+      buf[0] = 'H';
+      buf[1] = 'e';
+      buf[2] = 'r';
+      buf[3] = 'e';
+      buf[4] = '\0';
+      //
 
-      if (routes[dest - 1] == 0) {  // if there is no route
-        rssi[dest - 1] = 0;         // reset rssi
+      // Transmit a signal to destination
+      uint8_t error = manager->sendtoWait((uint8_t *)buf, sizeof(buf), destination);
+      if (error != RH_ROUTER_ERROR_NONE) {  // if transmit error is occured, print detail error
+        Serial.print(F(" !! "));
+        Serial.println(getErrorString(error));
+
+        // if transmission is failed, reset the routing data
+        routes[destination - 1] = 0;
+        rssi[destination - 1] = 0;
+      } else {  // if transmit is successful
+        Serial.println(F(" OK"));
+      }
+
+      // Update the routing table after transmission is done
+      RHRouter::RoutingTableEntry *route = manager->getRouteTo(destination);
+      if (route == NULL) continue;  // If routing is fail, don't update routing data to avoid NULL reference
+
+      // Update the routing data (next_hop, rssi)
+      routes[destination - 1] = route->next_hop;
+      rssi[destination - 1] = rf95w.lastRssi();
+
+      if (routes[destination - 1] == 0) {  // if there is no route
+        rssi[destination - 1] = 0;         // reset rssi
       }
     }
   }
@@ -251,22 +275,39 @@ void generateRouteInfoStringInBuf() {
 // Listen transmit coming to ground
 // Save transmitted data in buffer and return source number
 uint8_t listenIncomingRouteInfoInBuf() {
-  uint8_t len = sizeof(buf);
-  uint8_t src;
+  // Listen incoming messages
+  // Wait for LISTEN_INTERVAL untill next transmit
+  unsigned long nextTransmit = millis() + LISTEN_INTERVAL;
+  while (nextTransmit > millis()) {
 
-  // Listen transmission
-  if (manager->recvfromAck((uint8_t *)buf, &len, &src)) {
-    // Debug transmit
-    Serial.print("[RECV] ");
-    Serial.print(src);
-    Serial.print("-> ");
-    Serial.println(buf);
+    uint8_t len = sizeof(buf);
+    uint8_t source;
 
-    // Mark last length by null
-    buf[len] = '\0';
+    // Listen transmission
+    if (manager->recvfromAck((uint8_t *)buf, &len, &source)) {
+      // Mark last length by null
+      buf[len] = '\0';
 
-    // return source number
-    return src;
+      // Debug receiving
+      Serial.print("[RECV FROM ");
+      Serial.print(source);
+      Serial.println("] ");
+
+      // Update the routing table after receiving is done
+      RHRouter::RoutingTableEntry *route = manager->getRouteTo(source);
+      if (route == NULL) continue;  // If routing is fail, don't update routing data to avoid NULL reference
+
+      // Update the routing data (next_hop, rssi)
+      routes[source - 1] = route->next_hop;
+      rssi[source - 1] = rf95w.lastRssi();
+
+      if (routes[source - 1] == 0) {  // if there is no route
+        rssi[source - 1] = 0;         // reset rssi
+      }
+
+      // return source number
+      return source;
+    }
   }
 
   // If there is no transmission, return 0
@@ -278,7 +319,7 @@ uint8_t listenIncomingRouteInfoInBuf() {
 
   Related code
   @header   WiFi.h, WiFiClient.h, WiFiConfig.h, PubSubClient.h, MQTTConfig.h
-  @func     mqtt_connect(), updateRouteInfo(), generateRouteInfoStringInBuf(), publishRouteInfoInBuf(), listenIncomingRouteInfoInBuf()
+  @func     mqtt_connect(), propagateSignal(), generateRouteInfoStringInBuf(), publishRouteInfoInBuf(), listenIncomingRouteInfoInBuf()
   @var      mqtt_client, espClient
 */
 // void runGateway() {
@@ -291,7 +332,7 @@ uint8_t listenIncomingRouteInfoInBuf() {
 //   // Loop in every PUBLISH_INTERVAL
 //   if (millis() - publishTime > PUBLISH_INTERVAL) {
 //     // update route info, generate string and publish it about ground node
-//     updateRouteInfo();
+//     propagateSignal();
 //     generateRouteInfoStringInBuf();
 //     publishRouteInfoInBuf(1);
 
@@ -323,52 +364,22 @@ void log(char *ptr) {
 }
 
 /*
- Log only current node network status (route, rssi)
+ Propagate a signal and log a network status (route, rssi)
 
   Related code
   @header   Preferences.h
-  @var      preferences, logCount, logTime
-*/
-// void runNetworkLogging() {
-//   // Loop in every LOG_INTERVAL
-//   if (millis() - logTime > LOG_INTERVAL) {
-//     // Update route info and generate string abour ground node
-//     updateRouteInfo();
-//     generateRouteInfoStringInBuf();
-
-//     // Log buffer
-//     log((char *)buf);
-//     Serial.println(buf);
-
-//     // Update logged time
-//     logTime = millis();
-//   }
-// }
-
-/*
- Log current node network status (route, rssi) and received transmission
-
-  Related code
-  @header   Preferences.h
-  @var      preferences, logCount, logTime
+  @var      preferences, logCount
 */
 void runExperimentWithLog() {
-  // Loop in every LOG_INTERVAL
-  if (millis() - logTime > LOG_INTERVAL) {
-    // Update route info and generate string about ground node
-    updateRouteInfo();
-    generateRouteInfoStringInBuf();
+  // Propagate signal to all other nodes
+  propagateSignal();
 
-    // Write source at last of buffer and log buffer
-    strcat(buf, "[1");
-    log((char *)buf);
-    Serial.println(buf);
+  // Log and print a route info of Ground
+  generateRouteInfoStringInBuf();
+  log((char *)buf);
+  Serial.println(buf);
 
-    // Update logged time
-    logTime = millis();
-  }
-
-  // Log transmitted data
+  // Log a receiving
   uint8_t transmitSource = listenIncomingRouteInfoInBuf();
   if (transmitSource) {  // If source is not 0 (= transmission is done)
                          // Write source at last of buffer and log buffer
@@ -376,19 +387,16 @@ void runExperimentWithLog() {
     char sourceCharPtr[5];
     itoa(transmitSource, sourceCharPtr, 10);
 
-    strcat(buf, "[");
+    buf[0] = '\0';
+    strcat(buf, "[RECV FROM ");
     strcat(buf, sourceCharPtr);
     log((char *)buf);
-    Serial.println(buf);
   }
 }
 
 void loop() {
   // * Execute to enable gateway features
   // runGateway();
-
-  // * Execute to enable network logging
-  // runNetworkLogging();
 
   // * Execute to enable experiment with log
   runExperimentWithLog();
