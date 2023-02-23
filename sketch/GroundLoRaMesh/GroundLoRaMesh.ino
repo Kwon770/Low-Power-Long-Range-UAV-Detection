@@ -20,8 +20,8 @@
 
 
 RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ);  // LoRa transceiver driver
-RHMesh *manager;                       // Mesh network instance
-char buf[MAX_MESSAGE_LEN];             // String buffer for receiving
+RHMesh *manager;                           // Mesh network instance
+char buf[MAX_MESSAGE_LEN];                 // String buffer for receiving
 
 uint8_t routes[NODES];  // Routing table (Debug data | Gateway data)
 int16_t rssi[NODES];    // RSSI table against all other nodes (Debug data | Gateway data)
@@ -65,7 +65,7 @@ void initLoRaDriver() {
   } else {
     Serial.println("done");
   }
-  
+
   // Configure LoRa driver
   rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
   rf95w.setFrequency(LORA_FREQUENCY);
@@ -382,8 +382,11 @@ void runExperimentWithLog() {
   // Log a receiving
   uint8_t transmitSource = listenIncomingRouteInfoInBuf();
   if (transmitSource) {  // If source is not 0 (= transmission is done)
-                         // Write source at last of buffer and log buffer
-                         // Type casting 'transmitSource' from uint8_t to Char pointer
+    // print a route info of Ground
+    generateRouteInfoStringInBuf();
+    Serial.println(buf);
+
+    // Type casting 'transmitSource' from uint8_t to Char pointer
     char sourceCharPtr[5];
     itoa(transmitSource, sourceCharPtr, 10);
 

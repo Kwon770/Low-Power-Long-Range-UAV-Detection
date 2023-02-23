@@ -13,8 +13,8 @@
 
 
 RH_RF95 rf95w(FREENOVE_CS, FREENOVE_ITQ);  // LoRa transceiver driver
-RHMesh *manager;                       // Mesh network instance
-char buf[MAX_MESSAGE_LEN];             // String buffer for receiving
+RHMesh *manager;                           // Mesh network instance
+char buf[MAX_MESSAGE_LEN];                 // String buffer for receiving
 
 uint8_t routes[NODES];  // Routing table (Debug data | Gateway data)
 int16_t rssi[NODES];    // RSSI table against all other nodes (Debug data | Gateway data)
@@ -60,7 +60,6 @@ void initLoRaDriver() {
   rf95w.setTxPower(LORA_TX_POWER, LORA_TX_USERFO);
   rf95w.setFrequency(LORA_FREQUENCY);
   rf95w.setCADTimeout(LORA_TIMEOUT);
-
   // Configure Model for configuring LoRa parameter
   if (!rf95w.setModemConfig(LORA_MODEM_CONFIG)) {
     Serial.println(F("!! Modem config failed !!"));
@@ -131,7 +130,7 @@ const __FlashStringHelper *getErrorString(uint8_t error) {
 // Propagate a signal to all other nodes to update routing
 void propagateSignal() {
   for (uint8_t destination = 1; destination <= NODES; destination++) {
-    if (destination == NODE_ID) {   // if destination is self
+    if (destination == NODE_ID) {     // if destination is self
       routes[destination - 1] = 255;  // mark itself
 
     } else {
@@ -266,26 +265,29 @@ void runExperimentWithLog() {
   // Log a receiving
   uint8_t transmitSource = listenIncomingRouteInfoInBuf();
   if (transmitSource) {  // If source is not 0 (= transmission is done)
-                         // Write source at last of buffer and log buffer
-                         // Type casting 'transmitSource' from uint8_t to Char pointer
-  char sourceCharPtr[5];
-  itoa(transmitSource, sourceCharPtr, 10);
+                         // print a route info of Ground
+    generateRouteInfoStringInBuf();
+    Serial.println(buf);
 
-  buf[0] = '\0';
-  strcat(buf, "[RECV FROM ");
-  strcat(buf, sourceCharPtr);
-  log((char *)buf);
-}
+    // Type casting 'transmitSource' from uint8_t to Char pointer
+    char sourceCharPtr[5];
+    itoa(transmitSource, sourceCharPtr, 10);
 
-// // Time TFML detection
-// unsigned long start = millis();
-// // detectUAVWithTFML();
-// unsigned long end = millis();
+    buf[0] = '\0';
+    strcat(buf, "[RECV FROM ");
+    strcat(buf, sourceCharPtr);
+    log((char *)buf);
+  }
 
-// // Log time taken by TFML after type casting from Long to Char pointer
-// char timeCharPtr[5];
-// sprintf(timeCharPtr, "%lu", end - start);
-// log((char *) timeCharPtr);
+  // // Time TFML detection
+  // unsigned long start = millis();
+  // // detectUAVWithTFML();
+  // unsigned long end = millis();
+
+  // // Log time taken by TFML after type casting from Long to Char pointer
+  // char timeCharPtr[5];
+  // sprintf(timeCharPtr, "%lu", end - start);
+  // log((char *) timeCharPtr);
 }
 
 void loop() {
