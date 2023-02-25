@@ -21,24 +21,11 @@ a Counter Drone System (CDS). There have already been several attempts of implem
 but Ground Counter Drone System (GCDS) has a geological restriction and
 Airspace Counter Drone System (ACDS) in NASA research uses a WiFi mesh network which is
 fast but consumes high-power.
-<br/>
-<br/>
-**Therefore we wanted to make the system which is free from these restrictions.**
 The system is ACDS uses observer drones to detect unidentified aerial object in LoRa mesh network.
 
 ## 🎯 Research novelty
-1. **Observer drones to detect unidentified aerial object**<br/>
-   The system gives a immunity to a geological restriction because we have observer drones that are used for detection.
-   <br/>
-   <br/>
-2. **Low-power and low-cost Machine learning detection**<br/>
-   Detection is run on the Micro-controller. Additionally, video does not have to be sent
    to the ground for detection, so we can use low-data-rate and long-range communication
    technology.
-   <br/>
-   <br/>
-3. **LoRa mesh network via multi-hop communication**<br/>
-   LoRa allows low-power and long-range communication while multi-hop communication allows
    network coverage to be expanded just by adding a new drone.
 
 
@@ -47,9 +34,6 @@ The system is classified into three:
 - Ground LoRa mesh network - Base station where communicate with UAVs by LoRa mesh network
 - Node LoRa mesh network - UAV which communicate with ground and UAV by LoRa mesh network 
 - Detection - Small and simple UAV detection model
-<br/>
-<br/>
-<img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/system-overview.jpg?raw=true">
 
 ## 🛠️ Environment setting
 
@@ -59,19 +43,12 @@ The system consist of LoRa mesh network and detection is developed on Arduino an
 <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/hardware-diagram.jpg?raw=true">
 
 ### Software development platform
-
-
-<p align="center">
-    <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-logo-1.png?raw=true" width="200">
-   <br/>
-<em>Arduino</em>
-    <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-esp32.png?raw=true" width="200">
-   <br/>
-    <em>arduino-esp32</em>
-    <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/radiohead.png?raw=true" width="200">
-   <br/>
-    <em>RadioHead</em>
-    <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/tflm.png?raw=true" width="200">
-   <br/>
-    <em>TensorFlow Lite for Micro</em>
-</p>
+<center>
+<img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-logo-1.png?raw=true" width="200"/> <br/>
+<br/>
+<img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-esp32.png?raw=true" width="200"/> <br/>
+<br/>
+<img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/radiohead.png?raw=true" width="200"/> <br/>
+<br/>
+<img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/tflm.png?raw=true" width="200"/> <br/>
+</center>
