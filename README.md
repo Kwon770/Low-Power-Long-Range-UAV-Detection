@@ -44,7 +44,7 @@ The system is ACDS uses observer drones to detect unidentified aerial object in 
 
 ## Overview of the system
 The system is classified into three:
-- Ground LoRa mesh network - Base station where communicate with UAV by LoRa mesh network
+- Ground LoRa mesh network - Base station where communicate with UAVs by LoRa mesh network
 - Node LoRa mesh network - UAV which communicate with ground and UAV by LoRa mesh network 
 - Detection - Small and simple UAV detection model
 <br/>
