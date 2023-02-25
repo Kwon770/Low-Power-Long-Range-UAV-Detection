@@ -20,4 +20,7 @@ arduino-esp32 = 2.0.6
 - [Lora mesh network communication of base station](./arduino/sketch/GroundLoRaMesh)
 - [Lora mesh network communication of UAV](./arduino/sketch/NodeLoRaMesh)
 - [Network Log manager](./arduino/sketch/LogBuilder)
-- UAV Detection
+- [Data preprocessing](./arduino/dataset_pre-processing)
+- [Data preprocessing](./arduino/dataset_pre-processing)
+- [Drone detection](./arduino/sketch/Drone_detection)
+- [Drone detection model training](./arduino/model_training)
