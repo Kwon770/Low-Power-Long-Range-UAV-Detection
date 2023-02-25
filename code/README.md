@@ -14,12 +14,13 @@ arduino-esp32 = 2.0.6
     - ```Tools > Board > ESP32 Arduino > ESP32 Wrover module```
     - ```Tools > Upload speed > 115200```
     - ```Arduino > Settings > Sketchbook Location > [PATH OF 'CODE' FOLDER]```
-4. Model ~~~~~
+
 
 ## 🚀 Get Started
 - [Lora mesh network communication of base station](./arduino/sketch/GroundLoRaMesh)
 - [Lora mesh network communication of UAV](./arduino/sketch/NodeLoRaMesh)
 - [Network Log manager](./arduino/sketch/LogBuilder)
-- [Data preprocessing](./dataset_pre-processing)
-- [Drone detection model training](./model_training)
-- [Drone detection](./arduino/sketch/drone_detection)
+- Drone detection part, you have to follow the order below.
+    1. [Data preprocessing](./dataset_pre-processing)
+    2. [Drone detection model training](./model_training)
+    3. [Drone detection](./arduino/sketch/drone_detection)
