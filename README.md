@@ -44,17 +44,21 @@ The system consist of LoRa mesh network and detection is developed on Arduino an
 
 ### Software development platform
 <p align="center" width="100%">
-    <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-logo-1.png?raw=true"/> 
+    <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-logo-1.png?raw=true"/><br/>
+   <em>Arduino</em>
 </p>
 <br/>
 <p align="center" width="100%">
-   <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-esp32.png?raw=true"/> <br/>
+   <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-esp32.png?raw=true"/> <br/><br/>
+   <em>arduino-esp32</em>
 </p>
 <br/>
 <p align="center" width="100%">
-   <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/radiohead.png?raw=true"/> <br/>
+   <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/radiohead.png?raw=true"/> <br/><br/>
+   <em>RadioHead</em>
 </p>
 <br/>
 <p align="center" width="100%">
-   <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/tflm.png?raw=true"/> <br/>
+   <img width="33%" src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/tflm.png?raw=true"/> <br/><br/>
+   <em>TensorFlow Lite for Microcontrollers</em>
 </p>
