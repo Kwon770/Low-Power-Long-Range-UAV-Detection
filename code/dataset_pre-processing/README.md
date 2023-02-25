@@ -24,7 +24,7 @@
 <br>
 
 ## 0. Dependencies
-<hr>
+
 
 You need to install bellow libraries to preprocess dataset.
 
@@ -56,7 +56,7 @@ git clone https://github.com/tensorflow/models
 <br>
 
 ## 1.  Prepare dataset
-<hr>
+
 
 - [Original Dataset](https://www.kaggle.com/datasets/dasmehdixtr/drone-dataset-uav) <br>
     This dataset has 1359 phtos and labeled data. <br>
@@ -156,7 +156,7 @@ Plz follow these instructions.
 
 
 ## 1. Initialize preprocessing.sh
-<hr>
+
 
 - You have to set your data preprocessing enviornment.
     - `SRC_DATASET_PATH` : Your source dataset(not resized yet) path.
@@ -194,7 +194,7 @@ Plz follow these instructions.
 
 
 ## 2. Run preprocessing code
-<hr>
+
 You can run preporcess.py with two options: `shell` or directly run `python`
 
 - shell
@@ -219,7 +219,7 @@ You can run preporcess.py with two options: `shell` or directly run `python`
 
 
 ## 3. Result
-<hr>
+
 
 - You can get resized Dataset and Annotation at `RESIZED_DATASET_PATH` and `RESIZED_ANNOTATION_PATH`
 
