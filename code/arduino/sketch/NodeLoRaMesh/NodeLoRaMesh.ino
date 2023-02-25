@@ -66,7 +66,6 @@ void initLoRaDriver() {
   }
   Serial.println("RF95 Ready");
 
-  //manager->setTimeout(1500);
   initLoRaData();
 }
 
@@ -89,8 +88,7 @@ void initLog() {
 void setup() {
   randomSeed(analogRead(0));
   Serial.begin(BUAD_RATE);
-  while (!Serial)
-    ;  // Wait for serial port to be available
+  while (!Serial);  // Wait for serial port to be available
 
   // Use flash memory for string instead of RAM
   Serial.print(F("[NODE "));
@@ -291,6 +289,6 @@ void runExperimentWithLog() {
 }
 
 void loop() {
-  // * Execute to enable experiment with log
+  // Operate a network with logging
   runExperimentWithLog();
 }

@@ -8,13 +8,6 @@
 #include <RH_RF95.h>
 #include <LoPoDeMesh.h>
 
-// Gateway headers
-// #include <WiFi.h>
-// #include <WiFiClient.h>
-// #include <WiFiConfig.h>
-// #include <PubSubClient.h>
-// #include <MQTTConfig.h>
-
 // Log header
 #include <Preferences.h>
 
@@ -25,11 +18,6 @@ char buf[MAX_MESSAGE_LEN];                 // String buffer for receiving
 
 uint8_t routes[NODES];  // Routing table (Debug data | Gateway data)
 int16_t rssi[NODES];    // RSSI table against all other nodes (Debug data | Gateway data)
-
-// WiFiClient espClient;                 // Arduino-ESP32 WiFiSTA instance
-// PubSubClient mqtt_client(espClient);  // MQTT client instance
-// #define PUBLISH_INTERVAL 3000         // Interval for publishing visualize route data
-// unsigned long publishTime = 0;        // previous publish time
 
 #define LOG_NAMESPACE "log"        // log namespace name
 #define LOG_COUNT_KEY "log-count"  // log count key name
@@ -80,62 +68,8 @@ void initLoRaDriver() {
   initLoRaData();
 }
 
-// // Connect to MQTT broker
-// void mqtt_connect() {
-//   // Loop connecting until mqtt client is connected
-//   while (!mqtt_client.connected()) {
-//     Serial.print(F("Connecting to MQTT...  "));
 
-//     // Generate randome mqtt client id
-//     String mqtt_clientId = "gateway-";
-//     mqtt_clientId += String(random(0xffff), HEX);
-
-//     // Attempt to connect
-//     if (mqtt_client.connect(mqtt_clientId.c_str(), MQTT_GROUND_USERNAME, MQTT_GROUND_PASSWORD)) {  // if connection is successful
-//       Serial.println(F("[Connected]"));
-//     } else {  // if connection is failed
-//               // Log the reason of fail and Retry after 2000ms
-//       Serial.print(F("[Failed, rc="));
-//       Serial.print(mqtt_client.state());
-//       Serial.println("]");
-//       delay(2000);
-//     }
-//   }
-// }
-
-/*
- Initalize features needed as the gateway of visualizing server
-
-  Related code
-  @header   WiFi.h, WiFiClient.h, WiFiConfig.h, PubSubClient.h, MQTTConfig.h
-  @func     mqtt_connect()
-  @var      mqtt_client, espClient
-*/
-// void initGateway() {
-//   // Initialize WiFi STA
-//   Serial.print("Connecting to AP - ");
-//   Serial.print(WIFI_SSID);
-
-//   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-//   // If connection isn't done yet, wait for 250ms till done
-//   while (WiFi.status() != WL_CONNECTED) {
-//     delay(250);
-//     Serial.print(". ");
-//   }
-//   Serial.println("[Connected]");
-
-//   // Initialize MQTT server connection
-//   mqtt_client.setServer(MQTT_SERVER, MQTT_PORT);
-//   mqtt_connect();
-// }
-
-/*
- Initalize logging feature
-
-  Related code
-  @header   Preferences.h
-  @var      preferences, logCount
-*/
+// Initalize logging feature
 void initLog() {
   // Open namespace with Preferences instance
   Serial.print(F("Logging."));
@@ -154,17 +88,15 @@ void initLog() {
 void setup() {
   randomSeed(analogRead(0));
   Serial.begin(BUAD_RATE);
-  while (!Serial)
-    ;  // Wait untill serial is ready
+  while (!Serial);  // Wait untill serial is ready
 
   Serial.println(F("[Ground Node 1]"));
 
   // Initialize LoRa network
   initLoRaDriver();
 
-  // * Execute to enable gateway features
-  // initGateway();
-  // * Execute to enable logging
+  
+  // Initialize logging
   initLog();
 }
 
@@ -258,20 +190,6 @@ void generateRouteInfoStringInBuf() {
   }
 }
 
-// // Publish route info saved in bffer on MQTT server
-// void publishRouteInfoInBuf(uint8_t nodeId) {
-//   // Append the source of route info at buffer
-//   strcat(buf, "[");
-//   sprintf(buf + strlen(buf), "%d", nodeId);
-
-//   // Print route info in serial for debugging
-//   Serial.print("[PUB] ");
-//   Serial.println(buf);
-
-//   // Publish data on MQTT server by topic
-//   mqtt_client.publish(MQTT_GATEWAY_TOPIC, buf);
-// }
-
 // Listen transmit coming to ground
 // Save transmitted data in buffer and return source number
 uint8_t listenIncomingRouteInfoInBuf() {
@@ -314,39 +232,6 @@ uint8_t listenIncomingRouteInfoInBuf() {
   return 0;
 }
 
-/*
- Publish ground route info and other nodes route info which is transmitted on MQTT server
-
-  Related code
-  @header   WiFi.h, WiFiClient.h, WiFiConfig.h, PubSubClient.h, MQTTConfig.h
-  @func     mqtt_connect(), propagateSignal(), generateRouteInfoStringInBuf(), publishRouteInfoInBuf(), listenIncomingRouteInfoInBuf()
-  @var      mqtt_client, espClient
-*/
-// void runGateway() {
-//   // If MQTTT connection isn't done, keep trying and waiting
-//   if (!mqtt_client.connected()) {
-//     mqtt_connect();
-//   }
-//   mqtt_client.loop();
-
-//   // Loop in every PUBLISH_INTERVAL
-//   if (millis() - publishTime > PUBLISH_INTERVAL) {
-//     // update route info, generate string and publish it about ground node
-//     propagateSignal();
-//     generateRouteInfoStringInBuf();
-//     publishRouteInfoInBuf(1);
-
-//     // Update published time
-//     publishTime = millis();
-//   }
-
-//   // Publish node route info whenever transmit is done
-//   uint8_t transmitSource = listenIncomingRouteInfoInBuf();
-//   if (transmitSource) {  // If source is not 0 (= transmission is done)
-//     publishRouteInfoInBuf(transmitSource);
-//   }
-// }
-
 // Log char pointer parameter in namespace
 void log(char *ptr) {
   // Type casting 'logCount' from Int to Char pointer
@@ -363,13 +248,8 @@ void log(char *ptr) {
   preferences.putInt(LOG_COUNT_KEY, logCount);
 }
 
-/*
- Propagate a signal and log a network status (route, rssi)
 
-  Related code
-  @header   Preferences.h
-  @var      preferences, logCount
-*/
+// Propagate a signal and log a network status (route, rssi)
 void runExperimentWithLog() {
   // Propagate signal to all other nodes
   propagateSignal();
@@ -398,9 +278,7 @@ void runExperimentWithLog() {
 }
 
 void loop() {
-  // * Execute to enable gateway features
-  // runGateway();
 
-  // * Execute to enable experiment with log
+  // Operate a network with logging
   runExperimentWithLog();
 }
