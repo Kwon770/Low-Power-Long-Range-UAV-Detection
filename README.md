@@ -1,5 +1,5 @@
 # BTT - Be The Top
-## Member
+## 🧑‍💻👩‍💻 Member
 
 <div style="text-align: center;">
 
@@ -10,11 +10,11 @@
 
 </div>
 
-## Project title
+## 🏛️ Project title
 Airspace Counter Drone System (ACDS) using observer drones to detect unidentified aerial object in LoRa mesh network.
 
 
-## Research problem statements
+## 🔍 Research problem statements
 With the increasing popularity of UAVs, they have become more easily accessible to
 the public, companies, and even terrorists. This has raised the need for having
 a Counter Drone System (CDS). There have already been several attempts of implementing a CDS,
@@ -26,7 +26,7 @@ fast but consumes high-power.
 **Therefore we wanted to make the system which is free from these restrictions.**
 The system is ACDS uses observer drones to detect unidentified aerial object in LoRa mesh network.
 
-## Research novelty
+## 🎯 Research novelty
 1. **Observer drones to detect unidentified aerial object**<br/>
    The system gives a immunity to a geological restriction because we have observer drones that are used for detection.
    <br/>
@@ -42,7 +42,7 @@ The system is ACDS uses observer drones to detect unidentified aerial object in 
    network coverage to be expanded just by adding a new drone.
 
 
-## Overview of the system
+## 🤖 Overview of the system
 The system is classified into three:
 - Ground LoRa mesh network - Base station where communicate with UAVs by LoRa mesh network
 - Node LoRa mesh network - UAV which communicate with ground and UAV by LoRa mesh network 
@@ -51,7 +51,7 @@ The system is classified into three:
 <br/>
 <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/system-overview.jpg?raw=true">
 
-## Environment setting
+## 🛠️ Environment setting
 
 The system consist of LoRa mesh network and detection is developed on Arduino and run on ESP32-WROVER.
 
