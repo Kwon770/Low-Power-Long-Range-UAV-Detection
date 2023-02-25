@@ -11,7 +11,7 @@
 // Node Config
 #define NODES 3
 #define GROUND_ID 1
-#define NODE_ID 3
+#define NODE_ID 2
 #define MAX_MESSAGE_LEN 60
 
 // LoRa transceiver config

@@ -25,11 +25,12 @@ void setup() {
 }
 
 void loop() {
-  if (logCount == 0) return;  // If there is no log, skip
+  
+//  if (logCount == 0) return;  // If there is no log, skip
 
   // print all log by iterating
   Serial.println("[LOGS]");
-  for (int logIndex = 0; logIndex < logCount; logIndex++) {
+  for (int logIndex = 0; logIndex < 300; logIndex++) {
     // Print log index
     Serial.print(logIndex);
     Serial.print(":");
