@@ -61,21 +61,17 @@ The system consist of LoRa mesh network and detection is developed on Arduino an
 ### Software development platform
 
 
-<div align="center">
-  <figure>
+<p align="center">
     <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-logo-1.png?raw=true" width="200">
-    <figcaption style="text-align:center"><em>Arduino</em></figcaption>
-  </figure>
-  <figure>
+   <br/>
+<em>Arduino</em>
     <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/arduino-esp32.png?raw=true" width="200">
-    <figcaption style="text-align:center"><em>arduino-esp32</em></figcaption>
-  </figure>
-<figure>
+   <br/>
+    <em>arduino-esp32</em>
     <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/radiohead.png?raw=true" width="200">
-    <figcaption style="text-align:center"><em>RadioHead</em></figcaption>
-  </figure>
-<figure>
+   <br/>
+    <em>RadioHead</em>
     <img src="https://github.com/Kwon770/Low-Power-Long-Range-UAV-Detection/blob/main/image/tflm.png?raw=true" width="200">
-    <figcaption style="text-align:center"><em>TensorFlow Lite for Micro</em></figcaption>
-  </figure>
-</div>
+   <br/>
+    <em>TensorFlow Lite for Micro</em>
+</p>
