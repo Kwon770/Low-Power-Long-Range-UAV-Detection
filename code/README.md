@@ -22,4 +22,4 @@ arduino-esp32 = 2.0.6
 - [Network Log manager](./arduino/sketch/LogBuilder)
 - [Data preprocessing](./dataset_pre-processing)
 - [Drone detection model training](./model_training)
-- [Drone detection](./arduino/sketch/Drone_detection)
+- [Drone detection](./arduino/sketch/drone_detection)
