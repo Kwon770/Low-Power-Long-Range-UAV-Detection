@@ -1,3 +1,8 @@
+# Power Efficient Long Range Drone Networking System for UAV Detection
+- ICTC 2023, Best Paper Award, The 14th International Conference on ICT Convergence
+- [Link to paper]([https://example.com/url](https://ieeexplore.ieee.org/document/10392942))
+
+
 # BTT - Be The Top
 ## 🧑‍💻👩‍💻 Member
 
